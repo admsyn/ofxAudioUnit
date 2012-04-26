@@ -8,7 +8,7 @@ What Are Audio Units?
 
 Audio Units are small programs that you can hook up to each other to produce sound. For example, you can hook up a synthesizer unit to a distortion effect unit, then connect the distortion unit to an output unit to send the audio to your speakers. This is analogous to a guitar being connected to an effect stompbox which is connected to an amplifier.
 
-If you're on a mac, you already have a bunch of Audio Units on your computer. Run this command in a Terminal to see them all: 
+Audio Units are only available on osx and iOS. If you're on a mac, you already have a bunch of Audio Units on your computer. Run this command in a Terminal to see them all: 
 
 ```
 auval -a
@@ -36,3 +36,12 @@ After this, just add
 ```
 in your testApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include ofxAudioUnitMidi.h` as well.
 
+Soon
+---------------
+* Proper iOS support (I think everything should work but I haven't head a chance to test on an iThing yet)
+* Subclass for the AUSampler (loading samples, tweaking params etc)
+
+License
+----------
+
+MIT License. See license.txt in this distrubtion.
