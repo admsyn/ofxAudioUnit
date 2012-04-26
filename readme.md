@@ -40,6 +40,7 @@ Soon
 ---------------
 * Proper iOS support (I think everything should work but I haven't head a chance to test on an iThing yet)
 * Subclass for the AUSampler (loading samples, tweaking params etc)
+* Direct, port-less MIDI (for sending MIDI messages directly to the units)
 
 License
 ----------
