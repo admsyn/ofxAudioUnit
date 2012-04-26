@@ -93,6 +93,26 @@ bool ofxAudioUnitMidiReceiver::connectToMidiSource(unsigned long midiSourceIndex
 }
 
 // ----------------------------------------------------------
+bool ofxAudioUnitMidiReceiver::connectToMidiSource(string midiSourceName)
+// ----------------------------------------------------------
+{
+	vector<string> sources = ofxAudioUnitMidi::getSourceNames();
+	bool foundSource = false;
+	int sourceIndex;
+	for(int i = 0; i < sources.size() && !foundSource; i++)
+	{
+		if(midiSourceName == sources.at(i))
+		{
+			foundSource = true;
+			sourceIndex = i;
+		}
+	}
+	
+	if(foundSource) return connectToMidiSource(sourceIndex);
+	else            return false;
+}
+
+// ----------------------------------------------------------
 void ofxAudioUnitMidiReceiver::disconnectFromMidiSource(unsigned long midiSourceIndex)
 // ----------------------------------------------------------
 {

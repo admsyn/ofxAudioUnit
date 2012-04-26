@@ -28,6 +28,7 @@ public:
 	
 	bool createMidiDestination(std::string portName);
 	bool connectToMidiSource(unsigned long midiSourceIndex);
+	bool connectToMidiSource(std::string midiSourceName);
 	void disconnectFromMidiSource(unsigned long midiSourceIndex);
 	void routeMidiTo(ofxAudioUnit &unitToRouteTo);
 };
