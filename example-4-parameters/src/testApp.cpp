@@ -46,7 +46,7 @@ void testApp::setup(){
 //	kLowPassParam_CutoffFrequency. 
 	
 //	The easiest way to find the parameters for your Audio Unit
-//	are to type kNameOfYourUnit and let XCode's auto-complete
+//	are to type kNameOfYourUnit and let Xcode's auto-complete
 //	show you what's available. You can also see all of the parameters
 //	defined in <AudioUnit/AudioUnitParameters.h>. It is a good idea
 //	to read this header file anyway, as it'll tell you what values 
@@ -74,6 +74,14 @@ void testApp::setup(){
 	
 	AudioUnitSetParameter(*lowpass.getUnit(), kLowPassParam_Resonance, 
 												kAudioUnitScope_Global, 0, 10, 0);
+	
+//	You can also save the state of an Audio Unit's parameters as a
+//	preset file. You can load a preset file like this:
+
+//	varispeed.setPreset("MyPresetName.aupreset");
+	
+//	You can create aupreset files in GarageBand. Saving presets is
+//	a feature in-the-works for ofxAudioUnit
 	
 	output.start();
 	
