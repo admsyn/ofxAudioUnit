@@ -363,6 +363,8 @@ using namespace std;
 void ofxAudioUnit::showUI(string title, int x, int y, bool forceGeneric)
 // ----------------------------------------------------------
 {
+	if(!_unit.get()) return;
+	
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*_unit.get()

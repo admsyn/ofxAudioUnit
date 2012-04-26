@@ -103,7 +103,10 @@ void ofxAudioUnitMidiReceiver::disconnectFromMidiSource(unsigned long midiSource
 void ofxAudioUnitMidiReceiver::routeMidiTo(ofxAudioUnit &unitToRouteTo)
 // ----------------------------------------------------------
 {
-	_unit = *(unitToRouteTo.getUnit().get());
+	if((unitToRouteTo.getUnit().get()))
+	{
+		_unit = *(unitToRouteTo.getUnit().get());
+	}
 }
 
 #pragma mark - Callbacks
