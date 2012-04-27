@@ -15,15 +15,15 @@ ofxAudioUnitOutput::ofxAudioUnitOutput()
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitOutput::start()
+bool ofxAudioUnitOutput::start()
 // ----------------------------------------------------------
 {
-  ERR_CHK(AudioOutputUnitStart(*_unit), "starting output unit");
+  return ERR_CHK_BOOL(AudioOutputUnitStart(*_unit), "starting output unit");
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitOutput::stop()
+bool ofxAudioUnitOutput::stop()
 // ----------------------------------------------------------
 {
-  ERR_CHK(AudioOutputUnitStop(*_unit), "stopping output unit");
+  return ERR_CHK_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
 }

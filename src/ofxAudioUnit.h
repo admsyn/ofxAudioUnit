@@ -203,8 +203,8 @@ public:
   ofxAudioUnitOutput();
 	~ofxAudioUnitOutput(){stop();}
   
-  void start();
-  void stop();
+  bool start();
+  bool stop();
 };
 
 #pragma mark - ofxAudioUnitTap
