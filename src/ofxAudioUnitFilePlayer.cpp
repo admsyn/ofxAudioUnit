@@ -32,9 +32,22 @@ bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
 	
 	if(fileID[0]) AudioFileClose(fileID[0]);
 	
-	AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, fileID);
+	OSStatus s = AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, fileID);
 	
 	CFRelease(fileURL);
+	
+	if(s != noErr)
+	{
+		if(s == fnfErr)
+		{
+			cout << "File not found : " << filePath << endl;
+		}
+		else 
+		{
+			cout << "Error " << s << " while opening file at " << filePath << endl;
+		}
+		return false;
+	}
 	
 	UInt64 numPackets = 0;
 	UInt32 dataSize = sizeof(numPackets);
@@ -60,19 +73,25 @@ bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
 	// setting the file ID now since it seems to have some overhead.
 	// Doing it now ensures you'll get sound pretty much instantly after
 	// calling play()
-	ERR_CHK(AudioUnitSetProperty(*_unit,
-															 kAudioUnitProperty_ScheduledFileIDs,
-															 kAudioUnitScope_Global,
-															 0, 
-															 fileID, 
-															 sizeof(fileID)),
-					"setting file player's file ID");
+	return ERR_CHK_BOOL(AudioUnitSetProperty(*_unit,
+																					 kAudioUnitProperty_ScheduledFileIDs,
+																					 kAudioUnitScope_Global,
+																					 0, 
+																					 fileID, 
+																					 sizeof(fileID)),
+											"setting file player's file ID");
 }
 
 // ----------------------------------------------------------
 void ofxAudioUnitFilePlayer::play()
 // ----------------------------------------------------------
 {
+	if(!(region.mTimeStamp.mFlags & kAudioTimeStampSampleTimeValid))
+	{
+		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
+		return;
+	}
+	
 	ERR_CHK(AudioUnitSetProperty(*_unit,
 															 kAudioUnitProperty_ScheduledFileIDs,
 															 kAudioUnitScope_Global,
