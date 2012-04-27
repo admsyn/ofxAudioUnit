@@ -54,6 +54,15 @@ void ofxAudioUnitMixer::setOutputVolume(float volume)
 void ofxAudioUnitMixer::setPan(float pan, int bus)
 // ----------------------------------------------------------
 {
+#ifndef __MAC_10_7
+	static bool printedSetPanOSVersionMessage = false;
+	if(!printedSetPanOSVersionMessage)
+	{
+		cout << "ofxAudioUnitMixer's setPan() is only available"
+		<< "on OS X 10.7 and up" << endl;
+		printedSetPanOSVersionMessage = true;
+	}
+#else
   ERR_CHK(AudioUnitSetParameter(*_unit,
                                 kMultiChannelMixerParam_Pan,
                                 kAudioUnitScope_Input,
@@ -61,6 +70,7 @@ void ofxAudioUnitMixer::setPan(float pan, int bus)
                                 pan,
                                 0),
           "setting mixer pan");
+#endif
 }
 
 #pragma mark - Metering
