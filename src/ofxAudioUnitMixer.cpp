@@ -59,7 +59,7 @@ void ofxAudioUnitMixer::setPan(float pan, int bus)
 	if(!printedSetPanOSVersionMessage)
 	{
 		cout << "ofxAudioUnitMixer's setPan() is only available"
-		<< "on OS X 10.7 and up" << endl;
+		<< " on OS X 10.7 and up" << endl;
 		printedSetPanOSVersionMessage = true;
 	}
 #else
