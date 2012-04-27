@@ -27,8 +27,11 @@ ofxAudioUnit::ofxAudioUnit(OSType type,
 
 // ----------------------------------------------------------
 ofxAudioUnit::ofxAudioUnit(const ofxAudioUnit &orig)
-: _desc(orig._desc), _unit(orig._unit){}
+: _desc(orig._desc)
 // ----------------------------------------------------------
+{
+	initUnit();
+}
 
 // ----------------------------------------------------------
 ofxAudioUnit& ofxAudioUnit::operator=(const ofxAudioUnit &orig)
