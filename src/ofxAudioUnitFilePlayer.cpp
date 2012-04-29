@@ -38,14 +38,7 @@ bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
 	
 	if(s != noErr)
 	{
-		if(s == fnfErr)
-		{
-			cout << "File not found : " << filePath << endl;
-		}
-		else 
-		{
-			cout << "Error " << s << " while opening file at " << filePath << endl;
-		}
+		cout << "Error " << s << " while opening file at " << filePath << endl;
 		return false;
 	}
 	

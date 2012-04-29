@@ -46,26 +46,26 @@ public:
   ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
   
+	ofPtr<AudioUnit> getUnit(){return _unit;}
   bool setPreset(std::string presetPath);
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, 
 										AudioUnitScope scope, 
 										AudioUnitParameterValue value, 
 										int bus = 0);
+	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
 	bool setInputBusCount(unsigned int numberOfInputBusses);
 	unsigned int getInputBusCount();
 	bool setOutputBusCount(unsigned int numberOfOutputBusses);
 	unsigned int getOutputBusCount();
 	
+#ifndef TARGET_OS_IPHONE
 	void showUI(std::string title = "Audio Unit UI",
 							int x = 100, 
 							int y = 100,
 							bool forceGeneric = false);
-	
-	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
-	
-	ofPtr<AudioUnit> getUnit(){return _unit;}
+#endif
 };
 
 static void AudioUnitDeleter(AudioUnit * unit);
@@ -123,6 +123,8 @@ public:
 	void loop(unsigned int timesToLoop = -1);
 	void stop();
 };
+
+#ifndef TARGET_OS_IPHONE
 
 #pragma mark - ofxAudioUnitNetSend
 
@@ -191,9 +193,13 @@ public:
 	SpeechChannel getSpeechChannel(){return _channel;}
 };
 
+#endif
+
 #pragma mark - ofxAudioUnitOutput
 
-// ofxAudioUnitOutput wraps the AUHAL output unit
+// ofxAudioUnitOutput wraps the AUHAL output unit on OSX
+// and the RemoteIO unit on iOS
+
 // This unit drives the "pull" model of Core Audio and
 // sends audio to the actual hardware (ie. speakers / headphones)
 

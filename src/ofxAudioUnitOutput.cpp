@@ -2,9 +2,14 @@
 
 AudioComponentDescription outputDesc = {
 	kAudioUnitType_Output,
+#ifdef TARGET_OS_IPHONE
+	kAudioUnitSubType_RemoteIO,
+#else
 	kAudioUnitSubType_HALOutput,
+#endif
 	kAudioUnitManufacturer_Apple
 };
+
 
 // ----------------------------------------------------------
 ofxAudioUnitOutput::ofxAudioUnitOutput()
