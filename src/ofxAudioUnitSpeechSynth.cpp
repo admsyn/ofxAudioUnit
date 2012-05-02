@@ -1,5 +1,7 @@
 #include "ofxAudioUnit.h"
 
+#if !(TARGET_OS_IPHONE)
+
 AudioComponentDescription speechDesc = {
 	kAudioUnitType_Generator,
 	kAudioUnitSubType_SpeechSynthesis,
@@ -111,3 +113,5 @@ bool ofxAudioUnitSpeechSynth::setVoice(string voiceName)
 	
 	return false;
 }
+
+#endif //TARGET_OS_IPHONE

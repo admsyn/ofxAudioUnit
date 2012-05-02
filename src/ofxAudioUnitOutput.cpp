@@ -2,7 +2,7 @@
 
 AudioComponentDescription outputDesc = {
 	kAudioUnitType_Output,
-#ifdef TARGET_OS_IPHONE
+#if TARGET_OS_IPHONE
 	kAudioUnitSubType_RemoteIO,
 #else
 	kAudioUnitSubType_HALOutput,

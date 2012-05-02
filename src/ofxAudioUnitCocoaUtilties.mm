@@ -1,4 +1,6 @@
 #include "ofxAudioUnit.h"
+
+#if !(TARGET_OS_IPHONE)
 #include <CoreAudioKit/CoreAudioKit.h>
 #include <AudioUnit/AUCocoaUIView.h>
 #include <AudioUnit/AudioUnitCarbonView.h>
@@ -381,3 +383,5 @@ void ofxAudioUnit::showUI(string title, int x, int y, bool forceGeneric)
 	
 	[pool drain];
 }
+
+#endif //TARGET_OS_IPHONE

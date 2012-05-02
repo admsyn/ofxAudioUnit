@@ -1,10 +1,10 @@
 #pragma once
 
+#include "ofxAudioUnit.h"
+#if !(TARGET_OS_IPHONE)
 #include <CoreMIDI/CoreMIDI.h>
 #include <string>
 #include <vector>
-
-#include "ofxAudioUnit.h"
 
 struct ofxAudioUnitMidi 
 {
@@ -39,3 +39,4 @@ static void ofxAudioUnitMidiInputProc(const MIDINotification *message,
 static void ofxAudioUnitMidiReadProc(const MIDIPacketList *pktlist, 
 																		 void *readProcRefCon,
 																		 void *srcConnRefCon);
+#endif //TARGET_OS_IPHONE

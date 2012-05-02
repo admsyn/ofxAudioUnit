@@ -1,5 +1,7 @@
 #include "ofxAudioUnit.h"
 
+#if !(TARGET_OS_IPHONE)
+
 AudioComponentDescription netSendDesc = {
 	kAudioUnitType_Effect,
 	kAudioUnitSubType_NetSend,
@@ -61,3 +63,5 @@ void ofxAudioUnitNetSend::setFormat(unsigned int formatIndex)
 															 sizeof(format)),
 					"setting net send format");
 }
+
+#endif //TARGET_OS_IPHONE

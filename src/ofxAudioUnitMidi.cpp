@@ -1,5 +1,7 @@
 #include "ofxAudioUnitMidi.h"
 
+#if !(TARGET_OS_IPHONE)
+
 #pragma mark MIDI utilities
 
 // ----------------------------------------------------------
@@ -151,3 +153,5 @@ void ofxAudioUnitMidiReadProc(const MIDIPacketList *pktlist, void *readProcRefCo
 		packet = MIDIPacketNext(packet);
 	}
 }
+
+#endif
