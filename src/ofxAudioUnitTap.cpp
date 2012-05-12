@@ -82,7 +82,7 @@ AudioBufferList * ofxAudioUnitTap::allocBufferList(int channels, size_t size)
 #pragma mark - Connections
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus)
+void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
 	if(_trackedSamples) releaseBufferList(_trackedSamples);
@@ -90,13 +90,27 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus)
 	AudioStreamBasicDescription asbd = {0};
 	UInt32 dataSize = sizeof(AudioStreamBasicDescription);
 	
-	ERR_CHK(AudioUnitGetProperty(*(destination._unit),
-															 kAudioUnitProperty_StreamFormat,
-															 kAudioUnitScope_Global,
-															 0,
-															 &asbd,
-															 &dataSize),
-					"getting ASBD from tap destination unit");
+//	Connect the source to the destination.
+//	The only reason for this is so that they can sort out their
+//	own ASBDs. The destination unit will be connected to the tap's
+//	render callback afterwards.
+	AudioUnitConnection c;
+	c.sourceAudioUnit = *_sourceUnit;
+	c.sourceOutputNumber = sourceBus;
+	c.destInputNumber = destinationBus;
+	AudioUnitSetProperty(*(destination._unit),
+											 kAudioUnitProperty_MakeConnection,
+											 kAudioUnitScope_Global,
+											 destinationBus,
+											 &c,
+											 sizeof(c));
+	
+	AudioUnitGetProperty(*(_sourceUnit),
+											 kAudioUnitProperty_StreamFormat,
+											 kAudioUnitScope_Output,
+											 sourceBus,
+											 &asbd,
+											 &dataSize);
 	
 	_trackedSamples = allocBufferList(asbd.mChannelsPerFrame);
 	
@@ -158,7 +172,12 @@ void ofxAudioUnitTap::waveformForBuffer(AudioBuffer *buffer, float width, float 
 		
 		for (int i = 0; i < buffer->mDataByteSize / sizeof(AudioUnitSampleType); i++, x += xStep) 
 		{
+#if TARGET_OS_IPHONE
+			SInt16 s = SInt16(samples[i] >> 9);
+			float y = ofMap(s, -32768, 32767, height, 0, true);
+#else
 			float y = ofMap(samples[i], -1, 1, height, 0, true);
+#endif
 			outLine.addVertex(ofPoint(x, y));
 		}
 	}
@@ -237,7 +256,9 @@ OSStatus tapRenderCallback(void * inRefCon,
 			memcpy(context->trackedSamples->mBuffers[i].mData,
 						 ioData->mBuffers[i].mData,
 						 bytesToCopy);
+			context->trackedSamples->mBuffers[i].mDataByteSize = bytesToCopy;
 		}
+		
 		context->bufferMutex->unlock();
 	}
 	
