@@ -87,6 +87,7 @@ void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
 void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
+	if(!_unit) return;
   AudioUnitConnection connection;
   connection.sourceAudioUnit    = *_unit;
   connection.sourceOutputNumber = sourceBus;

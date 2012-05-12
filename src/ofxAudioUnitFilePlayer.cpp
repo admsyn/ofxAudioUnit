@@ -25,6 +25,8 @@ ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer()
 bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
 // ----------------------------------------------------------
 {
+	if(!_unit) return false;
+	
 	CFURLRef fileURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
 																														 (const UInt8 *)filePath.c_str(),
 																														 filePath.length(),
@@ -82,6 +84,10 @@ void ofxAudioUnitFilePlayer::play()
 	if(!(region.mTimeStamp.mFlags & kAudioTimeStampSampleTimeValid))
 	{
 		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
+		return;
+	}
+	else if(!_unit)
+	{
 		return;
 	}
 	

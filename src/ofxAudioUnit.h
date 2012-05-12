@@ -61,7 +61,7 @@ public:
 	bool setOutputBusCount(unsigned int numberOfOutputBusses);
 	unsigned int getOutputBusCount();
 	
-#ifndef TARGET_OS_IPHONE
+#if !(TARGET_OS_IPHONE)
 	void showUI(std::string title = "Audio Unit UI",
 							int x = 100, 
 							int y = 100,
@@ -124,77 +124,6 @@ public:
 	void loop(unsigned int timesToLoop = -1);
 	void stop();
 };
-
-#ifndef TARGET_OS_IPHONE
-
-#pragma mark - ofxAudioUnitNetSend
-
-// ofxAudioUnitNetSend wraps the AUNetSend unit.
-// This audio unit allows you to send audio to
-// an AUNetReceive via bonjour. It supports a handful
-// of different stream formats as well.
-
-// You can change the stream format by calling 
-// setFormat() with one of "kAUNetSendPresetFormat_"
-// constants
-
-// Multiple AUNetSends are differentiated by port
-// number, NOT by bonjour name
-
-class ofxAudioUnitNetSend : public ofxAudioUnit
-{
-public:
-	ofxAudioUnitNetSend();
-	void setName(std::string name);
-	void setPort(unsigned int portNumber);
-	void setFormat(unsigned int formatIndex);
-};
-
-#pragma mark - ofxAudioUnitNetReceive
-
-// ofxAudioUnitNetReceive wraps the AUNetReceive unit.
-// This audio unit receives audio from an AUNetSend.
-// Call connectToHost() with the IP Address of a
-// host running an instance of AUNetSend in order to
-// connect.
-
-// For example, myNetReceive.connectToHost("127.0.0.1")
-// will start streaming audio from an AUNetSend on the
-// same machine.
-
-class ofxAudioUnitNetReceive : public ofxAudioUnit
-{
-public:
-	ofxAudioUnitNetReceive();
-	void connectToHost(std::string ipAddress, unsigned long port = 52800);
-	void disconnect();
-};
-
-#pragma mark - ofxAudioUnitSpeechSynth
-
-// ofxAudioUnitSpeechSynth wraps the AUSpeechSynthesis unit.
-// This unit lets you access the Speech Synthesis API
-// for text-to-speech on your mac (the same thing that
-// powers the VoiceOver utility).
-
-class ofxAudioUnitSpeechSynth : public ofxAudioUnit
-{
-	SpeechChannel _channel;
-public:
-	ofxAudioUnitSpeechSynth();
-	
-	void say(std::string phrase);
-	void stop();
-	
-	void printAvailableVoices();
-	std::vector<std::string>getAvailableVoices();
-	bool setVoice(int voiceIndex);
-	bool setVoice(std::string voiceName);
-	
-	SpeechChannel getSpeechChannel(){return _channel;}
-};
-
-#endif
 
 #pragma mark - ofxAudioUnitOutput
 
@@ -268,8 +197,8 @@ class ofxAudioUnitTap
 public:
 	ofxAudioUnitTap();
 	~ofxAudioUnitTap();
-
-	void connectTo(ofxAudioUnit &destination, int destinationBus = 0);
+	
+	void connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
 	ofxAudioUnit& operator>>(ofxAudioUnit& destination);
 	
 	void getSamples(ofxAudioUnitTapSamples &outData);
@@ -277,6 +206,79 @@ public:
 	void getLeftWaveform(ofPolyline &outLine, float width, float height);
 	void getRightWaveform(ofPolyline &outLine, float width, float height);
 };
+
+#if !TARGET_OS_IPHONE
+
+#pragma mark - - OSX only below here - -
+
+#pragma mark ofxAudioUnitNetSend
+
+// ofxAudioUnitNetSend wraps the AUNetSend unit.
+// This audio unit allows you to send audio to
+// an AUNetReceive via bonjour. It supports a handful
+// of different stream formats as well.
+
+// You can change the stream format by calling 
+// setFormat() with one of "kAUNetSendPresetFormat_"
+// constants
+
+// Multiple AUNetSends are differentiated by port
+// number, NOT by bonjour name
+
+class ofxAudioUnitNetSend : public ofxAudioUnit
+{
+public:
+	ofxAudioUnitNetSend();
+	void setName(std::string name);
+	void setPort(unsigned int portNumber);
+	void setFormat(unsigned int formatIndex);
+};
+
+#pragma mark - ofxAudioUnitNetReceive
+
+// ofxAudioUnitNetReceive wraps the AUNetReceive unit.
+// This audio unit receives audio from an AUNetSend.
+// Call connectToHost() with the IP Address of a
+// host running an instance of AUNetSend in order to
+// connect.
+
+// For example, myNetReceive.connectToHost("127.0.0.1")
+// will start streaming audio from an AUNetSend on the
+// same machine.
+
+class ofxAudioUnitNetReceive : public ofxAudioUnit
+{
+public:
+	ofxAudioUnitNetReceive();
+	void connectToHost(std::string ipAddress, unsigned long port = 52800);
+	void disconnect();
+};
+
+#pragma mark - ofxAudioUnitSpeechSynth
+
+// ofxAudioUnitSpeechSynth wraps the AUSpeechSynthesis unit.
+// This unit lets you access the Speech Synthesis API
+// for text-to-speech on your mac (the same thing that
+// powers the VoiceOver utility).
+
+class ofxAudioUnitSpeechSynth : public ofxAudioUnit
+{
+	SpeechChannel _channel;
+public:
+	ofxAudioUnitSpeechSynth();
+	
+	void say(std::string phrase);
+	void stop();
+	
+	void printAvailableVoices();
+	std::vector<std::string>getAvailableVoices();
+	bool setVoice(int voiceIndex);
+	bool setVoice(std::string voiceName);
+	
+	SpeechChannel getSpeechChannel(){return _channel;}
+};
+
+#endif
 
 #pragma mark - Utility functions
 
