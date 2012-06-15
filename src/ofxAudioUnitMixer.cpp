@@ -28,26 +28,26 @@ ofxAudioUnitMixer::ofxAudioUnitMixer()
 void ofxAudioUnitMixer::setInputVolume(float volume, int bus)
 // ----------------------------------------------------------
 {
-  ERR_CHK(AudioUnitSetParameter(*_unit, 
-                                kMultiChannelMixerParam_Volume, 
-                                kAudioUnitScope_Input, 
-                                bus, 
-                                volume,
-                                0), 
-          "setting mixer input gain");
+  OFXAU_PRINT(AudioUnitSetParameter(*_unit, 
+																		kMultiChannelMixerParam_Volume, 
+																		kAudioUnitScope_Input, 
+																		bus, 
+																		volume,
+																		0), 
+							"setting mixer input gain");
 }
 
 // ----------------------------------------------------------
 void ofxAudioUnitMixer::setOutputVolume(float volume)
 // ----------------------------------------------------------
 {
-  ERR_CHK(AudioUnitSetParameter(*_unit, 
-                                kMultiChannelMixerParam_Volume, 
-                                kAudioUnitScope_Output, 
-                                0, 
-                                volume,
-                                0), 
-          "setting mixer output gain");
+  OFXAU_PRINT(AudioUnitSetParameter(*_unit, 
+																		kMultiChannelMixerParam_Volume, 
+																		kAudioUnitScope_Output, 
+																		0, 
+																		volume,
+																		0), 
+							"setting mixer output gain");
 }
 
 // ----------------------------------------------------------
@@ -63,13 +63,13 @@ void ofxAudioUnitMixer::setPan(float pan, int bus)
 		printedSetPanOSVersionMessage = true;
 	}
 #else
-  ERR_CHK(AudioUnitSetParameter(*_unit,
-                                kMultiChannelMixerParam_Pan,
-                                kAudioUnitScope_Input,
-                                bus,
-                                pan,
-                                0),
-          "setting mixer pan");
+  OFXAU_PRINT(AudioUnitSetParameter(*_unit,
+																		kMultiChannelMixerParam_Pan,
+																		kAudioUnitScope_Input,
+																		bus,
+																		pan,
+																		0),
+							"setting mixer pan");
 #endif
 }
 
@@ -80,12 +80,12 @@ float ofxAudioUnitMixer::getInputLevel(int bus)
 // ----------------------------------------------------------
 {	
 	AudioUnitParameterValue level;
-	ERR_CHK(AudioUnitGetParameter(*_unit,
-																kMultiChannelMixerParam_PreAveragePower,
-																kAudioUnitScope_Input,
-																bus,
-																&level),
-					"getting mixer input level");
+	OFXAU_PRINT(AudioUnitGetParameter(*_unit,
+																		kMultiChannelMixerParam_PreAveragePower,
+																		kAudioUnitScope_Input,
+																		bus,
+																		&level),
+							"getting mixer input level");
 	return level;
 }
 
@@ -94,12 +94,12 @@ float ofxAudioUnitMixer::getOutputLevel()
 // ----------------------------------------------------------
 {	
 	AudioUnitParameterValue level;
-	ERR_CHK(AudioUnitGetParameter(*_unit,
-																kMultiChannelMixerParam_PreAveragePower,
-																kAudioUnitScope_Output,
-																0,
-																&level),
-					"getting mixer output level");
+	OFXAU_PRINT(AudioUnitGetParameter(*_unit,
+																		kMultiChannelMixerParam_PreAveragePower,
+																		kAudioUnitScope_Output,
+																		0,
+																		&level),
+							"getting mixer output level");
 	return level;
 }
 

@@ -57,16 +57,16 @@ void ofxAudioUnit::initUnit()
   }
   
 	_unit = ofPtr<AudioUnit>((AudioUnit *)malloc(sizeof(AudioUnit)), AudioUnitDeleter);
-  ERR_CHK(AudioComponentInstanceNew(component, _unit.get()), "creating new unit");
-  ERR_CHK(AudioUnitInitialize(*_unit),                       "initializing unit");
+  OFXAU_RETURN(AudioComponentInstanceNew(component, _unit.get()), "creating new unit");
+  OFXAU_RETURN(AudioUnitInitialize(*_unit),                       "initializing unit");
 }
 
 // ----------------------------------------------------------
 void AudioUnitDeleter(AudioUnit * unit)
 // ----------------------------------------------------------
 {
-	ERR_CHK(AudioUnitUninitialize(*unit),         "uninitializing unit");
-  ERR_CHK(AudioComponentInstanceDispose(*unit), "disposing unit");
+	OFXAU_PRINT(AudioUnitUninitialize(*unit),         "uninitializing unit");
+  OFXAU_PRINT(AudioComponentInstanceDispose(*unit), "disposing unit");
 }
 
 #pragma mark - Parameters
@@ -78,7 +78,7 @@ void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
 																int bus)
 // ----------------------------------------------------------
 {
-	ERR_CHK(AudioUnitSetParameter(*_unit, parameter, scope, bus, value, 0), "setting parameter");
+	OFXAU_PRINT(AudioUnitSetParameter(*_unit, parameter, scope, bus, value, 0), "setting parameter");
 }
 
 #pragma mark - Connections
@@ -93,13 +93,13 @@ void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int so
   connection.sourceOutputNumber = sourceBus;
   connection.destInputNumber    = destinationBus;
   
-  ERR_CHK(AudioUnitSetProperty(*(otherUnit._unit), 
-                               kAudioUnitProperty_MakeConnection,
-                               kAudioUnitScope_Input,
-                               destinationBus,
-                               &connection,
-                               sizeof(AudioUnitConnection)),
-          "connecting units");
+  OFXAU_PRINT(AudioUnitSetProperty(*(otherUnit._unit), 
+																	 kAudioUnitProperty_MakeConnection,
+																	 kAudioUnitScope_Input,
+																	 destinationBus,
+																	 &connection,
+																	 sizeof(AudioUnitConnection)),
+							"connecting units");
 }
 
 // ----------------------------------------------------------
@@ -132,13 +132,13 @@ bool ofxAudioUnit::setInputBusCount(unsigned int numberOfInputBusses)
 // ----------------------------------------------------------
 {
 	UInt32 busCount = numberOfInputBusses;
-	return ERR_CHK_BOOL(AudioUnitSetProperty(*_unit,
-																					 kAudioUnitProperty_ElementCount,
-																					 kAudioUnitScope_Input, 
-																					 0, 
-																					 &busCount, 
-																					 sizeof(busCount)),
-											"setting number of input busses");
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+																			kAudioUnitProperty_ElementCount,
+																			kAudioUnitScope_Input, 
+																			0, 
+																			&busCount, 
+																			sizeof(busCount)),
+								 "setting number of input busses");
 }
 
 // ----------------------------------------------------------
@@ -147,13 +147,13 @@ unsigned int ofxAudioUnit::getInputBusCount()
 {
 	UInt32 busCount;
 	UInt32 busCountSize = sizeof(busCount);
-	ERR_CHK(AudioUnitGetProperty(*_unit,
-															 kAudioUnitProperty_ElementCount,
-															 kAudioUnitScope_Input,
-															 0,
-															 &busCount, 
-															 &busCountSize), 
-					"getting input bus count");
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+																	 kAudioUnitProperty_ElementCount,
+																	 kAudioUnitScope_Input,
+																	 0,
+																	 &busCount, 
+																	 &busCountSize), 
+							"getting input bus count");
 	return busCount;
 }
 
@@ -162,13 +162,13 @@ bool ofxAudioUnit::setOutputBusCount(unsigned int numberOfOutputBusses)
 // ----------------------------------------------------------
 {
 	UInt32 busCount = numberOfOutputBusses;
-	return ERR_CHK_BOOL(AudioUnitSetProperty(*_unit,
-																					 kAudioUnitProperty_ElementCount,
-																					 kAudioUnitScope_Output, 
-																					 0, 
-																					 &busCount, 
-																					 sizeof(busCount)),
-											"setting number of output busses");
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+																			kAudioUnitProperty_ElementCount,
+																			kAudioUnitScope_Output, 
+																			0, 
+																			&busCount, 
+																			sizeof(busCount)),
+								 "setting number of output busses");
 }
 
 // ----------------------------------------------------------
@@ -177,13 +177,13 @@ unsigned int ofxAudioUnit::getOutputBusCount()
 {
 	UInt32 busCount;
 	UInt32 busCountSize = sizeof(busCount);
-	ERR_CHK(AudioUnitGetProperty(*_unit,
-															 kAudioUnitProperty_ElementCount,
-															 kAudioUnitScope_Output,
-															 0,
-															 &busCount, 
-															 &busCountSize), 
-					"getting output bus count");
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+																	 kAudioUnitProperty_ElementCount,
+																	 kAudioUnitScope_Output,
+																	 0,
+																	 &busCount, 
+																	 &busCountSize), 
+							"getting output bus count");
 	return busCount;
 }
 
@@ -253,11 +253,11 @@ bool ofxAudioUnit::setPreset(std::string presetPath)
 void ofxAudioUnit::setRenderCallback(AURenderCallbackStruct callback, int bus)
 // ----------------------------------------------------------
 {
-	ERR_CHK(AudioUnitSetProperty(*_unit, 
-											 kAudioUnitProperty_SetRenderCallback,
-											 kAudioUnitScope_Global,
-											 bus, 
-											 &callback, 
-											 sizeof(callback)),
-					"setting render callback");
+	OFXAU_PRINT(AudioUnitSetProperty(*_unit, 
+																	 kAudioUnitProperty_SetRenderCallback,
+																	 kAudioUnitScope_Global,
+																	 bus, 
+																	 &callback, 
+																	 sizeof(callback)),
+							"setting render callback");
 }

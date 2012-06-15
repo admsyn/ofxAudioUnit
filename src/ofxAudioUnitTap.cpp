@@ -32,13 +32,13 @@ ofxAudioUnitTap::~ofxAudioUnitTap()
 		AURenderCallbackStruct callbackInfo;
 		callbackInfo.inputProc = silentRenderCallback;
 		callbackInfo.inputProcRefCon = NULL;
-		ERR_CHK(AudioUnitSetProperty(*_destinationUnit,
-																 kAudioUnitProperty_SetRenderCallback,
-																 kAudioUnitScope_Input,
-																 _destinationBus,
-																 &callbackInfo,
-																 sizeof(callbackInfo)),
-						"setting tap destination to a silent render callback");
+		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit,
+																		 kAudioUnitProperty_SetRenderCallback,
+																		 kAudioUnitScope_Input,
+																		 _destinationBus,
+																		 &callbackInfo,
+																		 sizeof(callbackInfo)),
+								"setting tap destination to a silent render callback");
 	}
 	
 	_bufferMutex.lock();
@@ -236,13 +236,13 @@ OSStatus tapRenderCallback(void * inRefCon,
 	}
 	
 	// if we're all set, render the source unit into the destination unit...
-	ERR_CHK(AudioUnitRender(*(context->sourceUnit),
-													ioActionFlags,
-													inTimeStamp,
-													0,
-													inNumberFrames,
-													ioData),
-					"passing source into destination");
+	OFXAU_PRINT(AudioUnitRender(*(context->sourceUnit),
+															ioActionFlags,
+															inTimeStamp,
+															0,
+															inNumberFrames,
+															ioData),
+							"passing source into destination");
 	
 	// if the tracked sample buffer isn't locked, copy the audio output there as well
 	if(context->bufferMutex->tryLock())

@@ -16,13 +16,13 @@ ofxAudioUnitSpeechSynth::ofxAudioUnitSpeechSynth()
 	initUnit();
 	UInt32 dataSize = sizeof(SpeechChannel);
 	
-	ERR_CHK(AudioUnitGetProperty(*_unit,
-															 kAudioUnitProperty_SpeechChannel,
-															 kAudioUnitScope_Global,
-															 0,
-															 &_channel,
-															 &dataSize),
-					"getting speech channel");
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+																	 kAudioUnitProperty_SpeechChannel,
+																	 kAudioUnitScope_Global,
+																	 0,
+																	 &_channel,
+																	 &dataSize),
+							"getting speech channel");
 }
 
 // ----------------------------------------------------------

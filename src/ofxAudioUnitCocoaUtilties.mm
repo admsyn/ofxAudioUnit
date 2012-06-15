@@ -184,55 +184,55 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	UInt32 dataSize;
 	Boolean isWriteable;
 	
-	ERR_CHK(AudioUnitGetPropertyInfo(unit,
+	OFXAU_RETURN(AudioUnitGetPropertyInfo(unit,
 																				kAudioUnitProperty_GetUIComponentList,
 																				kAudioUnitScope_Global,
 																				0,
 																				&dataSize, 
 																				&isWriteable),
-					"getting size of carbon view info");
+							 "getting size of carbon view info");
 	
 	ComponentDescription * desc = (ComponentDescription *)malloc(dataSize);
 	
-	ERR_CHK(AudioUnitGetProperty(unit,
-													 kAudioUnitProperty_GetUIComponentList,
-													 kAudioUnitScope_Global,
-													 0,
-													 desc,
-													 &dataSize), 
-					"getting carbon view info");
+	OFXAU_RETURN(AudioUnitGetProperty(unit,
+																		kAudioUnitProperty_GetUIComponentList,
+																		kAudioUnitScope_Global,
+																		0,
+																		desc,
+																		&dataSize), 
+							 "getting carbon view info");
 	
 	ComponentDescription d = desc[0];
 	
 	// Creating carbon view component
 	Component comp = FindNextComponent(NULL, &d);
-	ERR_CHK(OpenAComponent(comp, &_carbonView), "opening carbon view component");
+	OFXAU_RETURN(OpenAComponent(comp, &_carbonView), "opening carbon view component");
 	
 	// Creating a carbon window for the view
 	Rect carbonWindowBounds = {100,100,300,300};
-	ERR_CHK(CreateNewWindow(kPlainWindowClass,
-									(kWindowStandardHandlerAttribute |
-									 kWindowCompositingAttribute),
-									&carbonWindowBounds,
-									&_carbonWindow),
-					"creating carbon window");
+	OFXAU_RETURN(CreateNewWindow(kPlainWindowClass,
+															 (kWindowStandardHandlerAttribute |
+																kWindowCompositingAttribute),
+															 &carbonWindowBounds,
+															 &_carbonWindow),
+							 "creating carbon window");
 	
 	// Creating carbon controls
 	ControlRef rootControl, viewPane;
-	ERR_CHK(GetRootControl(_carbonWindow, &rootControl), 
-					"getting root control of carbon window");
+	OFXAU_RETURN(GetRootControl(_carbonWindow, &rootControl), 
+							 "getting root control of carbon window");
 	
 	// Creating the view
 	Float32Point size = {0,0};
 	Float32Point location = {0,0};
-	ERR_CHK(AudioUnitCarbonViewCreate(_carbonView,
-																unit,
-																_carbonWindow,
-																rootControl,
-																&location,
-																&size,
-																&viewPane),
-					"creating carbon view for audio unit");
+	OFXAU_RETURN(AudioUnitCarbonViewCreate(_carbonView,
+																				 unit,
+																				 _carbonWindow,
+																				 rootControl,
+																				 &location,
+																				 &size,
+																				 &viewPane),
+							 "creating carbon view for audio unit");
 	
 	// Putting everything in place
 	GetControlBounds(viewPane, &carbonWindowBounds);
@@ -248,13 +248,13 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	};
 	
 	EventHandlerUPP ehUPP = NewEventHandlerUPP(CarbonWindowEventHandler);
-	ERR_CHK(InstallWindowEventHandler(_carbonWindow,
-																		ehUPP,
-																		sizeof(windowEventTypes) / sizeof(EventTypeSpec),
-																		windowEventTypes,
-																		self,
-																		&_carbonEventHandler), 
-					"setting up carbon window event handler");
+	OFXAU_RETURN(InstallWindowEventHandler(_carbonWindow,
+																				 ehUPP,
+																				 sizeof(windowEventTypes) / sizeof(EventTypeSpec),
+																				 windowEventTypes,
+																				 self,
+																				 &_carbonEventHandler), 
+							 "setting up carbon window event handler");
 	
 	NSWindow * wrapperWindow = [[[NSWindow alloc] initWithWindowRef:_carbonWindow] autorelease];
 	

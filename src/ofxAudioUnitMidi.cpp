@@ -41,7 +41,8 @@ ofxAudioUnitMidiReceiver::ofxAudioUnitMidiReceiver(string clientName)
 // ----------------------------------------------------------
 {
 	CFStringRef cName = CFStringCreateWithCString(kCFAllocatorDefault, clientName.c_str(), kCFStringEncodingUTF8);
-	ERR_CHK(MIDIClientCreate(cName, ofxAudioUnitMidiInputProc, this, &_client), "creating MIDI client");
+	OFXAU_PRINT(MIDIClientCreate(cName, ofxAudioUnitMidiInputProc, this, &_client), 
+							"creating MIDI client");
 	CFRelease(cName);
 }
 
@@ -90,8 +91,8 @@ bool ofxAudioUnitMidiReceiver::connectToMidiSource(unsigned long midiSourceIndex
 		if(s != noErr) return false;
 	}
 	
-	return ERR_CHK_BOOL(MIDIPortConnectSource(_port, MIDIGetSource(midiSourceIndex), NULL), 
-											"connecting MIDI receiver to source");
+	OFXAU_RET_BOOL(MIDIPortConnectSource(_port, MIDIGetSource(midiSourceIndex), NULL), 
+								 "connecting MIDI receiver to source");
 }
 
 // ----------------------------------------------------------
@@ -118,7 +119,8 @@ bool ofxAudioUnitMidiReceiver::connectToMidiSource(string midiSourceName)
 void ofxAudioUnitMidiReceiver::disconnectFromMidiSource(unsigned long midiSourceIndex)
 // ----------------------------------------------------------
 {
-	ERR_CHK(MIDIPortDisconnectSource(_port, MIDIGetSource(midiSourceIndex)), "disconnecting from MIDI source");
+	OFXAU_PRINT(MIDIPortDisconnectSource(_port, MIDIGetSource(midiSourceIndex)), 
+							"disconnecting from MIDI source");
 }
 
 // ----------------------------------------------------------

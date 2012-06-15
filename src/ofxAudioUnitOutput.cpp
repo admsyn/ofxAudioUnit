@@ -23,12 +23,12 @@ ofxAudioUnitOutput::ofxAudioUnitOutput()
 bool ofxAudioUnitOutput::start()
 // ----------------------------------------------------------
 {
-  return ERR_CHK_BOOL(AudioOutputUnitStart(*_unit), "starting output unit");
+  OFXAU_RET_BOOL(AudioOutputUnitStart(*_unit), "starting output unit");
 }
 
 // ----------------------------------------------------------
 bool ofxAudioUnitOutput::stop()
 // ----------------------------------------------------------
 {
-  return ERR_CHK_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
+  OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
 }

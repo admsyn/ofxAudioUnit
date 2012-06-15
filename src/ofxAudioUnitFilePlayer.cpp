@@ -68,13 +68,13 @@ bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
 	// setting the file ID now since it seems to have some overhead.
 	// Doing it now ensures you'll get sound pretty much instantly after
 	// calling play()
-	return ERR_CHK_BOOL(AudioUnitSetProperty(*_unit,
-																					 kAudioUnitProperty_ScheduledFileIDs,
-																					 kAudioUnitScope_Global,
-																					 0, 
-																					 fileID, 
-																					 sizeof(fileID)),
-											"setting file player's file ID");
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+																			kAudioUnitProperty_ScheduledFileIDs,
+																			kAudioUnitScope_Global,
+																			0, 
+																			fileID, 
+																			sizeof(fileID)),
+								 "setting file player's file ID");
 }
 
 // ----------------------------------------------------------
@@ -91,33 +91,33 @@ void ofxAudioUnitFilePlayer::play()
 		return;
 	}
 	
-	ERR_CHK(AudioUnitSetProperty(*_unit,
-															 kAudioUnitProperty_ScheduledFileIDs,
-															 kAudioUnitScope_Global,
-															 0, 
-															 fileID, 
-															 sizeof(fileID)),
-					"setting file player's file ID");
+	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
+																		kAudioUnitProperty_ScheduledFileIDs,
+																		kAudioUnitScope_Global,
+																		0, 
+																		fileID, 
+																		sizeof(fileID)),
+							 "setting file player's file ID");
 	
-	ERR_CHK(AudioUnitSetProperty(*_unit,
-															 kAudioUnitProperty_ScheduledFileRegion,
-															 kAudioUnitScope_Global,
-															 0,
-															 &region,
-															 sizeof(region)),
-					"setting file player region");
+	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
+																		kAudioUnitProperty_ScheduledFileRegion,
+																		kAudioUnitScope_Global,
+																		0,
+																		&region,
+																		sizeof(region)),
+							 "setting file player region");
 	
 	AudioTimeStamp startTime = {0};
 	startTime.mFlags = kAudioTimeStampSampleTimeValid;
 	startTime.mSampleTime = -1;
 	
-	ERR_CHK(AudioUnitSetProperty(*_unit,
-															 kAudioUnitProperty_ScheduleStartTimeStamp,
-															 kAudioUnitScope_Global,
-															 0,
-															 &startTime,
-															 sizeof(startTime)),
-					"setting file player start time");
+	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
+																		kAudioUnitProperty_ScheduleStartTimeStamp,
+																		kAudioUnitScope_Global,
+																		0,
+																		&startTime,
+																		sizeof(startTime)),
+							 "setting file player start time");
 }
 
 // ----------------------------------------------------------

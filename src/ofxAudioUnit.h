@@ -7,6 +7,7 @@
 #include <vector>
 #include "ofPolyline.h"
 #include "ofTypes.h"
+#include "ofxAudioUnitUtils.h"
 
 #pragma mark ofxAudioUnit
 
@@ -21,14 +22,12 @@
 // output unit will allow you to read the samples being sent from the synth
 // to the output.
 
-class ofxAudioUnitTap;
-
 class ofxAudioUnit
 {	
 	friend class ofxAudioUnitTap;
 	
 protected:  
-  ofPtr<AudioUnit> _unit;
+  AudioUnitRef _unit;
   
 	AudioComponentDescription _desc;
   void initUnit();
@@ -47,7 +46,7 @@ public:
   ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
   
-	ofPtr<AudioUnit> getUnit(){return _unit;}
+	AudioUnitRef getUnit(){return _unit;}
   bool setPreset(std::string presetPath);
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, 
@@ -164,21 +163,6 @@ public:
 // At the moment, the size of the vector of samples extracted
 // is basically hardcoded to 512 samples
 
-struct ofxAudioUnitTapContext
-{
-	ofPtr<AudioUnit> sourceUnit;
-	AudioBufferList * trackedSamples;
-	ofMutex * bufferMutex;
-};
-
-typedef struct ofxAudioUnitTapSamples
-{
-	std::vector<AudioUnitSampleType> left;
-	std::vector<AudioUnitSampleType> right;
-	size_t size(){return min(left.size(), right.size());}
-}
-ofxAudioUnitTapSamples;
-
 class ofxAudioUnitTap
 {
 	friend class ofxAudioUnit;
@@ -189,8 +173,8 @@ class ofxAudioUnitTap
 	
 	ofMutex _bufferMutex;
 	AudioBufferList * _trackedSamples;
-	ofPtr<AudioUnit> _sourceUnit;
-	ofPtr<AudioUnit> _destinationUnit;
+	AudioUnitRef _sourceUnit;
+	AudioUnitRef _destinationUnit;
 	UInt32 _destinationBus;
 	ofxAudioUnitTapContext _tapContext;
 	
@@ -279,20 +263,3 @@ public:
 };
 
 #endif
-
-#pragma mark - Utility functions
-
-// these functions make the "do core audio thing, check for error" process less repetitive
-static void ERR_CHK(OSStatus s, std::string stage){
-	if(s!=noErr){
-		std::cout << "Error " << s << " while " << stage << std::endl;
-		return;
-	}
-}
-static bool ERR_CHK_BOOL(OSStatus s, std::string stage){
-	if(s!=noErr){
-		std::cout << "Error " << s << " while " << stage << std::endl;
-		return false;
-	}
-	return true;
-}
