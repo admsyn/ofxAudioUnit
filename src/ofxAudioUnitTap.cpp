@@ -1,21 +1,21 @@
 #include "ofxAudioUnit.h"
 
 static OSStatus tapRenderCallback(void * inRefCon,
-																	AudioUnitRenderActionFlags *	ioActionFlags,
-																	const AudioTimeStamp *	inTimeStamp,
-																	UInt32 inBusNumber,
-																	UInt32	inNumberFrames,
-																	AudioBufferList * ioData);
+								  AudioUnitRenderActionFlags *	ioActionFlags,
+								  const AudioTimeStamp *	inTimeStamp,
+								  UInt32 inBusNumber,
+								  UInt32	inNumberFrames,
+								  AudioBufferList * ioData);
 
 static OSStatus silentRenderCallback(void * inRefCon,
-																		 AudioUnitRenderActionFlags *	ioActionFlags,
-																		 const AudioTimeStamp *	inTimeStamp,
-																		 UInt32 inBusNumber,
-																		 UInt32	inNumberFrames,
-																		 AudioBufferList * ioData);
+									 AudioUnitRenderActionFlags *	ioActionFlags,
+									 const AudioTimeStamp *	inTimeStamp,
+									 UInt32 inBusNumber,
+									 UInt32	inNumberFrames,
+									 AudioBufferList * ioData);
 
 // ----------------------------------------------------------
-ofxAudioUnitTap::ofxAudioUnitTap() : 
+ofxAudioUnitTap::ofxAudioUnitTap() :
 _trackedSamples(NULL)
 // ----------------------------------------------------------
 {
@@ -33,12 +33,12 @@ ofxAudioUnitTap::~ofxAudioUnitTap()
 		callbackInfo.inputProc = silentRenderCallback;
 		callbackInfo.inputProcRefCon = NULL;
 		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit,
-																		 kAudioUnitProperty_SetRenderCallback,
-																		 kAudioUnitScope_Input,
-																		 _destinationBus,
-																		 &callbackInfo,
-																		 sizeof(callbackInfo)),
-								"setting tap destination to a silent render callback");
+										 kAudioUnitProperty_SetRenderCallback,
+										 kAudioUnitScope_Input,
+										 _destinationBus,
+										 &callbackInfo,
+										 sizeof(callbackInfo)),
+					"setting tap destination to a silent render callback");
 	}
 	
 	_bufferMutex.lock();
@@ -90,27 +90,27 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	AudioStreamBasicDescription asbd = {0};
 	UInt32 dataSize = sizeof(AudioStreamBasicDescription);
 	
-//	Connect the source to the destination.
-//	The only reason for this is so that they can sort out their
-//	own ASBDs. The destination unit will be connected to the tap's
-//	render callback afterwards.
+	//	Connect the source to the destination.
+	//	The only reason for this is so that they can sort out their
+	//	own ASBDs. The destination unit will be connected to the tap's
+	//	render callback afterwards.
 	AudioUnitConnection c;
 	c.sourceAudioUnit = *_sourceUnit;
 	c.sourceOutputNumber = sourceBus;
 	c.destInputNumber = destinationBus;
 	AudioUnitSetProperty(*(destination._unit),
-											 kAudioUnitProperty_MakeConnection,
-											 kAudioUnitScope_Global,
-											 destinationBus,
-											 &c,
-											 sizeof(c));
+						 kAudioUnitProperty_MakeConnection,
+						 kAudioUnitScope_Global,
+						 destinationBus,
+						 &c,
+						 sizeof(c));
 	
 	AudioUnitGetProperty(*(_sourceUnit),
-											 kAudioUnitProperty_StreamFormat,
-											 kAudioUnitScope_Output,
-											 sourceBus,
-											 &asbd,
-											 &dataSize);
+						 kAudioUnitProperty_StreamFormat,
+						 kAudioUnitScope_Output,
+						 sourceBus,
+						 &asbd,
+						 &dataSize);
 	
 	_trackedSamples = allocBufferList(asbd.mChannelsPerFrame);
 	
@@ -214,11 +214,11 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRigh
 
 // ----------------------------------------------------------
 OSStatus tapRenderCallback(void * inRefCon,
-													 AudioUnitRenderActionFlags *	ioActionFlags,
-													 const AudioTimeStamp *	inTimeStamp,
-													 UInt32 inBusNumber,
-													 UInt32	inNumberFrames,
-													 AudioBufferList * ioData)
+						   AudioUnitRenderActionFlags *	ioActionFlags,
+						   const AudioTimeStamp *	inTimeStamp,
+						   UInt32 inBusNumber,
+						   UInt32	inNumberFrames,
+						   AudioBufferList * ioData)
 // ----------------------------------------------------------
 {
 	ofxAudioUnitTapContext * context = (ofxAudioUnitTapContext *)inRefCon;
@@ -237,25 +237,25 @@ OSStatus tapRenderCallback(void * inRefCon,
 	
 	// if we're all set, render the source unit into the destination unit...
 	OFXAU_PRINT(AudioUnitRender(*(context->sourceUnit),
-															ioActionFlags,
-															inTimeStamp,
-															0,
-															inNumberFrames,
-															ioData),
-							"passing source into destination");
+								ioActionFlags,
+								inTimeStamp,
+								0,
+								inNumberFrames,
+								ioData),
+				"passing source into destination");
 	
 	// if the tracked sample buffer isn't locked, copy the audio output there as well
 	if(context->bufferMutex->tryLock())
 	{
 		int numChannels = min(ioData->mNumberBuffers, context->trackedSamples->mNumberBuffers);
 		size_t bytesToCopy = min(ioData->mBuffers[0].mDataByteSize, 
-														 context->trackedSamples->mBuffers[0].mDataByteSize);
+								 context->trackedSamples->mBuffers[0].mDataByteSize);
 		
 		for(int i = 0; i < numChannels; i++)
 		{
 			memcpy(context->trackedSamples->mBuffers[i].mData,
-						 ioData->mBuffers[i].mData,
-						 bytesToCopy);
+				   ioData->mBuffers[i].mData,
+				   bytesToCopy);
 			context->trackedSamples->mBuffers[i].mDataByteSize = bytesToCopy;
 		}
 		
@@ -267,11 +267,11 @@ OSStatus tapRenderCallback(void * inRefCon,
 
 // ----------------------------------------------------------
 OSStatus silentRenderCallback(void * inRefCon,
-															AudioUnitRenderActionFlags *	ioActionFlags,
-															const AudioTimeStamp *	inTimeStamp,
-															UInt32 inBusNumber,
-															UInt32	inNumberFrames,
-															AudioBufferList * ioData)
+							  AudioUnitRenderActionFlags *	ioActionFlags,
+							  const AudioTimeStamp *	inTimeStamp,
+							  UInt32 inBusNumber,
+							  UInt32	inNumberFrames,
+							  AudioBufferList * ioData)
 // ----------------------------------------------------------
 {
 	for(int i = 0; i < ioData->mNumberBuffers; i++)

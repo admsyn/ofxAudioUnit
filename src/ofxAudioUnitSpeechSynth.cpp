@@ -17,21 +17,21 @@ ofxAudioUnitSpeechSynth::ofxAudioUnitSpeechSynth()
 	UInt32 dataSize = sizeof(SpeechChannel);
 	
 	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
-																	 kAudioUnitProperty_SpeechChannel,
-																	 kAudioUnitScope_Global,
-																	 0,
-																	 &_channel,
-																	 &dataSize),
-							"getting speech channel");
+									 kAudioUnitProperty_SpeechChannel,
+									 kAudioUnitScope_Global,
+									 0,
+									 &_channel,
+									 &dataSize),
+				"getting speech channel");
 }
 
 // ----------------------------------------------------------
 void ofxAudioUnitSpeechSynth::say(std::string phrase)
 // ----------------------------------------------------------
 {
-	CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault, 
-																								 phrase.c_str(), 
-																								 kCFStringEncodingUTF8);
+	CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault,
+												   phrase.c_str(),
+												   kCFStringEncodingUTF8);
 	
 	SpeakCFString(_channel, string, NULL);
 	

@@ -8,20 +8,20 @@
 
 struct ofxAudioUnitMidi 
 {
-  static unsigned long getNumberOfSources(){return MIDIGetNumberOfSources();}
+	static unsigned long getNumberOfSources(){return MIDIGetNumberOfSources();}
 	static std::vector<std::string> getSourceNames();
 	static void printSourceNames();
 };
 
 class ofxAudioUnitMidiReceiver 
 {
-  MIDIClientRef    _client;
+	MIDIClientRef    _client;
 	MIDIEndpointRef  _endpoint;
 	MIDIPortRef      _port;
 	AudioUnit        _unit;
 	
 public:
-  ofxAudioUnitMidiReceiver(std::string clientName = "openFrameworks");
+	ofxAudioUnitMidiReceiver(std::string clientName = "openFrameworks");
 	ofxAudioUnitMidiReceiver(const ofxAudioUnitMidiReceiver &other);
 	ofxAudioUnitMidiReceiver& operator= (const ofxAudioUnitMidiReceiver &other);
 	~ofxAudioUnitMidiReceiver();
@@ -34,9 +34,9 @@ public:
 };
 
 static void ofxAudioUnitMidiInputProc(const MIDINotification *message, 
-																			void *refCon);
+									  void *refCon);
 
 static void ofxAudioUnitMidiReadProc(const MIDIPacketList *pktlist, 
-																		 void *readProcRefCon,
-																		 void *srcConnRefCon);
+									 void *readProcRefCon,
+									 void *srcConnRefCon);
 #endif //TARGET_OS_IPHONE

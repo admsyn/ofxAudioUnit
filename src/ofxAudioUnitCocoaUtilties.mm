@@ -41,9 +41,9 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 - (void) dealloc
 // ----------------------------------------------------------
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-																									name:NSViewFrameDidChangeNotification 
-																								object:_AUView];
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:NSViewFrameDidChangeNotification
+												  object:_AUView];
 	
 	if(_carbonView)         CloseComponent(_carbonView);
 	if(_carbonWindow)       DisposeWindow(_carbonWindow);
@@ -86,11 +86,11 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	
 	// getting the size of the AU View info
 	OSStatus result = AudioUnitGetPropertyInfo(unit,
-																						 kAudioUnitProperty_CocoaUI,
-																						 kAudioUnitScope_Global,
-																						 0,
-																						 &dataSize,
-																						 &isWriteable);
+											   kAudioUnitProperty_CocoaUI,
+											   kAudioUnitScope_Global,
+											   0,
+											   &dataSize,
+											   &isWriteable);
 	
 	numberOfClasses = (dataSize - sizeof(CFURLRef)) / sizeof(CFStringRef);
 	
@@ -99,11 +99,11 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	{
 		cocoaViewInfo = (AudioUnitCocoaViewInfo *)malloc(dataSize);
 		if(AudioUnitGetProperty(unit,
-														kAudioUnitProperty_CocoaUI,
-														kAudioUnitScope_Global,
-														0,
-														cocoaViewInfo,
-														&dataSize) == noErr)
+								kAudioUnitProperty_CocoaUI,
+								kAudioUnitScope_Global,
+								0,
+								cocoaViewInfo,
+								&dataSize) == noErr)
 		{
 			cocoaViewBundlePath = cocoaViewInfo->mCocoaAUViewBundleLocation;
 			factoryClassName    = cocoaViewInfo->mCocoaAUViewClass[0];
@@ -124,7 +124,7 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 			Class factoryClass = [viewBundle classNamed:(NSString *)factoryClassName];
 			id<AUCocoaUIBase> factoryInstance = [[[factoryClass alloc] init] autorelease];
 			AUView = [factoryInstance uiViewForAudioUnit:unit 
-																					withSize:NSMakeSize(0, 0)];
+												withSize:NSMakeSize(0, 0)];
 			// cleanup
 			CFRelease(cocoaViewBundlePath);
 			if(cocoaViewInfo)
@@ -155,23 +155,23 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	_AUView = audioUnitView;
 	NSRect contentRect = NSMakeRect(0, 0, audioUnitView.frame.size.width, audioUnitView.frame.size.height);
 	self = [super initWithContentRect:contentRect
-													styleMask:(NSTitledWindowMask | 
-																		 NSClosableWindowMask | 
-																		 NSMiniaturizableWindowMask) 
-														backing:NSBackingStoreBuffered 
-															defer:NO];
+							styleMask:(NSTitledWindowMask |
+									   NSClosableWindowMask |
+									   NSMiniaturizableWindowMask)
+							  backing:NSBackingStoreBuffered
+								defer:NO];
 	if(self)
 	{
 		self.level = NSNormalWindowLevel;
 		self.contentView = audioUnitView;
 		
-		[[NSNotificationCenter defaultCenter] addObserver:self 
-																						 selector:@selector(audioUnitChangedViewSize:) 
-																								 name:NSViewFrameDidChangeNotification
-																							 object:_AUView];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(audioUnitChangedViewSize:)
+													 name:NSViewFrameDidChangeNotification
+												   object:_AUView];
 	}
 }
-	
+
 // ----------------------------------------------------------
 - (void) initWithCarbonViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
@@ -185,22 +185,22 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	Boolean isWriteable;
 	
 	OFXAU_RETURN(AudioUnitGetPropertyInfo(unit,
-																				kAudioUnitProperty_GetUIComponentList,
-																				kAudioUnitScope_Global,
-																				0,
-																				&dataSize, 
-																				&isWriteable),
-							 "getting size of carbon view info");
+										  kAudioUnitProperty_GetUIComponentList,
+										  kAudioUnitScope_Global,
+										  0,
+										  &dataSize,
+										  &isWriteable),
+				 "getting size of carbon view info");
 	
 	ComponentDescription * desc = (ComponentDescription *)malloc(dataSize);
 	
 	OFXAU_RETURN(AudioUnitGetProperty(unit,
-																		kAudioUnitProperty_GetUIComponentList,
-																		kAudioUnitScope_Global,
-																		0,
-																		desc,
-																		&dataSize), 
-							 "getting carbon view info");
+									  kAudioUnitProperty_GetUIComponentList,
+									  kAudioUnitScope_Global,
+									  0,
+									  desc,
+									  &dataSize),
+				 "getting carbon view info");
 	
 	ComponentDescription d = desc[0];
 	
@@ -211,28 +211,28 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	// Creating a carbon window for the view
 	Rect carbonWindowBounds = {100,100,300,300};
 	OFXAU_RETURN(CreateNewWindow(kPlainWindowClass,
-															 (kWindowStandardHandlerAttribute |
-																kWindowCompositingAttribute),
-															 &carbonWindowBounds,
-															 &_carbonWindow),
-							 "creating carbon window");
+								 (kWindowStandardHandlerAttribute |
+								  kWindowCompositingAttribute),
+								 &carbonWindowBounds,
+								 &_carbonWindow),
+				 "creating carbon window");
 	
 	// Creating carbon controls
 	ControlRef rootControl, viewPane;
-	OFXAU_RETURN(GetRootControl(_carbonWindow, &rootControl), 
-							 "getting root control of carbon window");
+	OFXAU_RETURN(GetRootControl(_carbonWindow, &rootControl),
+				 "getting root control of carbon window");
 	
 	// Creating the view
 	Float32Point size = {0,0};
 	Float32Point location = {0,0};
 	OFXAU_RETURN(AudioUnitCarbonViewCreate(_carbonView,
-																				 unit,
-																				 _carbonWindow,
-																				 rootControl,
-																				 &location,
-																				 &size,
-																				 &viewPane),
-							 "creating carbon view for audio unit");
+										   unit,
+										   _carbonWindow,
+										   rootControl,
+										   &location,
+										   &size,
+										   &viewPane),
+				 "creating carbon view for audio unit");
 	
 	// Putting everything in place
 	GetControlBounds(viewPane, &carbonWindowBounds);
@@ -249,21 +249,21 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 	
 	EventHandlerUPP ehUPP = NewEventHandlerUPP(CarbonWindowEventHandler);
 	OFXAU_RETURN(InstallWindowEventHandler(_carbonWindow,
-																				 ehUPP,
-																				 sizeof(windowEventTypes) / sizeof(EventTypeSpec),
-																				 windowEventTypes,
-																				 self,
-																				 &_carbonEventHandler), 
-							 "setting up carbon window event handler");
+										   ehUPP,
+										   sizeof(windowEventTypes) / sizeof(EventTypeSpec),
+										   windowEventTypes,
+										   self,
+										   &_carbonEventHandler),
+				 "setting up carbon window event handler");
 	
 	NSWindow * wrapperWindow = [[[NSWindow alloc] initWithWindowRef:_carbonWindow] autorelease];
 	
 	self = [super initWithContentRect:NSMakeRect(0, 0, size.x + 1, size.y + 1)
-													styleMask:(NSClosableWindowMask | 
-																		 NSMiniaturizableWindowMask |
-																		 NSTitledWindowMask)
-														backing:NSBackingStoreBuffered
-															defer:NO];
+							styleMask:(NSClosableWindowMask | 
+									   NSMiniaturizableWindowMask |
+									   NSTitledWindowMask)
+							  backing:NSBackingStoreBuffered
+								defer:NO];
 	
 	if(self)
 	{
@@ -274,8 +274,8 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 }
 
 pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
-																				 EventRef event,
-																				 void * userData)
+										 EventRef event,
+										 void * userData)
 {
 	ofxAudioUnitUIWindow * uiWindow = (ofxAudioUnitUIWindow *)userData;
 	UInt32 eventKind = GetEventKind(event);
@@ -289,13 +289,13 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 			[uiWindow makeKeyAndOrderFront:nil];
 			ClickActivationResult howToHandleClick = kActivateAndHandleClick;
 			SetEventParameter(event, 
-												kEventParamClickActivation,
-												typeClickActivationResult,
-												sizeof(ClickActivationResult),
-												&howToHandleClick);
+							  kEventParamClickActivation,
+							  typeClickActivationResult,
+							  sizeof(ClickActivationResult),
+							  &howToHandleClick);
 			return noErr;
 	}
-
+	
 	return eventNotHandledErr;
 }
 
@@ -306,16 +306,16 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 	UInt32 dataSize;
 	UInt32 numberOfClasses;
 	Boolean isWriteable;
-
+	
 	OSStatus result = AudioUnitGetPropertyInfo(unit,
-																						 kAudioUnitProperty_CocoaUI,
-																						 kAudioUnitScope_Global,
-																						 0,
-																						 &dataSize,
-																						 &isWriteable);
+											   kAudioUnitProperty_CocoaUI,
+											   kAudioUnitScope_Global,
+											   0,
+											   &dataSize,
+											   &isWriteable);
 	
 	numberOfClasses = (dataSize - sizeof(CFURLRef)) / sizeof(CFStringRef);
-
+	
 	return (result == noErr) && (numberOfClasses > 0);
 }
 
@@ -326,11 +326,11 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 	UInt32 dataSize;
 	Boolean isWriteable;
 	OSStatus s = AudioUnitGetPropertyInfo(unit,
-																				kAudioUnitProperty_GetUIComponentList,
-																				kAudioUnitScope_Global,
-																				0,
-																				&dataSize, 
-																				&isWriteable);
+										  kAudioUnitProperty_GetUIComponentList,
+										  kAudioUnitScope_Global,
+										  0,
+										  &dataSize, 
+										  &isWriteable);
 	
 	return (s == noErr) && (dataSize >= sizeof(ComponentDescription));
 }
@@ -340,8 +340,8 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 // ----------------------------------------------------------
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
-																									name:NSViewFrameDidChangeNotification 
-																								object:_AUView];
+													name:NSViewFrameDidChangeNotification 
+												  object:_AUView];
 	
 	NSRect newRect = self.frame;
 	NSSize newSize = [self frameRectForContentRect:((NSView *)[notification object]).frame].size;
@@ -350,9 +350,9 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 	[self setFrame:newRect display:YES];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self 
-																					 selector:@selector(audioUnitChangedViewSize:) 
-																							 name:NSViewFrameDidChangeNotification
-																						 object:_AUView];
+											 selector:@selector(audioUnitChangedViewSize:) 
+												 name:NSViewFrameDidChangeNotification
+											   object:_AUView];
 }
 
 @end
@@ -370,8 +370,8 @@ void ofxAudioUnit::showUI(string title, int x, int y, bool forceGeneric)
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*_unit.get()
-																																			 forceGeneric:forceGeneric];
-
+																		 forceGeneric:forceGeneric];
+	
 	NSString * windowTitle = [NSString stringWithUTF8String:title.c_str()];
 	if(!windowTitle) windowTitle = @"Audio Unit UI";
 	

@@ -8,21 +8,21 @@ ofxAudioUnit::ofxAudioUnit(AudioComponentDescription description)
 : _desc(description)
 // ----------------------------------------------------------
 {
-  initUnit();
+	initUnit();
 }
 
 // ----------------------------------------------------------
-ofxAudioUnit::ofxAudioUnit(OSType type, 
-                           OSType subType, 
-                           OSType manufacturer)
+ofxAudioUnit::ofxAudioUnit(OSType type,
+						   OSType subType,
+						   OSType manufacturer)
 // ----------------------------------------------------------
 {
-  _desc.componentType         = type;
-  _desc.componentSubType      = subType;
-  _desc.componentManufacturer = manufacturer;
-  _desc.componentFlags        = 0;
-  _desc.componentFlagsMask    = 0;
-  initUnit();
+	_desc.componentType         = type;
+	_desc.componentSubType      = subType;
+	_desc.componentManufacturer = manufacturer;
+	_desc.componentFlags        = 0;
+	_desc.componentFlagsMask    = 0;
+	initUnit();
 };
 
 // ----------------------------------------------------------
@@ -39,7 +39,7 @@ ofxAudioUnit& ofxAudioUnit::operator=(const ofxAudioUnit &orig)
 {
 	if(this == &orig) return *this;
 	
-  _desc = orig._desc;
+	_desc = orig._desc;
 	_unit = orig._unit;
 	
 	return *this;
@@ -49,16 +49,16 @@ ofxAudioUnit& ofxAudioUnit::operator=(const ofxAudioUnit &orig)
 void ofxAudioUnit::initUnit()
 // ----------------------------------------------------------
 {
-  AudioComponent component = AudioComponentFindNext(NULL, &_desc);
-  if(!component)
-  {
-    cout << "Couldn't locate component for description" << endl;
-    return;
-  }
-  
+	AudioComponent component = AudioComponentFindNext(NULL, &_desc);
+	if(!component)
+	{
+		cout << "Couldn't locate component for description" << endl;
+		return;
+	}
+	
 	_unit = ofPtr<AudioUnit>((AudioUnit *)malloc(sizeof(AudioUnit)), AudioUnitDeleter);
-  OFXAU_RETURN(AudioComponentInstanceNew(component, _unit.get()), "creating new unit");
-  OFXAU_RETURN(AudioUnitInitialize(*_unit),                       "initializing unit");
+	OFXAU_RETURN(AudioComponentInstanceNew(component, _unit.get()), "creating new unit");
+	OFXAU_RETURN(AudioUnitInitialize(*_unit),                       "initializing unit");
 }
 
 // ----------------------------------------------------------
@@ -66,16 +66,16 @@ void AudioUnitDeleter(AudioUnit * unit)
 // ----------------------------------------------------------
 {
 	OFXAU_PRINT(AudioUnitUninitialize(*unit),         "uninitializing unit");
-  OFXAU_PRINT(AudioComponentInstanceDispose(*unit), "disposing unit");
+	OFXAU_PRINT(AudioComponentInstanceDispose(*unit), "disposing unit");
 }
 
 #pragma mark - Parameters
 
 // ----------------------------------------------------------
-void ofxAudioUnit::setParameter(AudioUnitParameterID parameter, 
-																AudioUnitScope scope, 
-																AudioUnitParameterValue value,
-																int bus)
+void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
+								AudioUnitScope scope,
+								AudioUnitParameterValue value,
+								int bus)
 // ----------------------------------------------------------
 {
 	OFXAU_PRINT(AudioUnitSetParameter(*_unit, parameter, scope, bus, value, 0), "setting parameter");
@@ -88,18 +88,18 @@ void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int so
 // ----------------------------------------------------------
 {
 	if(!_unit) return;
-  AudioUnitConnection connection;
-  connection.sourceAudioUnit    = *_unit;
-  connection.sourceOutputNumber = sourceBus;
-  connection.destInputNumber    = destinationBus;
-  
-  OFXAU_PRINT(AudioUnitSetProperty(*(otherUnit._unit), 
-																	 kAudioUnitProperty_MakeConnection,
-																	 kAudioUnitScope_Input,
-																	 destinationBus,
-																	 &connection,
-																	 sizeof(AudioUnitConnection)),
-							"connecting units");
+	AudioUnitConnection connection;
+	connection.sourceAudioUnit    = *_unit;
+	connection.sourceOutputNumber = sourceBus;
+	connection.destInputNumber    = destinationBus;
+	
+	OFXAU_PRINT(AudioUnitSetProperty(*(otherUnit._unit),
+									 kAudioUnitProperty_MakeConnection,
+									 kAudioUnitScope_Input,
+									 destinationBus,
+									 &connection,
+									 sizeof(AudioUnitConnection)),
+				"connecting units");
 }
 
 // ----------------------------------------------------------
@@ -113,8 +113,8 @@ void ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
 ofxAudioUnit& ofxAudioUnit::operator>>(ofxAudioUnit& otherUnit)
 // ----------------------------------------------------------
 {
-  connectTo(otherUnit);
-  return otherUnit;
+	connectTo(otherUnit);
+	return otherUnit;
 }
 
 // ----------------------------------------------------------
@@ -133,12 +133,12 @@ bool ofxAudioUnit::setInputBusCount(unsigned int numberOfInputBusses)
 {
 	UInt32 busCount = numberOfInputBusses;
 	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-																			kAudioUnitProperty_ElementCount,
-																			kAudioUnitScope_Input, 
-																			0, 
-																			&busCount, 
-																			sizeof(busCount)),
-								 "setting number of input busses");
+										kAudioUnitProperty_ElementCount,
+										kAudioUnitScope_Input,
+										0,
+										&busCount,
+										sizeof(busCount)),
+				   "setting number of input busses");
 }
 
 // ----------------------------------------------------------
@@ -148,12 +148,12 @@ unsigned int ofxAudioUnit::getInputBusCount()
 	UInt32 busCount;
 	UInt32 busCountSize = sizeof(busCount);
 	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
-																	 kAudioUnitProperty_ElementCount,
-																	 kAudioUnitScope_Input,
-																	 0,
-																	 &busCount, 
-																	 &busCountSize), 
-							"getting input bus count");
+									 kAudioUnitProperty_ElementCount,
+									 kAudioUnitScope_Input,
+									 0,
+									 &busCount,
+									 &busCountSize),
+				"getting input bus count");
 	return busCount;
 }
 
@@ -163,12 +163,12 @@ bool ofxAudioUnit::setOutputBusCount(unsigned int numberOfOutputBusses)
 {
 	UInt32 busCount = numberOfOutputBusses;
 	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-																			kAudioUnitProperty_ElementCount,
-																			kAudioUnitScope_Output, 
-																			0, 
-																			&busCount, 
-																			sizeof(busCount)),
-								 "setting number of output busses");
+										kAudioUnitProperty_ElementCount,
+										kAudioUnitScope_Output,
+										0, 
+										&busCount,
+										sizeof(busCount)),
+				   "setting number of output busses");
 }
 
 // ----------------------------------------------------------
@@ -178,12 +178,12 @@ unsigned int ofxAudioUnit::getOutputBusCount()
 	UInt32 busCount;
 	UInt32 busCountSize = sizeof(busCount);
 	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
-																	 kAudioUnitProperty_ElementCount,
-																	 kAudioUnitScope_Output,
-																	 0,
-																	 &busCount, 
-																	 &busCountSize), 
-							"getting output bus count");
+									 kAudioUnitProperty_ElementCount,
+									 kAudioUnitScope_Output,
+									 0,
+									 &busCount,
+									 &busCountSize),
+				"getting output bus count");
 	return busCount;
 }
 
@@ -193,47 +193,47 @@ unsigned int ofxAudioUnit::getOutputBusCount()
 bool ofxAudioUnit::setPreset(std::string presetPath)
 // ----------------------------------------------------------
 {
-  CFURLRef          presetURL;
-  CFDataRef         presetData;
-  CFPropertyListRef presetPList;
-  Boolean           presetReadSuccess;
-  SInt32            presetReadErrorCode;
-  OSStatus          presetSetStatus;
-  
-  presetURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
-                                                      (const UInt8*)presetPath.c_str(),
-                                                      presetPath.length(),
-                                                      NULL);
-  
-  presetReadSuccess = CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault,
-                                                               presetURL,
-                                                               &presetData,
-                                                               NULL,
-                                                               NULL,
-                                                               &presetReadErrorCode);
-  CFRelease(presetURL);
-  
-  if(presetReadSuccess)
-  {
-    presetPList = CFPropertyListCreateWithData(kCFAllocatorDefault,
-                                               presetData,
-                                               kCFPropertyListImmutable,
-                                               NULL,
-                                               NULL);
-    
-    presetSetStatus = AudioUnitSetProperty(*_unit,
-                                            kAudioUnitProperty_ClassInfo,
-                                            kAudioUnitScope_Global,
-                                            0,
-                                            &presetPList,
-                                            sizeof(presetPList));
-    CFRelease(presetData);
-    CFRelease(presetPList);
-  }
-  else
-  {
-		if(presetReadErrorCode == kCFURLUnknownError || 
-			 presetReadErrorCode == kCFURLResourceNotFoundError)
+	CFURLRef          presetURL;
+	CFDataRef         presetData;
+	CFPropertyListRef presetPList;
+	Boolean           presetReadSuccess;
+	SInt32            presetReadErrorCode;
+	OSStatus          presetSetStatus;
+	
+	presetURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+														(const UInt8*)presetPath.c_str(),
+														presetPath.length(),
+														NULL);
+	
+	presetReadSuccess = CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault,
+																 presetURL,
+																 &presetData,
+																 NULL,
+																 NULL,
+																 &presetReadErrorCode);
+	CFRelease(presetURL);
+	
+	if(presetReadSuccess)
+	{
+		presetPList = CFPropertyListCreateWithData(kCFAllocatorDefault,
+												   presetData,
+												   kCFPropertyListImmutable,
+												   NULL,
+												   NULL);
+		
+		presetSetStatus = AudioUnitSetProperty(*_unit,
+											   kAudioUnitProperty_ClassInfo,
+											   kAudioUnitScope_Global,
+											   0,
+											   &presetPList,
+											   sizeof(presetPList));
+		CFRelease(presetData);
+		CFRelease(presetPList);
+	}
+	else
+	{
+		if(presetReadErrorCode == kCFURLUnknownError ||
+		   presetReadErrorCode == kCFURLResourceNotFoundError)
 		{
 			cout << "Couldn't locate preset at " << presetPath << endl;
 		}
@@ -242,9 +242,9 @@ bool ofxAudioUnit::setPreset(std::string presetPath)
 			cout << "CFURL Error Code: " << presetReadErrorCode 
 			<< " while reading preset at " << presetPath << endl;
 		}
-  }
-
-  return presetReadSuccess && (presetSetStatus == noErr);
+	}
+	
+	return presetReadSuccess && (presetSetStatus == noErr);
 }
 
 #pragma mark - Render Callbacks
@@ -253,11 +253,11 @@ bool ofxAudioUnit::setPreset(std::string presetPath)
 void ofxAudioUnit::setRenderCallback(AURenderCallbackStruct callback, int bus)
 // ----------------------------------------------------------
 {
-	OFXAU_PRINT(AudioUnitSetProperty(*_unit, 
-																	 kAudioUnitProperty_SetRenderCallback,
-																	 kAudioUnitScope_Global,
-																	 bus, 
-																	 &callback, 
-																	 sizeof(callback)),
-							"setting render callback");
+	OFXAU_PRINT(AudioUnitSetProperty(*_unit,
+									 kAudioUnitProperty_SetRenderCallback,
+									 kAudioUnitScope_Global,
+									 bus,
+									 &callback,
+									 sizeof(callback)),
+				"setting render callback");
 }

@@ -26,33 +26,33 @@ class ofxAudioUnit
 {	
 	friend class ofxAudioUnitTap;
 	
-protected:  
-  AudioUnitRef _unit;
-  
+protected:
+	AudioUnitRef _unit;
+	
 	AudioComponentDescription _desc;
-  void initUnit();
-  
+	void initUnit();
+	
 public:
-  ofxAudioUnit(){};
-  ofxAudioUnit(AudioComponentDescription description);
-  ofxAudioUnit(OSType type, 
-               OSType subType, 
-               OSType manufacturer = kAudioUnitManufacturer_Apple);
-  ofxAudioUnit(const ofxAudioUnit &orig);
-  ofxAudioUnit& operator=(const ofxAudioUnit &orig);
-  
-  void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	ofxAudioUnit(){};
+	ofxAudioUnit(AudioComponentDescription description);
+	ofxAudioUnit(OSType type,
+				 OSType subType,
+				 OSType manufacturer = kAudioUnitManufacturer_Apple);
+	ofxAudioUnit(const ofxAudioUnit &orig);
+	ofxAudioUnit& operator=(const ofxAudioUnit &orig);
+	
+	void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
 	void connectTo(ofxAudioUnitTap &tap);
-  ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
+	ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
-  
+	
 	AudioUnitRef getUnit(){return _unit;}
-  bool setPreset(std::string presetPath);
+	bool setPreset(std::string presetPath);
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
-	void setParameter(AudioUnitParameterID property, 
-										AudioUnitScope scope, 
-										AudioUnitParameterValue value, 
-										int bus = 0);
+	void setParameter(AudioUnitParameterID property,
+					  AudioUnitScope scope,
+					  AudioUnitParameterValue value,
+					  int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
 	bool setInputBusCount(unsigned int numberOfInputBusses);
@@ -62,9 +62,9 @@ public:
 	
 #if !(TARGET_OS_IPHONE)
 	void showUI(std::string title = "Audio Unit UI",
-							int x = 100, 
-							int y = 100,
-							bool forceGeneric = false);
+				int x = 100,
+				int y = 100,
+				bool forceGeneric = false);
 #endif
 };
 
@@ -89,11 +89,11 @@ static void AudioUnitDeleter(AudioUnit * unit);
 class ofxAudioUnitMixer : public ofxAudioUnit
 {
 public:
-  ofxAudioUnitMixer();
-  
-  void setInputVolume (float volume, int bus = 0);
-  void setOutputVolume(float volume);
-  void setPan(float pan, int bus = 0);
+	ofxAudioUnitMixer();
+	
+	void setInputVolume (float volume, int bus = 0);
+	void setOutputVolume(float volume);
+	void setPan(float pan, int bus = 0);
 	
 	float getInputLevel(int bus = 0);
 	float getOutputLevel();
@@ -115,7 +115,7 @@ class ofxAudioUnitFilePlayer : public ofxAudioUnit
 	ScheduledAudioFileRegion region;
 	
 public:
-  ofxAudioUnitFilePlayer();
+	ofxAudioUnitFilePlayer();
 	~ofxAudioUnitFilePlayer();
 	
 	bool setFile(std::string filePath);
@@ -135,11 +135,11 @@ public:
 class ofxAudioUnitOutput : public ofxAudioUnit
 {
 public:
-  ofxAudioUnitOutput();
+	ofxAudioUnitOutput();
 	~ofxAudioUnitOutput(){stop();}
-  
-  bool start();
-  bool stop();
+	
+	bool start();
+	bool stop();
 };
 
 #pragma mark - ofxAudioUnitTap

@@ -15,20 +15,20 @@ AudioComponentDescription outputDesc = {
 ofxAudioUnitOutput::ofxAudioUnitOutput()
 // ----------------------------------------------------------
 {
-  _desc = outputDesc;
-  initUnit();
+	_desc = outputDesc;
+	initUnit();
 }
 
 // ----------------------------------------------------------
 bool ofxAudioUnitOutput::start()
 // ----------------------------------------------------------
 {
-  OFXAU_RET_BOOL(AudioOutputUnitStart(*_unit), "starting output unit");
+	OFXAU_RET_BOOL(AudioOutputUnitStart(*_unit), "starting output unit");
 }
 
 // ----------------------------------------------------------
 bool ofxAudioUnitOutput::stop()
 // ----------------------------------------------------------
 {
-  OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
+	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
 }
