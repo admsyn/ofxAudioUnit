@@ -4,7 +4,20 @@
 void testApp::setup(){
 	
 //	This example explains a bit about what an Audio Unit is, and
-//	how to use one in the context of the ofxAudioUnit addon
+//	how to use one in the context of the ofxAudioUnit addon.
+	
+//	An Audio Unit is an external mini program you can use to 
+//	experiment with sound. An Audio Unit usually performs a 
+//	specific audio-related task. For example, there are 
+//	synthesizer Audio Units for creating sound, effect Audio Units
+//	for processing sound and so on. Typically, you connect
+//	multiple Audio Units together to do interesting things.
+	
+//	If you've ever used an application like GarageBand, Ableton Live,
+//	or Logic, you may have come across Audio Units in the form
+//	of 3rd party synthesizers or effects. There are also many
+//	Apple-supplied Audio Units that come pre-installed on
+//	both OSX and iOS.
 	
 //	You access an Audio Unit by its description. An Audio Unit's 
 //	description is a set of 3 OSTypes. These OSTypes correspond 
@@ -34,8 +47,8 @@ void testApp::setup(){
 //	constructed like this:
 //	
 //	reverb = ofxAudioUnit(kAudioUnitType_Effect,
-//												kAudioUnitSubType_MatrixReverb,
-//												kAudioUnitManufacturer_Apple);
+//						  kAudioUnitSubType_MatrixReverb,
+//						  kAudioUnitManufacturer_Apple);
 //	
 //	To see all of the Audio Units you have installed on your
 //	computer, open a Terminal and run the command "auval -a"
@@ -62,7 +75,7 @@ void testApp::setup(){
 //	We've already declared an ofxAudioUnitSpeechSynth in the 
 //	testApp.h of this example. Therefore we don't need to
 //	specify which Audio Unit we're looking for since ofxAudioUnit
-//	has done it already.
+//	knows to look for the AUSpeechSynthesis unit.
 //	
 //	In order to do anything interesting with Audio Units, you
 //	have to connect them together. Here, we're connecting 
@@ -110,9 +123,9 @@ void testApp::setup(){
 //	
 //	If you want to change from the default voice, you can do that
 //	with this line
-//	
+	
 	speechSynth.setVoice("Cellos");
-//	
+	
 //	Regardless, we need to give the speechSynth a phrase and 
 //	start it talking
 	

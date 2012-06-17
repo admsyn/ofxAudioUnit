@@ -50,10 +50,10 @@ void testApp::setup(){
 //	First, let's set up an Audio Unit chain
 	
 	distortion = ofxAudioUnit(kAudioUnitType_Effect,
-														kAudioUnitSubType_Distortion);
+							  kAudioUnitSubType_Distortion);
 	
 	reverb = ofxAudioUnit(kAudioUnitType_Effect,
-												kAudioUnitSubType_MatrixReverb);
+						  kAudioUnitSubType_MatrixReverb);
 	
 	distortion >> reverb >> tap >> output;
 	
@@ -80,30 +80,30 @@ void testApp::setup(){
 	ofSetVerticalSync(true);
 }
 
-// This is our render callback. Every render callback has the same arguments.
-// The important ones are:
-// inRefCon - the pointer we gave the Audio Unit earlier (inputProcRefCon)
-// inNumberFrames - the number of samples that the Audio Unit wants from us
-// ioData - where we're supposed to write the samples we create
+//	This is our render callback. Every render callback has the same arguments.
+//	The important ones are:
+//	inRefCon - the pointer we gave the Audio Unit earlier (inputProcRefCon)
+//	inNumberFrames - the number of samples that the Audio Unit wants from us
+//	ioData - where we're supposed to write the samples we create
 
-// This particular callback will render a chord of sine waves (3 sine waves
-// with different wavelengths). It will also pulse the chord's volume via
-// another sine wave.
+//	This particular callback will render a chord of sine waves (3 sine waves
+//	with different wavelengths). It will also pulse the chord's volume via
+//	another sine wave.
 
-// See the commented-out render callback below this one for a bare-bones 
-// callback you can copy to get yourself started
+//	See the commented-out render callback below this one for a bare-bones 
+//	callback you can copy to get yourself started
 
 OSStatus renderPulseSineChord(void * inRefCon,
-															AudioUnitRenderActionFlags * ioActionFlags,
-															const AudioTimeStamp * inTimeStamp,
-															UInt32 inBusNumber,
-															UInt32 inNumberFrames,
-															AudioBufferList * ioData)
+							  AudioUnitRenderActionFlags * ioActionFlags,
+							  const AudioTimeStamp * inTimeStamp,
+							  UInt32 inBusNumber,
+							  UInt32 inNumberFrames,
+							  AudioBufferList * ioData)
 {
 	static double phase = 0; // used to generate the sine waves
 	static double pulse = 0; // used to pulse the volume of the sine wave
 	
-//  Here, we're grabbing pointers to the two chunks of memory that the Audio Unit
+//	Here, we're grabbing pointers to the two chunks of memory that the Audio Unit
 //	wants the samples written to (left channel and right channel).
 	AudioUnitSampleType * leftSamples  = (AudioUnitSampleType *)ioData->mBuffers[0].mData;
 	AudioUnitSampleType * rightSamples = (AudioUnitSampleType *)ioData->mBuffers[1].mData;
@@ -134,15 +134,15 @@ OSStatus renderPulseSineChord(void * inRefCon,
 
 
 /*
- 
+
  This is a bare-bones callback you can copy to use in your own app.
  
 OSStatus plainRenderCallback(void * inRefCon,
-														 AudioUnitRenderActionFlags * ioActionFlags,
-														 const AudioTimeStamp * inTimeStamp,
-														 UInt32 inBusNumber,
-														 UInt32 inNumberFrames,
-														 AudioBufferList * ioData)
+							 AudioUnitRenderActionFlags * ioActionFlags,
+							 const AudioTimeStamp * inTimeStamp,
+							 UInt32 inBusNumber,
+							 UInt32 inNumberFrames,
+							 AudioBufferList * ioData)
 {	
 	//  Here, we're grabbing a pointer to the two chunks of memory that the Audio Unit
 	//	wants the samples written to (left channel and right channel).

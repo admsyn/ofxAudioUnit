@@ -8,7 +8,7 @@ void testApp::setup(){
 //	This example demonstrates a few different ways of producing
 //	audio with ofxAudioUnit
 
-//  Un-comment one of these blocks depending on where you want
+//	Un-comment one of these blocks depending on where you want
 //	your audio to come from
 	
 //	This will open a file with an ofxAudioUnitFilePlayer and play it.
@@ -105,7 +105,7 @@ void testApp::draw(){
 	}
 	else {
 		ofDrawBitmapString("You need to un-comment one of the blocks in\
-											 setup() to generate some audio", ofPoint(25,25));
+						   setup() to generate some audio", ofPoint(25,25));
 	}
 	
 }
@@ -144,7 +144,7 @@ void testApp::drawOscilloscopeLabels()
 	ofSetColor(0, 200, 40);
 	ofDrawBitmapString("Left Channel", ofPoint(ofGetWidth() / 2 - 60, ofGetHeight() / 8 - 20));
 	ofDrawBitmapString("Right Channel", ofPoint(ofGetWidth() / 2 - 70, 
-																							ofGetHeight() - (ofGetHeight() / 8 - 20)));
+												ofGetHeight() - (ofGetHeight() / 8 - 20)));
 	for(int y = 0; y < ofGetHeight(); y += ofGetHeight() / 2)
 	{
 		ofPushMatrix();

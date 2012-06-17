@@ -25,13 +25,13 @@ void testApp::setup(){
 //	(like slowing down and speeding up a record)
 	
 	varispeed = ofxAudioUnit(kAudioUnitType_FormatConverter,
-													 kAudioUnitSubType_Varispeed);
+							 kAudioUnitSubType_Varispeed);
 	
 //	AULowPass - a lowpass filter which cuts off high frequencies
 //	at a user-controllable cutoff point
 	
 	lowpass = ofxAudioUnit(kAudioUnitType_Effect,
-												 kAudioUnitSubType_LowPassFilter);
+						   kAudioUnitSubType_LowPassFilter);
 	
 //	We'll also use an ofxAudioUnitFilePlayer to generate audio,
 //	an ofxAudioUnitTap to extract the waveform, and an output
@@ -73,7 +73,7 @@ void testApp::setup(){
 //	Here, we're setting the lowpass's resonance to 10
 	
 	AudioUnitSetParameter(*lowpass.getUnit(), kLowPassParam_Resonance, 
-												kAudioUnitScope_Global, 0, 10, 0);
+						  kAudioUnitScope_Global, 0, 10, 0);
 	
 //	You can also save the state of an Audio Unit's parameters as a
 //	preset file. You can load a preset file like this:
@@ -128,20 +128,20 @@ void testApp::mouseMoved(int x, int y ){
 	float newSpeed = ofMap(x, 0, ofGetWidth(), 0.01, 2, true);
 	
 	AudioUnitSetParameter(*varispeed.getUnit(), 
-												kVarispeedParam_PlaybackRate,
-												kAudioUnitScope_Global,
-												0,
-												newSpeed, 
-												0);
+						  kVarispeedParam_PlaybackRate,
+						  kAudioUnitScope_Global,
+						  0,
+						  newSpeed, 
+						  0);
 	
 	float newCutoff = ofMap(y, 0, ofGetHeight(), 10, 6900);
 	
 	AudioUnitSetParameter(*lowpass.getUnit(),
-												kLowPassParam_CutoffFrequency,
-												kAudioUnitScope_Global,
-												0,
-												newCutoff, 
-												0);
+						  kLowPassParam_CutoffFrequency,
+						  kAudioUnitScope_Global,
+						  0,
+						  newCutoff, 
+						  0);
 }
 
 //--------------------------------------------------------------

@@ -35,13 +35,13 @@ void testApp::setup()
 //	Now, let's set up a different effect for each one
 	
 	distortion = ofxAudioUnit(kAudioUnitType_Effect,
-														kAudioUnitSubType_Distortion);
+							  kAudioUnitSubType_Distortion);
 	
 	delay = ofxAudioUnit(kAudioUnitType_Effect,
-											 kAudioUnitSubType_Delay);
+						 kAudioUnitSubType_Delay);
 	
 	filter = ofxAudioUnit(kAudioUnitType_Effect,
-												kAudioUnitSubType_LowPassFilter);
+						  kAudioUnitSubType_LowPassFilter);
 	
 //	We'll send each of our sources through its own effect, and also
 //	through its own tap so that we can see the individual waveforms
@@ -64,7 +64,7 @@ void testApp::setup()
 //	compressor effect, then to the output
 	
 	compressor = ofxAudioUnit(kAudioUnitType_Effect,
-														kAudioUnitSubType_DynamicsProcessor);
+							  kAudioUnitSubType_DynamicsProcessor);
 	
 	mixer >> compressor >> output;
 	
