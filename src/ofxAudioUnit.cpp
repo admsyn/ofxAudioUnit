@@ -69,6 +69,13 @@ void AudioUnitDeleter(AudioUnit * unit)
 	OFXAU_PRINT(AudioComponentInstanceDispose(*unit), "disposing unit");
 }
 
+// ----------------------------------------------------------
+ofxAudioUnit::~ofxAudioUnit()
+// ----------------------------------------------------------
+{
+	
+}
+
 #pragma mark - Parameters
 
 // ----------------------------------------------------------

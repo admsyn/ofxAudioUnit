@@ -41,10 +41,12 @@ public:
 	ofxAudioUnit(const ofxAudioUnit &orig);
 	ofxAudioUnit& operator=(const ofxAudioUnit &orig);
 	
-	void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
-	void connectTo(ofxAudioUnitTap &tap);
-	ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
-	ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
+	virtual ~ofxAudioUnit();
+	
+	virtual void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	virtual void connectTo(ofxAudioUnitTap &tap);
+	virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
+	virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
 	
 	AudioUnitRef getUnit(){return _unit;}
 	bool setPreset(std::string presetPath);
