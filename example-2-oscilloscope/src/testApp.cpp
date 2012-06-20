@@ -52,7 +52,7 @@ void testApp::setup(){
 //	kAudioUnitSubType_DLSSynth
 //-------------------------------------------------
 //	sampler = ofxAudioUnit(kAudioUnitType_MusicDevice,
-//												 kAudioUnitSubType_Sampler);
+//						   kAudioUnitSubType_Sampler);
 //
 //	midiReceiver.createMidiDestination("openFrameworks");
 //	midiReceiver.routeMidiTo(sampler);
@@ -73,7 +73,7 @@ void testApp::setup(){
 //	kAudioUnitSubType_DLSSynth
 //-------------------------------------------------
 //	sampler = ofxAudioUnit(kAudioUnitType_MusicDevice,
-//												 kAudioUnitSubType_Sampler);
+//						   kAudioUnitSubType_Sampler);
 //	
 //	ofxAudioUnitMidi::printSourceNames();
 //	midiReceiver.connectToMidiSource(0);
