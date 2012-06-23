@@ -87,7 +87,30 @@ ofxAudioUnitInput::~ofxAudioUnitInput()
 void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
+	AURenderCallbackStruct callback;
+	callback.inputProc = pullCallback;
+	callback.inputProcRefCon = &_inputContext;
 	
+	AudioStreamBasicDescription ASBD;
+	UInt32 ASBDSize = sizeof(ASBD);
+	
+	OFXAU_RETURN(AudioUnitGetProperty(*otherUnit.getUnit(),
+									  kAudioUnitProperty_StreamFormat,
+									  kAudioUnitScope_Input,
+									  destinationBus,
+									  &ASBD,
+									  &ASBDSize),
+				 "getting hardware input destination's format");
+	
+	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
+									  kAudioUnitProperty_StreamFormat,
+									  kAudioUnitScope_Output,
+									  1,
+									  &ASBD,
+									  sizeof(ASBD)),
+				 "setting hardware input's output format");
+	
+	otherUnit.setRenderCallback(callback, destinationBus);
 }
 
 // ----------------------------------------------------------
@@ -243,6 +266,33 @@ OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
 										 AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	std::cout << "pull" << std::endl;
-	return 1;
+	RenderContext * ctx = static_cast<RenderContext *>(inRefCon);
+	
+	// If we can't advance the read head, render silence.
+	// Otherwise, copy the data from the ring buffer's read head.
+	if(!ctx->ringBuffer->advanceReadHead())
+	{
+		for(int i = 0; i < ioData->mNumberBuffers; i++)
+		{
+			memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize);
+		}
+		
+		*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
+		return noErr;
+	}
+	else 
+	{
+		AudioBufferList * bufferedAudio = ctx->ringBuffer->readHead();
+		int buffersToCopy = min(ioData->mNumberBuffers, bufferedAudio->mNumberBuffers);
+		
+		for(int i = 0; i < buffersToCopy; i++)
+		{
+			memcpy(ioData->mBuffers[i].mData, 
+				   bufferedAudio->mBuffers[i].mData, 
+				   bufferedAudio->mBuffers[i].mDataByteSize);
+		}
+		
+		std::cout << "pull" << std::endl;	
+		return noErr;
+	}
 }
