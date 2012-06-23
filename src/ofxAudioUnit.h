@@ -144,6 +144,64 @@ public:
 	bool stop();
 };
 
+#pragma mark - ofxAudioUnitInput
+
+class ofxAudioUnitInput : public ofxAudioUnit
+{
+	class RingBuffer : public std::vector<AudioBufferList>
+	{
+		UInt64 _readItrIndex, _writeItrIndex;
+		RingBuffer::iterator _readItr, _writeItr;
+		void advanceItr(RingBuffer::iterator &itr);
+		
+	public:
+		RingBuffer(UInt32 buffers = 3, 
+				   UInt32 channelsPerBuffer = 2,
+				   UInt32 samplesPerBuffer = 512);
+		~RingBuffer();
+		
+		bool advanceReadHead();
+		void advanceWriteHead();
+	};
+	
+	typedef ofPtr<RingBuffer> RingBufferRef;
+	
+	struct ofxAudioUnitInputContext
+	{
+		AudioUnitRef  inputUnit;
+		RingBufferRef ringBuffer;
+	};
+	
+	ofxAudioUnitInputContext _inputContext;
+	RingBufferRef _ringBuffer;
+	bool _isReady;
+	bool configureInputDevice();
+	
+	static OSStatus renderCallback(void *inRefCon, 
+								   AudioUnitRenderActionFlags *ioActionFlags,
+								   const AudioTimeStamp *inTimeStamp,
+								   UInt32 inBusNumber,
+								   UInt32 inNumberFrames,
+								   AudioBufferList *ioData);
+	
+	static OSStatus pullCallback(void *inRefCon, 
+								 AudioUnitRenderActionFlags *ioActionFlags,
+								 const AudioTimeStamp *inTimeStamp,
+								 UInt32 inBusNumber,
+								 UInt32 inNumberFrames,
+								 AudioBufferList *ioData);
+	
+public:
+	ofxAudioUnitInput();
+	~ofxAudioUnitInput();
+	
+	void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	void connectTo(ofxAudioUnitTap &tap);
+	
+	bool start();
+	bool stop();
+};
+
 #pragma mark - ofxAudioUnitTap
 
 // ofxAudioUnitTap acts like an Audio Unit (as in, you
