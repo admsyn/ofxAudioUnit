@@ -9,7 +9,7 @@ static OSStatus silentRenderCallback(void * inRefCon,
 
 // ----------------------------------------------------------
 ofxAudioUnitTap::ofxAudioUnitTap() :
-_trackedSamples(NULL)
+_trackedSamples(NULL), _sourceUnit(NULL), _destinationUnit(NULL)
 // ----------------------------------------------------------
 {
 }
@@ -25,7 +25,7 @@ ofxAudioUnitTap::~ofxAudioUnitTap()
 		AURenderCallbackStruct callbackInfo;
 		callbackInfo.inputProc = silentRenderCallback;
 		callbackInfo.inputProcRefCon = NULL;
-		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit,
+		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit->getUnit(),
 										 kAudioUnitProperty_SetRenderCallback,
 										 kAudioUnitScope_Input,
 										 _destinationBus,
@@ -57,17 +57,17 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	//	own ASBDs. The destination unit will be connected to the tap's
 	//	render callback afterwards.
 	AudioUnitConnection c;
-	c.sourceAudioUnit = *_sourceUnit;
+	c.sourceAudioUnit = *(_sourceUnit->getUnit());
 	c.sourceOutputNumber = sourceBus;
 	c.destInputNumber = destinationBus;
-	AudioUnitSetProperty(*(destination._unit),
+	AudioUnitSetProperty(*(destination.getUnit()),
 						 kAudioUnitProperty_MakeConnection,
 						 kAudioUnitScope_Global,
 						 destinationBus,
 						 &c,
 						 sizeof(c));
 	
-	AudioUnitGetProperty(*(_sourceUnit),
+	AudioUnitGetProperty(*(_sourceUnit->getUnit()),
 						 kAudioUnitProperty_StreamFormat,
 						 kAudioUnitScope_Output,
 						 sourceBus,
@@ -85,7 +85,7 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	callbackInfo.inputProcRefCon = &_tapContext;
 	destination.setRenderCallback(callbackInfo, destinationBus);
 	
-	_destinationUnit = destination._unit;
+	_destinationUnit = &destination;
 	_destinationBus  = destinationBus;
 }
 
@@ -95,6 +95,13 @@ ofxAudioUnit& ofxAudioUnitTap::operator>>(ofxAudioUnit &destination)
 {
 	connectTo(destination);
 	return destination;
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitTap::setSource(ofxAudioUnit * source)
+// ----------------------------------------------------------
+{
+	_sourceUnit = source;
 }
 
 #pragma mark - Getting samples
@@ -176,8 +183,8 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRigh
 
 // ----------------------------------------------------------
 OSStatus ofxAudioUnitTap::renderAndCopy(void * inRefCon,
-										AudioUnitRenderActionFlags *	ioActionFlags,
-										const AudioTimeStamp *	inTimeStamp,
+										AudioUnitRenderActionFlags * ioActionFlags,
+										const AudioTimeStamp * inTimeStamp,
 										UInt32 inBusNumber,
 										UInt32	inNumberFrames,
 										AudioBufferList * ioData)
@@ -198,12 +205,11 @@ OSStatus ofxAudioUnitTap::renderAndCopy(void * inRefCon,
 	}
 	
 	// if we're all set, render the source unit into the destination unit...
-	OFXAU_PRINT(AudioUnitRender(*(context->sourceUnit),
-								ioActionFlags,
-								inTimeStamp,
-								0,
-								inNumberFrames,
-								ioData),
+	OFXAU_PRINT(context->sourceUnit->render(ioActionFlags,
+											inTimeStamp,
+											0,
+											inNumberFrames,
+											ioData),
 				"passing source into destination");
 	
 	// if the tracked sample buffer isn't locked, copy the audio output there as well

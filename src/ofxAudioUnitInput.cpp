@@ -116,13 +116,6 @@ void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, i
 	otherUnit.setRenderCallback(callback, destinationBus);
 }
 
-// ----------------------------------------------------------
-void ofxAudioUnitInput::connectTo(ofxAudioUnitTap &tap)
-// ----------------------------------------------------------
-{
-	
-}
-
 #pragma mark - Start / Stop
 
 // ----------------------------------------------------------
@@ -228,7 +221,19 @@ bool ofxAudioUnitInput::configureInputDevice()
 	return true;
 }
 
-#pragma mark - Callbacks
+#pragma mark - Callbacks / Rendering
+
+// ----------------------------------------------------------
+OSStatus ofxAudioUnitInput::render(AudioUnitRenderActionFlags *ioActionFlags, 
+								   const AudioTimeStamp *inTimeStamp,
+								   UInt32 inOutputBusNumber,
+								   UInt32 inNumberFrames,
+								   AudioBufferList *ioData)
+// ----------------------------------------------------------
+{
+	return pullCallback(&_inputContext, ioActionFlags, inTimeStamp, 
+						inOutputBusNumber, inNumberFrames, ioData);
+}
 
 // ----------------------------------------------------------
 OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,

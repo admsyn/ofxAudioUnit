@@ -113,7 +113,7 @@ void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int so
 void ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
 // ----------------------------------------------------------
 {
-	tap._sourceUnit = _unit;
+	tap.setSource(this);
 }
 
 // ----------------------------------------------------------
@@ -130,6 +130,18 @@ ofxAudioUnitTap& ofxAudioUnit::operator>>(ofxAudioUnitTap &tap)
 {
 	connectTo(tap);
 	return tap;
+}
+
+// ----------------------------------------------------------
+OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
+							  const AudioTimeStamp *inTimeStamp,
+							  UInt32 inOutputBusNumber,
+							  UInt32 inNumberFrames,
+							  AudioBufferList *ioData)
+// ----------------------------------------------------------
+{
+	return AudioUnitRender(*_unit, ioActionFlags, inTimeStamp, 
+						   inOutputBusNumber, inNumberFrames, ioData);
 }
 
 #pragma mark - Busses

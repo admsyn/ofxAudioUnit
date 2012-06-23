@@ -24,8 +24,6 @@
 
 class ofxAudioUnit
 {	
-	friend class ofxAudioUnitTap;
-	
 protected:
 	AudioUnitRef _unit;
 	
@@ -47,6 +45,12 @@ public:
 	virtual void connectTo(ofxAudioUnitTap &tap);
 	virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
+	
+	virtual OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
+							const AudioTimeStamp *inTimeStamp,
+							UInt32 inOutputBusNumber, 
+							UInt32 inNumberFrames, 
+							AudioBufferList *ioData); 
 	
 	AudioUnitRef getUnit(){return _unit;}
 	bool setPreset(std::string presetPath);
@@ -201,7 +205,11 @@ public:
 	~ofxAudioUnitInput();
 	
 	void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
-	void connectTo(ofxAudioUnitTap &tap);
+	OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
+					const AudioTimeStamp *inTimeStamp,
+					UInt32 inOutputBusNumber,
+					UInt32 inNumberFrames,
+					AudioBufferList *ioData);
 	
 	bool start();
 	bool stop();
@@ -229,20 +237,18 @@ public:
 // is basically hardcoded to 512 samples
 
 class ofxAudioUnitTap
-{
-	friend class ofxAudioUnit;
-	
+{	
 	struct TapContext
 	{
-		AudioUnitRef sourceUnit;
+		ofxAudioUnit * sourceUnit;
 		AudioBufferList * trackedSamples;
 		ofMutex * bufferMutex;
 	};
 	
 	ofMutex _bufferMutex;
 	AudioBufferList * _trackedSamples;
-	AudioUnitRef _sourceUnit;
-	AudioUnitRef _destinationUnit;
+	ofxAudioUnit * _sourceUnit;
+	ofxAudioUnit * _destinationUnit;
 	UInt32 _destinationBus;
 	TapContext _tapContext;
 	
@@ -266,6 +272,8 @@ public:
 	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height);
 	void getLeftWaveform(ofPolyline &outLine, float width, float height);
 	void getRightWaveform(ofPolyline &outLine, float width, float height);
+	
+	void setSource(ofxAudioUnit * source);
 };
 
 #if !TARGET_OS_IPHONE
