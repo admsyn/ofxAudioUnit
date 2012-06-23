@@ -150,7 +150,7 @@ class ofxAudioUnitInput : public ofxAudioUnit
 {
 	typedef ofPtr<AudioBufferList> AudioBufferListRef;
 	
-	class RingBuffer : public std::vector<AudioBufferListRef>
+	class RingBuffer : private std::vector<AudioBufferListRef>
 	{
 		UInt64 _readItrIndex, _writeItrIndex;
 		RingBuffer::iterator _readItr, _writeItr;

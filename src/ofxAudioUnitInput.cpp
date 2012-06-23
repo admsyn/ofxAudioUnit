@@ -72,6 +72,9 @@ ofxAudioUnitInput::ofxAudioUnitInput() : _isReady(false)
 	initUnit();
 	
 	_ringBuffer = RingBufferRef(new RingBuffer());
+	
+	_inputContext.inputUnit  = _unit;
+	_inputContext.ringBuffer = _ringBuffer;
 }
 
 // ----------------------------------------------------------
@@ -207,9 +210,6 @@ bool ofxAudioUnitInput::configureInputDevice()
 										 sizeof(deviceASBD)),
 					"setting input sample rate to 44100");
 	
-	_inputContext.inputUnit  = _unit;
-	_inputContext.ringBuffer = _ringBuffer;
-	
 	AURenderCallbackStruct inputCallback;
 	inputCallback.inputProc = ofxAudioUnitInput::renderCallback;
 	inputCallback.inputProcRefCon = &_inputContext;
@@ -252,8 +252,6 @@ OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 	
 	ctx->ringBuffer->advanceWriteHead();
 	
-	if(s == noErr) std::cout << "render" << std::endl;
-	
 	return s;
 }
 
@@ -292,7 +290,6 @@ OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
 				   bufferedAudio->mBuffers[i].mDataByteSize);
 		}
 		
-		std::cout << "pull" << std::endl;	
 		return noErr;
 	}
 }
