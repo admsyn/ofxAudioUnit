@@ -227,16 +227,28 @@ class ofxAudioUnitTap
 {
 	friend class ofxAudioUnit;
 	
-	void releaseBufferList(AudioBufferList * bufferList);
-	AudioBufferList * allocBufferList(int channels, size_t size = 512);
-	void waveformForBuffer(AudioBuffer * buffer, float width, float height, ofPolyline &outLine);
+	struct TapContext
+	{
+		AudioUnitRef sourceUnit;
+		AudioBufferList * trackedSamples;
+		ofMutex * bufferMutex;
+	};
 	
 	ofMutex _bufferMutex;
 	AudioBufferList * _trackedSamples;
 	AudioUnitRef _sourceUnit;
 	AudioUnitRef _destinationUnit;
 	UInt32 _destinationBus;
-	ofxAudioUnitTapContext _tapContext;
+	TapContext _tapContext;
+	
+	static OSStatus renderAndCopy(void * inRefCon,
+								  AudioUnitRenderActionFlags * ioActionFlags,
+								  const AudioTimeStamp * inTimeStamp,
+								  UInt32 inBusNumber,
+								  UInt32 inNumberFrames,
+								  AudioBufferList * ioData);
+	
+	void waveformForBuffer(AudioBuffer * buffer, float width, float height, ofPolyline &outLine);
 	
 public:
 	ofxAudioUnitTap();

@@ -1,18 +1,12 @@
 #pragma once
 
+#include <AudioToolbox/AudioToolbox.h>
 #include "ofTypes.h"
 
 class ofxAudioUnitTap;
 class ofxAudioUnit;
 
 typedef ofPtr<AudioUnit> AudioUnitRef;
-
-struct ofxAudioUnitTapContext
-{
-	ofPtr<AudioUnit> sourceUnit;
-	AudioBufferList * trackedSamples;
-	ofMutex * bufferMutex;
-};
 
 // Container for samples returned from an ofxAudioUnitTap
 typedef struct ofxAudioUnitTapSamples
@@ -22,6 +16,9 @@ typedef struct ofxAudioUnitTapSamples
 	size_t size(){return min(left.size(), right.size());}
 }
 ofxAudioUnitTapSamples;
+
+AudioBufferList * allocBufferList(int channels = 2, size_t size = 512);
+void releaseBufferList(AudioBufferList * bufferList);
 
 // these macros make the "do core audio thing, check for error" process less repetitive
 #define OFXAU_PRINT(s, stage)\

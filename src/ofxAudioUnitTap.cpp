@@ -1,12 +1,5 @@
 #include "ofxAudioUnit.h"
 
-static OSStatus tapRenderCallback(void * inRefCon,
-								  AudioUnitRenderActionFlags *	ioActionFlags,
-								  const AudioTimeStamp *	inTimeStamp,
-								  UInt32 inBusNumber,
-								  UInt32	inNumberFrames,
-								  AudioBufferList * ioData);
-
 static OSStatus silentRenderCallback(void * inRefCon,
 									 AudioUnitRenderActionFlags *	ioActionFlags,
 									 const AudioTimeStamp *	inTimeStamp,
@@ -46,37 +39,6 @@ ofxAudioUnitTap::~ofxAudioUnitTap()
 		if(_trackedSamples) releaseBufferList(_trackedSamples);
 	}
 	_bufferMutex.unlock();
-}
-
-#pragma mark - Utilities
-
-// ----------------------------------------------------------
-void ofxAudioUnitTap::releaseBufferList(AudioBufferList * bufferList)
-// ----------------------------------------------------------
-{
-	for(int i = 0; i < bufferList->mNumberBuffers; i++)
-		free(bufferList->mBuffers[i].mData);
-	
-	free(bufferList);
-}
-
-// ----------------------------------------------------------
-AudioBufferList * ofxAudioUnitTap::allocBufferList(int channels, size_t size)
-// ----------------------------------------------------------
-{
-	AudioBufferList * bufferList;
-	size_t bufferSize = offsetof(AudioBufferList, mBuffers[0]) + (sizeof(AudioBuffer) * channels);
-	bufferList = (AudioBufferList *)malloc(bufferSize);
-	bufferList->mNumberBuffers = channels;
-	
-	for(UInt32 i = 0; i < bufferList->mNumberBuffers; i++)
-	{
-		bufferList->mBuffers[i].mNumberChannels = 1;
-		bufferList->mBuffers[i].mDataByteSize = sizeof(AudioUnitSampleType) * size;
-		bufferList->mBuffers[i].mData = malloc(sizeof(AudioUnitSampleType)  * size);
-		memset(bufferList->mBuffers[i].mData, 0, bufferList->mBuffers[i].mDataByteSize);
-	}
-	return bufferList;
 }
 
 #pragma mark - Connections
@@ -119,7 +81,7 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	_tapContext.trackedSamples = _trackedSamples;
 	
 	AURenderCallbackStruct callbackInfo;
-	callbackInfo.inputProc = tapRenderCallback;
+	callbackInfo.inputProc = renderAndCopy;
 	callbackInfo.inputProcRefCon = &_tapContext;
 	destination.setRenderCallback(callbackInfo, destinationBus);
 	
@@ -213,15 +175,15 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRigh
 #pragma mark - Render callbacks
 
 // ----------------------------------------------------------
-OSStatus tapRenderCallback(void * inRefCon,
-						   AudioUnitRenderActionFlags *	ioActionFlags,
-						   const AudioTimeStamp *	inTimeStamp,
-						   UInt32 inBusNumber,
-						   UInt32	inNumberFrames,
-						   AudioBufferList * ioData)
+OSStatus ofxAudioUnitTap::renderAndCopy(void * inRefCon,
+										AudioUnitRenderActionFlags *	ioActionFlags,
+										const AudioTimeStamp *	inTimeStamp,
+										UInt32 inBusNumber,
+										UInt32	inNumberFrames,
+										AudioBufferList * ioData)
 // ----------------------------------------------------------
 {
-	ofxAudioUnitTapContext * context = (ofxAudioUnitTapContext *)inRefCon;
+	TapContext * context = (TapContext *)inRefCon;
 	
 	// if we don't have a source, render silence (or else you'll get an extremely loud
 	// buzzing noise when we attempt to render a NULL unit. Ow.)
