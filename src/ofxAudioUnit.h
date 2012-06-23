@@ -148,7 +148,9 @@ public:
 
 class ofxAudioUnitInput : public ofxAudioUnit
 {
-	class RingBuffer : public std::vector<AudioBufferList>
+	typedef ofPtr<AudioBufferList> AudioBufferListRef;
+	
+	class RingBuffer : public std::vector<AudioBufferListRef>
 	{
 		UInt64 _readItrIndex, _writeItrIndex;
 		RingBuffer::iterator _readItr, _writeItr;
@@ -162,17 +164,20 @@ class ofxAudioUnitInput : public ofxAudioUnit
 		
 		bool advanceReadHead();
 		void advanceWriteHead();
+		
+		AudioBufferList * readHead() {return (*_readItr).get(); }
+		AudioBufferList * writeHead(){return (*_writeItr).get();}
 	};
 	
 	typedef ofPtr<RingBuffer> RingBufferRef;
 	
-	struct ofxAudioUnitInputContext
+	struct RenderContext
 	{
 		AudioUnitRef  inputUnit;
 		RingBufferRef ringBuffer;
 	};
 	
-	ofxAudioUnitInputContext _inputContext;
+	RenderContext _inputContext;
 	RingBufferRef _ringBuffer;
 	bool _isReady;
 	bool configureInputDevice();

@@ -10,6 +10,59 @@ AudioComponentDescription inputDesc = {
 	kAudioUnitManufacturer_Apple
 };
 
+#pragma mark RingBuffer
+
+// ----------------------------------------------------------
+ofxAudioUnitInput::RingBuffer::RingBuffer(UInt32 buffers, UInt32 channels, UInt32 samples) :
+_readItrIndex(0), _writeItrIndex(0)
+// ----------------------------------------------------------
+{
+	reserve(buffers);
+	
+	for(UInt32 i = 0; i < buffers; i++)
+	{
+		AudioBufferListRef bufferList(allocBufferList(channels,samples), releaseBufferList);
+		push_back(bufferList);
+	}
+	
+	_readItr = _writeItr = begin();
+}
+
+// ----------------------------------------------------------
+ofxAudioUnitInput::RingBuffer::~RingBuffer()
+// ----------------------------------------------------------
+{
+	
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitInput::RingBuffer::advanceItr(ofxAudioUnitInput::RingBuffer::iterator &itr)
+// ----------------------------------------------------------
+{
+	++itr;
+	if(itr == end()) itr = begin();
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnitInput::RingBuffer::advanceReadHead()
+// ----------------------------------------------------------
+{
+	if(_readItrIndex >= _writeItrIndex) return false;
+	advanceItr(_readItr);
+	_readItrIndex++;
+	return true;
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitInput::RingBuffer::advanceWriteHead()
+// ----------------------------------------------------------
+{
+	advanceItr(_writeItr);
+	_writeItrIndex++;
+}
+
+
+#pragma mark - ofxAudioUnitInput
 
 // ----------------------------------------------------------
 ofxAudioUnitInput::ofxAudioUnitInput() : _isReady(false)
@@ -17,6 +70,8 @@ ofxAudioUnitInput::ofxAudioUnitInput() : _isReady(false)
 {
 	_desc = inputDesc;
 	initUnit();
+	
+	_ringBuffer = RingBufferRef(new RingBuffer());
 }
 
 // ----------------------------------------------------------
@@ -25,6 +80,8 @@ ofxAudioUnitInput::~ofxAudioUnitInput()
 {
 	stop();
 }
+
+#pragma mark - Connections
 
 // ----------------------------------------------------------
 void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
@@ -40,6 +97,8 @@ void ofxAudioUnitInput::connectTo(ofxAudioUnitTap &tap)
 	
 }
 
+#pragma mark - Start / Stop
+
 // ----------------------------------------------------------
 bool ofxAudioUnitInput::start()
 // ----------------------------------------------------------
@@ -49,6 +108,15 @@ bool ofxAudioUnitInput::start()
 	
 	OFXAU_RET_BOOL(AudioOutputUnitStart(*_unit), "starting hardware input unit");
 }
+
+// ----------------------------------------------------------
+bool ofxAudioUnitInput::stop()
+// ----------------------------------------------------------
+{
+	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
+}
+
+#pragma mark - Configuration
 
 // ----------------------------------------------------------
 bool ofxAudioUnitInput::configureInputDevice()
@@ -137,6 +205,8 @@ bool ofxAudioUnitInput::configureInputDevice()
 	return true;
 }
 
+#pragma mark - Callbacks
+
 // ----------------------------------------------------------
 OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 										   AudioUnitRenderActionFlags *ioActionFlags,
@@ -146,13 +216,33 @@ OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 										   AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	std::cout << "I happened" << std::endl;
-	return 1;
+	RenderContext * ctx = static_cast<RenderContext *>(inRefCon);
+	
+	AudioBufferList * d = ctx->ringBuffer->writeHead();
+	
+	OSStatus s = AudioUnitRender(*(ctx->inputUnit),
+								 ioActionFlags,
+								 inTimeStamp,
+								 inBusNumber,
+								 inNumberFrames,
+								 ctx->ringBuffer->writeHead());
+	
+	ctx->ringBuffer->advanceWriteHead();
+	
+	if(s == noErr) std::cout << "render" << std::endl;
+	
+	return s;
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitInput::stop()
+OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
+										 AudioUnitRenderActionFlags *ioActionFlags,
+										 const AudioTimeStamp *inTimeStamp,
+										 UInt32 inBusNumber,
+										 UInt32 inNumberFrames,
+										 AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
+	std::cout << "pull" << std::endl;
+	return 1;
 }

@@ -14,6 +14,7 @@ AudioBufferList * allocBufferList(int channels, size_t size)
 		bufferList->mBuffers[i].mData = malloc(sizeof(AudioUnitSampleType)  * size);
 		memset(bufferList->mBuffers[i].mData, 0, bufferList->mBuffers[i].mDataByteSize);
 	}
+	
 	return bufferList;
 }
 
