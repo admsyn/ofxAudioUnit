@@ -30,6 +30,7 @@ public:
 	ofxAudioUnitNetReceive netReceive;
 	ofxAudioUnitSpeechSynth speechSynth;
 	ofxAudioUnitMidiReceiver midiReceiver;
+	ofxAudioUnitInput input;
 	
 	ofxAudioUnitOutput output;
 	

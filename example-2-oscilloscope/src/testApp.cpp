@@ -31,6 +31,22 @@ void testApp::setup(){
 //	activeUnit = &speechSynth; 
 //-------------------------------------------------
 	
+//	This will use an ofxAudioUnitInput to get audio from
+//	your selected audio input source (probably your mic
+//	or line in). You can change the source in your sound
+//	preferences, or by using Audio MIDI Setup.app (in
+//	/Applications/Utilities).
+//	WARNING: You will get feedback if you attempt to 
+//	use your microphone for input and your speakers for
+//	output. This will be unpleasant.
+//	If you get error -10863, make sure your input sample
+//	rate is set to 44100 in Audio MIDI Setup.
+//-------------------------------------------------	
+//	input >> tap >> output;
+//	input.start();
+//	activeUnit = &input;
+//-------------------------------------------------
+	
 //	This will use an ofxAudioUnitNetReceive to get audio
 //	from a corresponding AUNetSend running in another application
 //	on your computer (GarageBand, Ableton, Logic, etc)
@@ -142,9 +158,8 @@ void testApp::drawOscilloscopeGrid()
 void testApp::drawOscilloscopeLabels()
 {
 	ofSetColor(0, 200, 40);
-	ofDrawBitmapString("Left Channel", ofPoint(ofGetWidth() / 2 - 60, ofGetHeight() / 8 - 20));
-	ofDrawBitmapString("Right Channel", ofPoint(ofGetWidth() / 2 - 70, 
-												ofGetHeight() - (ofGetHeight() / 8 - 20)));
+	ofDrawBitmapString("Left Channel", 25, ofGetHeight() / 8 - 40);
+	ofDrawBitmapString("Right Channel", 25, ofGetHeight() - (ofGetHeight() / 8 - 40));
 	for(int y = 0; y < ofGetHeight(); y += ofGetHeight() / 2)
 	{
 		ofPushMatrix();
