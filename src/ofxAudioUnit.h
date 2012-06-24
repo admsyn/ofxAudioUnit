@@ -181,7 +181,7 @@ class ofxAudioUnitInput : public ofxAudioUnit
 		RingBufferRef ringBuffer;
 	};
 	
-	RenderContext _inputContext;
+	RenderContext _renderContext;
 	RingBufferRef _ringBuffer;
 	bool _isReady;
 	bool configureInputDevice();

@@ -51,22 +51,7 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	
 	AudioStreamBasicDescription asbd = {0};
 	UInt32 dataSize = sizeof(AudioStreamBasicDescription);
-	
-	//	Connect the source to the destination.
-	//	The only reason for this is so that they can sort out their
-	//	own ASBDs. The destination unit will be connected to the tap's
-	//	render callback afterwards.
-	AudioUnitConnection c;
-	c.sourceAudioUnit = *(_sourceUnit->getUnit());
-	c.sourceOutputNumber = sourceBus;
-	c.destInputNumber = destinationBus;
-	AudioUnitSetProperty(*(destination.getUnit()),
-						 kAudioUnitProperty_MakeConnection,
-						 kAudioUnitScope_Global,
-						 destinationBus,
-						 &c,
-						 sizeof(c));
-	
+		
 	AudioUnitGetProperty(*(_sourceUnit->getUnit()),
 						 kAudioUnitProperty_StreamFormat,
 						 kAudioUnitScope_Output,

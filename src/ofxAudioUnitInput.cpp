@@ -47,10 +47,16 @@ void ofxAudioUnitInput::RingBuffer::advanceItr(ofxAudioUnitInput::RingBuffer::it
 bool ofxAudioUnitInput::RingBuffer::advanceReadHead()
 // ----------------------------------------------------------
 {
-	if(_readItrIndex >= _writeItrIndex) return false;
-	advanceItr(_readItr);
-	_readItrIndex++;
-	return true;
+	if(_readItrIndex >= _writeItrIndex)
+	{
+		return false;
+	}
+	else 
+	{
+		advanceItr(_readItr);
+		_readItrIndex++;
+		return true;
+	}
 }
 
 // ----------------------------------------------------------
@@ -71,10 +77,10 @@ ofxAudioUnitInput::ofxAudioUnitInput() : _isReady(false)
 	_desc = inputDesc;
 	initUnit();
 	
-	_ringBuffer = RingBufferRef(new RingBuffer());
+	_ringBuffer = RingBufferRef(new ofxAudioUnitInput::RingBuffer());
 	
-	_inputContext.inputUnit  = _unit;
-	_inputContext.ringBuffer = _ringBuffer;
+	_renderContext.inputUnit  = _unit;
+	_renderContext.ringBuffer = _ringBuffer;
 }
 
 // ----------------------------------------------------------
@@ -92,7 +98,7 @@ void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, i
 {
 	AURenderCallbackStruct callback;
 	callback.inputProc = pullCallback;
-	callback.inputProcRefCon = &_inputContext;
+	callback.inputProcRefCon = &_renderContext;
 	
 	AudioStreamBasicDescription ASBD;
 	UInt32 ASBDSize = sizeof(ASBD);
@@ -205,7 +211,7 @@ bool ofxAudioUnitInput::configureInputDevice()
 	
 	AURenderCallbackStruct inputCallback;
 	inputCallback.inputProc = ofxAudioUnitInput::renderCallback;
-	inputCallback.inputProcRefCon = &_inputContext;
+	inputCallback.inputProcRefCon = &_renderContext;
 	
 	OFXAU_RET_FALSE(AudioUnitSetProperty(*_unit,
 										 kAudioOutputUnitProperty_SetInputCallback,
@@ -215,10 +221,8 @@ bool ofxAudioUnitInput::configureInputDevice()
 										 sizeof(inputCallback)),
 					"setting hardware input callback");
 	
-	OFXAU_RET_FALSE(AudioUnitInitialize(*_unit), 
-					"initializing hardware input unit after setting it to input mode");
-	
-	return true;
+	OFXAU_RET_BOOL(AudioUnitInitialize(*_unit), 
+				   "initializing hardware input unit after setting it to input mode");
 }
 
 #pragma mark - Callbacks / Rendering
@@ -231,7 +235,7 @@ OSStatus ofxAudioUnitInput::render(AudioUnitRenderActionFlags *ioActionFlags,
 								   AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	return pullCallback(&_inputContext, ioActionFlags, inTimeStamp, 
+	return pullCallback(&_renderContext, ioActionFlags, inTimeStamp, 
 						inOutputBusNumber, inNumberFrames, ioData);
 }
 
@@ -244,9 +248,7 @@ OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 										   AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	RenderContext * ctx = static_cast<RenderContext *>(inRefCon);
-	
-	AudioBufferList * d = ctx->ringBuffer->writeHead();
+	RenderContext * ctx = reinterpret_cast<RenderContext *>(inRefCon);
 	
 	OSStatus s = AudioUnitRender(*(ctx->inputUnit),
 								 ioActionFlags,
@@ -254,6 +256,8 @@ OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 								 inBusNumber,
 								 inNumberFrames,
 								 ctx->ringBuffer->writeHead());
+	
+	OFXAU_PRINT(s, "rendering audio input");
 	
 	ctx->ringBuffer->advanceWriteHead();
 	
@@ -269,7 +273,7 @@ OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
 										 AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	RenderContext * ctx = static_cast<RenderContext *>(inRefCon);
+	RenderContext * ctx = reinterpret_cast<RenderContext *>(inRefCon);
 	
 	// If we can't advance the read head, render silence.
 	// Otherwise, copy the data from the ring buffer's read head.
@@ -281,20 +285,22 @@ OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
 		}
 		
 		*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
-		return noErr;
 	}
 	else 
 	{
 		AudioBufferList * bufferedAudio = ctx->ringBuffer->readHead();
 		int buffersToCopy = min(ioData->mNumberBuffers, bufferedAudio->mNumberBuffers);
+		size_t bytesToCopy = min(ioData->mBuffers[0].mDataByteSize, 
+							  bufferedAudio->mBuffers[0].mDataByteSize);
+		bytesToCopy = min(bytesToCopy, inNumberFrames * sizeof(AudioUnitSampleType));
 		
 		for(int i = 0; i < buffersToCopy; i++)
 		{
 			memcpy(ioData->mBuffers[i].mData, 
 				   bufferedAudio->mBuffers[i].mData, 
-				   bufferedAudio->mBuffers[i].mDataByteSize);
+				   bytesToCopy);
 		}
-		
-		return noErr;
 	}
+	
+	return noErr;
 }
