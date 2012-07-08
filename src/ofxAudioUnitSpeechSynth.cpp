@@ -26,7 +26,7 @@ ofxAudioUnitSpeechSynth::ofxAudioUnitSpeechSynth()
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitSpeechSynth::say(std::string phrase)
+void ofxAudioUnitSpeechSynth::say(const std::string &phrase)
 // ----------------------------------------------------------
 {
 	CFStringRef string = CFStringCreateWithCString(kCFAllocatorDefault,
@@ -49,7 +49,7 @@ void ofxAudioUnitSpeechSynth::stop()
 void ofxAudioUnitSpeechSynth::printAvailableVoices()
 // ----------------------------------------------------------
 {
-	vector<string> voiceNames = getAvailableVoices();
+	std::vector<std::string> voiceNames = getAvailableVoices();
 	for(int i = 0; i < voiceNames.size(); i++)
 	{
 		cout << i+1 << ":\t" << voiceNames.at(i) << endl;
@@ -57,12 +57,12 @@ void ofxAudioUnitSpeechSynth::printAvailableVoices()
 }
 
 // ----------------------------------------------------------
-vector<string> ofxAudioUnitSpeechSynth::getAvailableVoices()
+std::vector<std::string> ofxAudioUnitSpeechSynth::getAvailableVoices()
 // ----------------------------------------------------------
 {
 	SInt16 numVoices = 0;
 	CountVoices(&numVoices);
-	vector<string> voiceNames;
+	std::vector<std::string> voiceNames;
 	
 	// voices seem to be 1-indexed instead of 0-indexed
 	for(int i = 1; i <= numVoices; i++)
@@ -98,10 +98,10 @@ bool ofxAudioUnitSpeechSynth::setVoice(int voiceIndex)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitSpeechSynth::setVoice(string voiceName)
+bool ofxAudioUnitSpeechSynth::setVoice(const std::string &voiceName)
 // ----------------------------------------------------------
 {
-	vector<string> voiceNames = getAvailableVoices();
+	std::vector<std::string> voiceNames = getAvailableVoices();
 	
 	for(int i = 0; i < voiceNames.size(); i++)
 	{

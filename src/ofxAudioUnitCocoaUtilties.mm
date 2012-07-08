@@ -362,7 +362,7 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
 using namespace std;
 
 // ----------------------------------------------------------
-void ofxAudioUnit::showUI(string title, int x, int y, bool forceGeneric)
+void ofxAudioUnit::showUI(const string &title, int x, int y, bool forceGeneric)
 // ----------------------------------------------------------
 {
 	if(!_unit.get()) return;

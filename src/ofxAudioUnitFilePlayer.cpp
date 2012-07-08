@@ -22,7 +22,7 @@ ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer()
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitFilePlayer::setFile(std::string filePath)
+bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 // ----------------------------------------------------------
 {
 	if(!_unit) return false;

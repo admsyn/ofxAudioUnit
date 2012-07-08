@@ -53,12 +53,9 @@ public:
 							AudioBufferList *ioData); 
 	
 	AudioUnitRef getUnit(){return _unit;}
-	bool setPreset(std::string presetPath);
+	bool setPreset(const std::string &presetPath);
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
-	void setParameter(AudioUnitParameterID property,
-					  AudioUnitScope scope,
-					  AudioUnitParameterValue value,
-					  int bus = 0);
+	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
 	bool setInputBusCount(unsigned int numberOfInputBusses);
@@ -67,7 +64,7 @@ public:
 	unsigned int getOutputBusCount();
 	
 #if !(TARGET_OS_IPHONE)
-	void showUI(std::string title = "Audio Unit UI",
+	void showUI(const std::string &title = "Audio Unit UI",
 				int x = 100,
 				int y = 100,
 				bool forceGeneric = false);
@@ -124,7 +121,7 @@ public:
 	ofxAudioUnitFilePlayer();
 	~ofxAudioUnitFilePlayer();
 	
-	bool setFile(std::string filePath);
+	bool setFile(const std::string &filePath);
 	void play();
 	void loop(unsigned int timesToLoop = -1);
 	void stop();
@@ -223,8 +220,8 @@ class ofxAudioUnitSampler : public ofxAudioUnit
 public:
 	ofxAudioUnitSampler();
 	
-	bool setSample(std::string samplePath);
-	bool setSamples(std::vector<std::string> samplePaths);
+	bool setSample(const std::string &samplePath);
+	bool setSamples(const std::vector<std::string> &samplePaths);
 };
 
 #pragma mark - ofxAudioUnitTap
@@ -310,7 +307,7 @@ class ofxAudioUnitNetSend : public ofxAudioUnit
 {
 public:
 	ofxAudioUnitNetSend();
-	void setName(std::string name);
+	void setName(const std::string &name);
 	void setPort(unsigned int portNumber);
 	void setFormat(unsigned int formatIndex);
 };
@@ -331,7 +328,7 @@ class ofxAudioUnitNetReceive : public ofxAudioUnit
 {
 public:
 	ofxAudioUnitNetReceive();
-	void connectToHost(std::string ipAddress, unsigned long port = 52800);
+	void connectToHost(const std::string &ipAddress, unsigned long port = 52800);
 	void disconnect();
 };
 
@@ -348,13 +345,13 @@ class ofxAudioUnitSpeechSynth : public ofxAudioUnit
 public:
 	ofxAudioUnitSpeechSynth();
 	
-	void say(std::string phrase);
+	void say(const std::string &phrase);
 	void stop();
 	
 	void printAvailableVoices();
 	std::vector<std::string>getAvailableVoices();
 	bool setVoice(int voiceIndex);
-	bool setVoice(std::string voiceName);
+	bool setVoice(const std::string &voiceName);
 	
 	SpeechChannel getSpeechChannel(){return _channel;}
 };

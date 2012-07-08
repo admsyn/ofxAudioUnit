@@ -209,7 +209,7 @@ unsigned int ofxAudioUnit::getOutputBusCount()
 #pragma mark - Presets
 
 // ----------------------------------------------------------
-bool ofxAudioUnit::setPreset(std::string presetPath)
+bool ofxAudioUnit::setPreset(const std::string &presetPath)
 // ----------------------------------------------------------
 {
 	CFURLRef          presetURL;

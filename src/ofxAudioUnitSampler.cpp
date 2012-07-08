@@ -15,7 +15,7 @@ ofxAudioUnitSampler::ofxAudioUnitSampler()
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitSampler::setSample(std::string samplePath)
+bool ofxAudioUnitSampler::setSample(const std::string &samplePath)
 // ----------------------------------------------------------
 {
 	CFURLRef sampleURL[1] = {CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
@@ -40,7 +40,7 @@ bool ofxAudioUnitSampler::setSample(std::string samplePath)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitSampler::setSamples(std::vector<std::string> samplePaths)
+bool ofxAudioUnitSampler::setSamples(const std::vector<std::string> &samplePaths)
 // ----------------------------------------------------------
 {
 	CFURLRef sampleURLs[samplePaths.size()];

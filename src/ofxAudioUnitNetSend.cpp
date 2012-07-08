@@ -32,7 +32,7 @@ void ofxAudioUnitNetSend::setPort(unsigned int portNumber)
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitNetSend::setName(std::string name)
+void ofxAudioUnitNetSend::setName(const std::string &name)
 // ----------------------------------------------------------
 {
 	CFStringRef serviceName = CFStringCreateWithCString(kCFAllocatorDefault,

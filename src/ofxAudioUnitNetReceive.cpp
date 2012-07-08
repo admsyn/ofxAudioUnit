@@ -18,7 +18,7 @@ ofxAudioUnitNetReceive::ofxAudioUnitNetReceive()
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitNetReceive::connectToHost(std::string address, unsigned long port)
+void ofxAudioUnitNetReceive::connectToHost(const std::string &address, unsigned long port)
 // ----------------------------------------------------------
 {
 	stringstream ss;
