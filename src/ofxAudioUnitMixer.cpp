@@ -90,7 +90,7 @@ float ofxAudioUnitMixer::getInputLevel(int bus)
 }
 
 // ----------------------------------------------------------
-float ofxAudioUnitMixer::getOutputLevel()
+float ofxAudioUnitMixer::getOutputLevel() const
 // ----------------------------------------------------------
 {	
 	AudioUnitParameterValue level;

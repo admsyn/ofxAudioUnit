@@ -59,9 +59,9 @@ public:
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
 	bool setInputBusCount(unsigned int numberOfInputBusses);
-	unsigned int getInputBusCount();
+	unsigned int getInputBusCount() const;
 	bool setOutputBusCount(unsigned int numberOfOutputBusses);
-	unsigned int getOutputBusCount();
+	unsigned int getOutputBusCount() const;
 	
 #if !(TARGET_OS_IPHONE)
 	void showUI(const std::string &title = "Audio Unit UI",
@@ -99,7 +99,7 @@ public:
 	void setPan(float pan, int bus = 0);
 	
 	float getInputLevel(int bus = 0);
-	float getOutputLevel();
+	float getOutputLevel() const;
 	void  enableInputMetering(int bus = 0);
 	void  enableOutputMetering();
 	void  disableInputMetering(int bus = 0);

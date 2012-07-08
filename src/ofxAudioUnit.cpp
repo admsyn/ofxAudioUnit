@@ -161,7 +161,7 @@ bool ofxAudioUnit::setInputBusCount(unsigned int numberOfInputBusses)
 }
 
 // ----------------------------------------------------------
-unsigned int ofxAudioUnit::getInputBusCount()
+unsigned int ofxAudioUnit::getInputBusCount() const
 // ----------------------------------------------------------
 {
 	UInt32 busCount;
@@ -191,7 +191,7 @@ bool ofxAudioUnit::setOutputBusCount(unsigned int numberOfOutputBusses)
 }
 
 // ----------------------------------------------------------
-unsigned int ofxAudioUnit::getOutputBusCount()
+unsigned int ofxAudioUnit::getOutputBusCount() const
 // ----------------------------------------------------------
 {
 	UInt32 busCount;
