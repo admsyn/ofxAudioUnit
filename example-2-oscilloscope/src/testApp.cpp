@@ -59,17 +59,11 @@ void testApp::setup(){
 //	This will create a MIDI destination that other
 //	applications can send MIDI to. The MIDI destination
 //	will show up as "openFrameworks". Any received MIDI
-//	will be routed to a synth unit.
+//	will be routed to an ofxAudioUnitSampler.
 //	Note that if you're using Ableton to generate MIDI, you'll
 //	have to go into the MIDI / Sync preferences and turn
 //	"Track" on for the openFrameworks MIDI Destination.
-//	If you're on osx 10.6 or earlier, you will have to
-//	change kAudioUnitSubType_Sampler to 
-//	kAudioUnitSubType_DLSSynth
-//-------------------------------------------------
-//	sampler = ofxAudioUnit(kAudioUnitType_MusicDevice,
-//						   kAudioUnitSubType_Sampler);
-//
+//-------------------------------------------------	
 //	midiReceiver.createMidiDestination("openFrameworks");
 //	midiReceiver.routeMidiTo(sampler);
 //	sampler >> tap >> output;
@@ -78,19 +72,13 @@ void testApp::setup(){
 	
 //	This will connect a MIDI receiver to an existing MIDI
 //	source (for instance, a MIDI keyboard you have plugged
-//	into your computer). This MIDI will be routed to
-//	a synth unit. 
+//	into your computer). MIDI from that source will be
+//	routed to an ofxAudioUnitSampler.
 //	This will also print the source names and indexes
 //	of your available MIDI sources. You can change the
 //	arg for connectToMidiSource() to one of these indexes
 //	if you want to use a different source.
-//	If you're on osx 10.6 or earlier, you will have to
-//	change kAudioUnitSubType_Sampler to 
-//	kAudioUnitSubType_DLSSynth
 //-------------------------------------------------
-//	sampler = ofxAudioUnit(kAudioUnitType_MusicDevice,
-//						   kAudioUnitSubType_Sampler);
-//	
 //	ofxAudioUnitMidi::printSourceNames();
 //	midiReceiver.connectToMidiSource(0);
 //	midiReceiver.routeMidiTo(sampler);

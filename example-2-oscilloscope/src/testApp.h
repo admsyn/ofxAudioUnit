@@ -25,7 +25,7 @@ public:
 	void drawOscilloscopeLabels();
 	void drawOscilloscopeLines();
 	
-	ofxAudioUnit sampler;
+	ofxAudioUnitSampler sampler;
 	ofxAudioUnitFilePlayer filePlayer;
 	ofxAudioUnitNetReceive netReceive;
 	ofxAudioUnitSpeechSynth speechSynth;
