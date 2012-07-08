@@ -224,6 +224,7 @@ public:
 	ofxAudioUnitSampler();
 	
 	bool setSample(std::string samplePath);
+	bool setSamples(std::vector<std::string> samplePaths);
 };
 
 #pragma mark - ofxAudioUnitTap

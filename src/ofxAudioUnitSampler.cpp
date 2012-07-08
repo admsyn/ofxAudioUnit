@@ -14,8 +14,6 @@ ofxAudioUnitSampler::ofxAudioUnitSampler()
 	initUnit();
 }
 
-//CFArrayRef of CFURLRef
-
 // ----------------------------------------------------------
 bool ofxAudioUnitSampler::setSample(std::string samplePath)
 // ----------------------------------------------------------
@@ -25,16 +23,47 @@ bool ofxAudioUnitSampler::setSample(std::string samplePath)
 																	 samplePath.length(),
 																	 NULL)};
 	
-	CFArrayRef samples = CFArrayCreate(NULL, (const void **)&sampleURL, 1, &kCFTypeArrayCallBacks);
+	CFArrayRef sample = CFArrayCreate(NULL, (const void **)&sampleURL, 1, &kCFTypeArrayCallBacks);
 
-	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-						 kAUSamplerProperty_LoadAudioFiles,
-						 kAudioUnitScope_Global,
-						 0,
-						 &samples,
-						 sizeof(samples)),
-				   "setting ofxAudioUnitSampler's source sample");
+	OFXAU_PRINT(AudioUnitSetProperty(*_unit,
+									 kAUSamplerProperty_LoadAudioFiles,
+									 kAudioUnitScope_Global,
+									 0,
+									 &sample,
+									 sizeof(sample)),
+				"setting ofxAudioUnitSampler's source sample");
+	
+	CFRelease(sample);
+	CFRelease(sampleURL[0]);
+	
+	return true;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnitSampler::setSamples(std::vector<std::string> samplePaths)
+// ----------------------------------------------------------
+{
+	CFURLRef sampleURLs[samplePaths.size()];
+	
+	for(int i = 0; i < samplePaths.size(); i++)
+	{
+		sampleURLs[i] = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+																(const UInt8 *)samplePaths[i].c_str(),
+																samplePaths[i].length(),
+																NULL);
+	}
+	
+	CFArrayRef samples = CFArrayCreate(NULL, (const void **)&sampleURLs, samplePaths.size(), &kCFTypeArrayCallBacks);
+	
+	OFXAU_PRINT(AudioUnitSetProperty(*_unit,
+									 kAUSamplerProperty_LoadAudioFiles,
+									 kAudioUnitScope_Global,
+									 0,
+									 &samples,
+									 sizeof(samples)),
+				"setting ofxAudioUnitSampler's source samples");
+	
+	for(int i = 0; i < samplePaths.size(); i++) CFRelease(sampleURLs[i]);
 	
 	CFRelease(samples);
-	CFRelease(sampleURL[0]);
 }
