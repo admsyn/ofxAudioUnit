@@ -4,7 +4,7 @@
 using namespace std;
 
 // ----------------------------------------------------------
-ofxAudioUnit::ofxAudioUnit(AudioComponentDescription description) 
+ofxAudioUnit::ofxAudioUnit(AudioComponentDescription description)
 : _desc(description)
 // ----------------------------------------------------------
 {
@@ -140,7 +140,7 @@ OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
 							  AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	return AudioUnitRender(*_unit, ioActionFlags, inTimeStamp, 
+	return AudioUnitRender(*_unit, ioActionFlags, inTimeStamp,
 						   inOutputBusNumber, inNumberFrames, ioData);
 }
 

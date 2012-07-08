@@ -10,12 +10,12 @@ void testApp::setup(){
 //	Unit which you can change in real time. For example, a
 //	Mixer audio unit typically has parameters for volume,
 //	panning, etc. These are the parameters that you are
-//	changing with ofxAudioUnitMixer's setPan() and 
+//	changing with ofxAudioUnitMixer's setPan() and
 //	setInputVolume() functions.
 	
 //	However, there are a huge number of parameters that Audio
 //	Units make available, and ofxAudioUnit can't make convienient
-//	functions for all of them. This example shows you how to 
+//	functions for all of them. This example shows you how to
 //	programmatically set Audio Unit parameters on the fly.
 	
 //	These are the audio units we'll use:
@@ -41,9 +41,9 @@ void testApp::setup(){
 	
 //	First, we'll set the lowpass's resonance setting. All of the
 //	Apple-manufactured Audio Units have parameter constants defined
-//	which follow a particular naming pattern. The two lowpass 
-//	parameters are kLowPassParam_Resonance and 
-//	kLowPassParam_CutoffFrequency. 
+//	which follow a particular naming pattern. The two lowpass
+//	parameters are kLowPassParam_Resonance and
+//	kLowPassParam_CutoffFrequency.
 	
 //	The easiest way to find the parameters for your Audio Unit
 //	are to type kNameOfYourUnit and let Xcode's auto-complete
@@ -72,7 +72,7 @@ void testApp::setup(){
 	
 //	Here, we're setting the lowpass's resonance to 10
 	
-	AudioUnitSetParameter(*lowpass.getUnit(), kLowPassParam_Resonance, 
+	AudioUnitSetParameter(*lowpass.getUnit(), kLowPassParam_Resonance,
 						  kAudioUnitScope_Global, 0, 10, 0);
 	
 //	You can also save the state of an Audio Unit's parameters as a
@@ -127,11 +127,11 @@ void testApp::mouseMoved(int x, int y ){
 	
 	float newSpeed = ofMap(x, 0, ofGetWidth(), 0.01, 2, true);
 	
-	AudioUnitSetParameter(*varispeed.getUnit(), 
+	AudioUnitSetParameter(*varispeed.getUnit(),
 						  kVarispeedParam_PlaybackRate,
 						  kAudioUnitScope_Global,
 						  0,
-						  newSpeed, 
+						  newSpeed,
 						  0);
 	
 	float newCutoff = ofMap(y, 0, ofGetHeight(), 10, 6900);
@@ -140,7 +140,7 @@ void testApp::mouseMoved(int x, int y ){
 						  kLowPassParam_CutoffFrequency,
 						  kAudioUnitScope_Global,
 						  0,
-						  newCutoff, 
+						  newCutoff,
 						  0);
 }
 
