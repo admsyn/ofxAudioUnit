@@ -215,6 +215,17 @@ public:
 	bool stop();
 };
 
+#pragma mark - ofxAudioUnitSampler
+
+class ofxAudioUnitSampler : public ofxAudioUnit 
+{
+	
+public:
+	ofxAudioUnitSampler();
+	
+	bool setSample(std::string samplePath);
+};
+
 #pragma mark - ofxAudioUnitTap
 
 // ofxAudioUnitTap acts like an Audio Unit (as in, you
