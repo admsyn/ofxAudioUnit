@@ -259,7 +259,7 @@ OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
 	
 	OFXAU_PRINT(s, "rendering audio input");
 	
-	ctx->ringBuffer->advanceWriteHead();
+	if(s == noErr) ctx->ringBuffer->advanceWriteHead();
 	
 	return s;
 }
