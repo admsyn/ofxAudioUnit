@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include "ofUtils.h"
 #include <iostream>
 
 using namespace std;
@@ -209,20 +210,42 @@ unsigned int ofxAudioUnit::getOutputBusCount() const
 #pragma mark - Presets
 
 // ----------------------------------------------------------
-bool ofxAudioUnit::setPreset(const std::string &presetPath)
+CFURLRef CreateURLFromPath(const std::string &path)
 // ----------------------------------------------------------
 {
-	CFURLRef          presetURL;
+	return CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+												   (const UInt8*)path.c_str(),
+												   path.length(),
+												   NULL);
+}
+
+// ----------------------------------------------------------
+CFURLRef CreateAbsURLForFileInDataFolder(const std::string &presetName)
+// ----------------------------------------------------------
+{
+	return CreateURLFromPath(ofFilePath::getAbsolutePath(ofToDataPath(presetName)));
+}
+
+// ----------------------------------------------------------
+std::string StringForPathFromURL(const CFURLRef &urlRef)
+// ----------------------------------------------------------
+{
+	CFStringRef filePath = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
+	char buf[512];
+	CFStringGetCString(filePath, buf, 512, kCFStringEncodingUTF8);
+	CFRelease(filePath);
+	return std::string(buf);
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::loadPreset(const CFURLRef &presetURL)
+// ----------------------------------------------------------
+{
 	CFDataRef         presetData;
 	CFPropertyListRef presetPList;
 	Boolean           presetReadSuccess;
 	SInt32            presetReadErrorCode;
 	OSStatus          presetSetStatus;
-	
-	presetURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
-														(const UInt8*)presetPath.c_str(),
-														presetPath.length(),
-														NULL);
 	
 	presetReadSuccess = CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault,
 																 presetURL,
@@ -230,8 +253,6 @@ bool ofxAudioUnit::setPreset(const std::string &presetPath)
 																 NULL,
 																 NULL,
 																 &presetReadErrorCode);
-	CFRelease(presetURL);
-	
 	if(presetReadSuccess)
 	{
 		presetPList = CFPropertyListCreateWithData(kCFAllocatorDefault,
@@ -249,18 +270,9 @@ bool ofxAudioUnit::setPreset(const std::string &presetPath)
 		CFRelease(presetData);
 		CFRelease(presetPList);
 	}
-	else
+	else 
 	{
-		if(presetReadErrorCode == kCFURLUnknownError ||
-		   presetReadErrorCode == kCFURLResourceNotFoundError)
-		{
-			cout << "Couldn't locate preset at " << presetPath << endl;
-		}
-		else 
-		{
-			cout << "CFURL Error Code: " << presetReadErrorCode 
-			<< " while reading preset at " << presetPath << endl;
-		}
+		cout << "Couldn't read preset at " << StringForPathFromURL(presetURL) << endl;
 	}
 	
 	bool presetSetSuccess = presetReadSuccess && (presetSetStatus == noErr);
@@ -278,9 +290,10 @@ bool ofxAudioUnit::setPreset(const std::string &presetPath)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnit::savePreset(const std::string &presetPath)
+bool ofxAudioUnit::savePreset(const CFURLRef &presetURL)
 // ----------------------------------------------------------
 {
+	// getting preset data from AU
 	CFPropertyListRef preset;
 	UInt32 presetSize = sizeof(preset);
 	
@@ -292,16 +305,11 @@ bool ofxAudioUnit::savePreset(const std::string &presetPath)
 										 &presetSize),
 					"getting preset data");
 	
-	if(!CFPropertyListIsValid(preset, kCFPropertyListXMLFormat_v1_0)) 
-	{
-		return false;
-	}
+	if(!CFPropertyListIsValid(preset, kCFPropertyListXMLFormat_v1_0)) return false;
 	
+	// if succesful, writing it to a file
 	CFDataRef presetData = CFPropertyListCreateXMLData(kCFAllocatorDefault, preset);
-	CFURLRef  presetURL  = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
-																   (const UInt8*)presetPath.c_str(),
-																   presetPath.length(),
-																   NULL);
+	
 	SInt32 errorCode;
 	Boolean writeSuccess = CFURLWriteDataAndPropertiesToResource(presetURL, 
 																 presetData,
@@ -312,10 +320,53 @@ bool ofxAudioUnit::savePreset(const std::string &presetPath)
 	
 	if(!writeSuccess)
 	{
-		cout << "Error writing preset file :" << errorCode << endl;
+		cout << "Error " << errorCode << " writing preset file at " 
+		<< StringForPathFromURL(presetURL) << endl;
 	}
 	
 	return writeSuccess;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::loadCustomPresetWithName(const std::string &presetName)
+// ----------------------------------------------------------
+{
+	std::string fileName = std::string(presetName).append(".aupreset");
+	CFURLRef URL = CreateAbsURLForFileInDataFolder(fileName);
+	bool successful = loadPreset(URL);
+	CFRelease(URL);
+	return successful;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::loadCustomPresetAtPath(const std::string &presetPath)
+// ----------------------------------------------------------
+{
+	CFURLRef URL = CreateURLFromPath(presetPath);
+	bool successful = loadPreset(URL);
+	CFRelease(URL);
+	return successful;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::saveCustomPresetWithName(const std::string &presetName)
+// ----------------------------------------------------------
+{
+	std::string fileName = std::string(presetName).append(".aupreset");
+	CFURLRef URL = CreateAbsURLForFileInDataFolder(fileName);
+	bool successful = savePreset(URL);
+	CFRelease(URL);
+	return successful;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::saveCustomPresetAtPath(const std::string &presetPath)
+// ----------------------------------------------------------
+{
+	CFURLRef URL = CreateURLFromPath(presetPath);
+	bool successful = savePreset(URL);
+	CFRelease(URL);
+	return successful;
 }
 
 #pragma mark - Render Callbacks

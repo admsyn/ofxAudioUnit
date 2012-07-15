@@ -29,6 +29,8 @@ protected:
 	
 	AudioComponentDescription _desc;
 	void initUnit();
+	bool loadPreset(const CFURLRef &presetURL);
+	bool savePreset(const CFURLRef &presetURL);
 	
 public:
 	ofxAudioUnit(){};
@@ -53,8 +55,17 @@ public:
 							AudioBufferList *ioData); 
 	
 	AudioUnitRef getUnit(){return _unit;}
-	bool setPreset(const std::string &presetPath);
-	bool savePreset(const std::string &presetName);
+	
+	// This pair of functions will look for the preset in the 
+	// apps's data folder and append ".aupreset" to the name
+	bool loadCustomPresetWithName(const std::string &presetName);
+	bool saveCustomPresetWithName(const std::string &presetName);
+	
+	// This pair of functions expect an absolute path (including
+	// the file extension)
+	bool saveCustomPresetAtPath(const std::string &presetPath);
+	bool loadCustomPresetAtPath(const std::string &presetPath);
+	
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
