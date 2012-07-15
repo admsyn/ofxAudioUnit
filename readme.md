@@ -38,8 +38,7 @@ in your testApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include 
 
 Soon
 ---------------
-* Proper iOS support (I think everything should work but I haven't had a chance to test on an iThing yet)
-* Subclass for the AUSampler (loading samples, tweaking params etc)
+* Proper iOS support
 * Direct, port-less MIDI (for sending MIDI messages directly to the units)
 * Saving .aupreset files
 
