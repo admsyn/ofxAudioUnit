@@ -1,5 +1,7 @@
 #include "ofxAudioUnit.h"
 
+#if (MAC_OS_X_VERSION_10_7 || __IPHONE_5_0)
+
 AudioComponentDescription samplerDesc = {
 	kAudioUnitType_MusicDevice,
 	kAudioUnitSubType_Sampler,
@@ -67,3 +69,29 @@ bool ofxAudioUnitSampler::setSamples(const std::vector<std::string> &samplePaths
 	
 	CFRelease(samples);
 }
+
+
+#else
+
+#if MAC_OS_X_VERSION_10_6
+
+#warning AUSampler doesn't exist on 10.6. ofxAudioUnitSampler is wrapping the DLSSynth instead
+
+AudioComponentDescription samplerDesc = {
+	kAudioUnitType_MusicDevice,
+	kAudioUnitSubType_DLSSynth,
+	kAudioUnitManufacturer_Apple
+};
+
+ofxAudioUnitSampler::ofxAudioUnitSampler()
+{
+	_desc = samplerDesc;
+	initUnit();
+}
+
+bool ofxAudioUnitSampler::setSample(const std::string &samplePath){return false;}
+bool ofxAudioUnitSampler::setSamples(const std::vector<std::string> &samplePaths){return false;}
+
+#endif // MAC_OS_X_VERSION_10_6
+
+#endif // (MAC_OS_X_VERSION_10_7 || __IPHONE_5_0)
