@@ -231,8 +231,8 @@ std::string StringForPathFromURL(const CFURLRef &urlRef)
 // ----------------------------------------------------------
 {
 	CFStringRef filePath = CFURLCopyFileSystemPath(urlRef, kCFURLPOSIXPathStyle);
-	char buf[512];
-	CFStringGetCString(filePath, buf, 512, kCFStringEncodingUTF8);
+	char buf[PATH_MAX];
+	CFStringGetCString(filePath, buf, PATH_MAX, kCFStringEncodingUTF8);
 	CFRelease(filePath);
 	return std::string(buf);
 }
@@ -309,6 +309,9 @@ bool ofxAudioUnit::savePreset(const CFURLRef &presetURL)
 	
 	// if succesful, writing it to a file
 	CFDataRef presetData = CFPropertyListCreateXMLData(kCFAllocatorDefault, preset);
+	
+	ofDirectory dataDir = ofDirectory(ofToDataPath(""));
+	if(!dataDir.exists()) dataDir.create();
 	
 	SInt32 errorCode;
 	Boolean writeSuccess = CFURLWriteDataAndPropertiesToResource(presetURL, 
