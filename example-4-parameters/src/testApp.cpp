@@ -76,12 +76,16 @@ void testApp::setup(){
 						  kAudioUnitScope_Global, 0, 10, 0);
 	
 //	You can also save the state of an Audio Unit's parameters as a
-//	preset file. You can load a preset file like this:
+//	preset file. Saving / Loading a preset file is done like this:
 
-//	varispeed.setPreset("MyPresetName.aupreset");
+//	varispeed.saveCustomPreset("MyPreset");
+//	varispeed.loadCustomPreset("MyPreset");
 	
-//	You can create aupreset files in GarageBand. Saving presets is
-//	a feature in-the-works for ofxAudioUnit
+//	These functions will look for or create a preset file with the extension
+//	".aupreset" in your app's data folder.
+	
+//	You can also create .aupreset files in Garageband and other DAWs.
+//	Usually, these are stored in ~/Library/Audio/Presets/
 	
 	output.start();
 	
