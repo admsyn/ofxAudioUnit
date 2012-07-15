@@ -58,8 +58,8 @@ public:
 	
 	// This pair of functions will look for the preset in the 
 	// apps's data folder and append ".aupreset" to the name
-	bool loadCustomPresetWithName(const std::string &presetName);
-	bool saveCustomPresetWithName(const std::string &presetName);
+	bool loadCustomPreset(const std::string &presetName);
+	bool saveCustomPreset(const std::string &presetName);
 	
 	// This pair of functions expect an absolute path (including
 	// the file extension)

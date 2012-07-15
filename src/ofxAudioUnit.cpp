@@ -331,7 +331,7 @@ bool ofxAudioUnit::savePreset(const CFURLRef &presetURL)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnit::loadCustomPresetWithName(const std::string &presetName)
+bool ofxAudioUnit::loadCustomPreset(const std::string &presetName)
 // ----------------------------------------------------------
 {
 	std::string fileName = std::string(presetName).append(".aupreset");
@@ -352,7 +352,7 @@ bool ofxAudioUnit::loadCustomPresetAtPath(const std::string &presetPath)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnit::saveCustomPresetWithName(const std::string &presetName)
+bool ofxAudioUnit::saveCustomPreset(const std::string &presetName)
 // ----------------------------------------------------------
 {
 	std::string fileName = std::string(presetName).append(".aupreset");
