@@ -40,7 +40,6 @@ Soon
 ---------------
 * Proper iOS support
 * Direct, port-less MIDI (for sending MIDI messages directly to the units)
-* Saving .aupreset files
 
 License
 ----------
