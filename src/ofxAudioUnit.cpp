@@ -263,7 +263,59 @@ bool ofxAudioUnit::setPreset(const std::string &presetPath)
 		}
 	}
 	
-	return presetReadSuccess && (presetSetStatus == noErr);
+	bool presetSetSuccess = presetReadSuccess && (presetSetStatus == noErr);
+	
+	if(presetSetSuccess)
+	{
+		// Notify any listeners that params probably changed
+		AudioUnitParameter paramNotification;
+		paramNotification.mAudioUnit   = *_unit;
+		paramNotification.mParameterID = kAUParameterListener_AnyParameter;
+		AUParameterListenerNotify(NULL, NULL, &paramNotification);
+	}
+	
+	return presetSetSuccess;
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::savePreset(const std::string &presetPath)
+// ----------------------------------------------------------
+{
+	CFPropertyListRef preset;
+	UInt32 presetSize = sizeof(preset);
+	
+	OFXAU_RET_FALSE(AudioUnitGetProperty(*_unit,
+										 kAudioUnitProperty_ClassInfo,
+										 kAudioUnitScope_Global,
+										 0,
+										 &preset,
+										 &presetSize),
+					"getting preset data");
+	
+	if(!CFPropertyListIsValid(preset, kCFPropertyListXMLFormat_v1_0)) 
+	{
+		return false;
+	}
+	
+	CFDataRef presetData = CFPropertyListCreateXMLData(kCFAllocatorDefault, preset);
+	CFURLRef  presetURL  = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
+																   (const UInt8*)presetPath.c_str(),
+																   presetPath.length(),
+																   NULL);
+	SInt32 errorCode;
+	Boolean writeSuccess = CFURLWriteDataAndPropertiesToResource(presetURL, 
+																 presetData,
+																 NULL,
+																 &errorCode);
+	
+	CFRelease(presetData);
+	
+	if(!writeSuccess)
+	{
+		cout << "Error writing preset file :" << errorCode << endl;
+	}
+	
+	return writeSuccess;
 }
 
 #pragma mark - Render Callbacks

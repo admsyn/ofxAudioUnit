@@ -54,6 +54,7 @@ public:
 	
 	AudioUnitRef getUnit(){return _unit;}
 	bool setPreset(const std::string &presetPath);
+	bool savePreset(const std::string &presetName);
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
