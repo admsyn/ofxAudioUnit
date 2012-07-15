@@ -57,13 +57,20 @@ void testApp::setup(){
 //	ofxAudioUnit declares a few specific types that make it 
 //	easier to work with certain Audio Units. These are:
 //	
-//	ofxAudioUnitMixer - mixes several audio streams into one
-//	ofxAudioUnitSpeechSynth - speaks text out loud
-//	ofxAudioUnitFilePlayer - plays files :o
-//	ofxAudioUnitOutput - sends audio to your speakers
-//	ofxAudioUnitNetSend & ofxAudioUnitNetReceive - these units
-//	work together to send audio over a network or between
-//	applications on the same computer
+//	ofxAudioUnitSpeechSynth       - speaks text out loud
+//	
+//	ofxAudioUnitFilePlayer        - plays or loops audio files
+//	
+//	ofxAudioUnitInput             - gets audio from your mic or line in
+//	
+//	ofxAudioUnitSampler           - plays files at various pitches
+//	
+//	ofxAudioUnitNetSend &         - these units work together to send audio over
+//	ofxAudioUnitNetReceive          a network or between applications on the same computer
+//	
+//	ofxAudioUnitMixer             - mixes several audio streams into one
+//	
+//	ofxAudioUnitOutput            - sends audio to your speakers
 //	
 //	There is also the ofxAudioUnitTap, which sits between audio
 //	units and allows you to read the audio samples that are
@@ -152,7 +159,7 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 
-//  The ofxAudioUnitTap has a function for getting an ofPolyline
+//	The ofxAudioUnitTap has a function for getting an ofPolyline
 //	representing the waveform of the samples currently passing 
 //	through it
 
