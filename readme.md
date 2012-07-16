@@ -3,6 +3,8 @@ Intro
 
 ofxAudioUnit is an addon for [openFrameworks](http://www.openframeworks.cc/) that lets you work with [Audio Units](http://en.wikipedia.org/wiki/Audio_Units) in an intuitive way.
 
+[Here's a demo of the examples](http://vimeo.com/41115496)
+
 What Are Audio Units?
 ---------------------
 
