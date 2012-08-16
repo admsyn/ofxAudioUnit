@@ -41,7 +41,7 @@ ofxAudioUnit& ofxAudioUnit::operator=(const ofxAudioUnit &orig)
 	if(this == &orig) return *this;
 	
 	_desc = orig._desc;
-	_unit = orig._unit;
+	initUnit();
 	
 	return *this;
 }
