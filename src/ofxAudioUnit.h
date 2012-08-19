@@ -126,14 +126,17 @@ public:
 
 class ofxAudioUnitFilePlayer : public ofxAudioUnit 
 {
-	AudioFileID fileID[1];
-	ScheduledAudioFileRegion region;
+	AudioFileID _fileID[1];
+	ScheduledAudioFileRegion _region;
 	
 public:
 	ofxAudioUnitFilePlayer();
 	~ofxAudioUnitFilePlayer();
+
+	bool   setFile(const std::string &filePath);
+	UInt32 getLength();
+	void   setLength(UInt32 length);
 	
-	bool setFile(const std::string &filePath);
 	void play();
 	void loop(unsigned int timesToLoop = -1);
 	void stop();
