@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#import <mach/mach_time.h>
 
 AudioComponentDescription filePlayerDesc =
 {
@@ -62,7 +63,7 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	
 	// defining a region which basically says "play the whole file"
 	memset(&_region, 0, sizeof(_region));
-	_region.mTimeStamp.mFlags       = kAudioTimeStampSampleTimeValid;
+	_region.mTimeStamp.mFlags       = kAudioTimeStampHostTimeValid;
 	_region.mTimeStamp.mSampleTime  = 0;
 	_region.mCompletionProc         = NULL;
 	_region.mCompletionProcUserData = NULL;
@@ -73,7 +74,7 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	
 	// setting the file ID now since it seems to have some overhead.
 	// Doing it now ensures you'll get sound pretty much instantly after
-	// calling play()
+	// calling play() (subsequent calls don't have the overhead)
 	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
 	                                    kAudioUnitProperty_ScheduledFileIDs,
 	                                    kAudioUnitScope_Global,
@@ -100,16 +101,12 @@ UInt32 ofxAudioUnitFilePlayer::getLength()
 #pragma mark - Playback
 
 // ----------------------------------------------------------
-void ofxAudioUnitFilePlayer::play()
+void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 // ----------------------------------------------------------
 {
-	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampSampleTimeValid))
+	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid))
 	{
 		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
-		return;
-	}
-	else if(!_unit)
-	{
 		return;
 	}
 	
@@ -129,25 +126,28 @@ void ofxAudioUnitFilePlayer::play()
 	                                  sizeof(_region)),
 	             "setting file player region");
 	
-	AudioTimeStamp startTime = {0};
-	startTime.mFlags = kAudioTimeStampSampleTimeValid;
-	startTime.mSampleTime = -1;
+	if(startTime == 0)
+	{
+		startTime = mach_absolute_time();
+	}
+	AudioTimeStamp startTimeStamp = {0};
+	FillOutAudioTimeStampWithHostTime(startTimeStamp, startTime);
 	
 	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
 	                                  kAudioUnitProperty_ScheduleStartTimeStamp,
 	                                  kAudioUnitScope_Global,
 	                                  0,
-	                                  &startTime,
-	                                  sizeof(startTime)),
+	                                  &startTimeStamp,
+	                                  sizeof(startTimeStamp)),
 	             "setting file player start time");
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop)
+void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop, uint64_t startTime)
 // ----------------------------------------------------------
 {
 	_region.mLoopCount = timesToLoop;
-	play();
+	play(startTime);
 }
 
 // ----------------------------------------------------------

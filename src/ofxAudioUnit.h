@@ -124,6 +124,11 @@ public:
 // This audio unit allows you to play any file that
 // Core Audio supports (mp3, aac, caf, aiff, etc)
 
+enum
+{
+	OFX_AU_LOOP_FOREVER = -1
+};
+
 class ofxAudioUnitFilePlayer : public ofxAudioUnit 
 {
 	AudioFileID _fileID[1];
@@ -137,8 +142,11 @@ public:
 	UInt32 getLength();
 	void   setLength(UInt32 length);
 	
-	void play();
-	void loop(unsigned int timesToLoop = -1);
+	// You can get the startTime arg from mach_absolute_time().
+	// Note that all of these args are optional; you can just
+	// call play() / loop() and it will start right away.
+	void play(uint64_t startTime = 0);
+	void loop(unsigned int timesToLoop = OFX_AU_LOOP_FOREVER, uint64_t startTime = 0);
 	void stop();
 };
 
