@@ -56,6 +56,7 @@ ofxAudioUnitMidiReceiver& ofxAudioUnitMidiReceiver::operator=(const ofxAudioUnit
 // ----------------------------------------------------------
 {
 	_client = other._client;
+	return *this;
 }
 
 // ----------------------------------------------------------
