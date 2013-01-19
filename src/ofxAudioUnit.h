@@ -40,13 +40,19 @@ public:
 	virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
 	
+	// By default, this just calls AudioUnitRender() on the underlying
+	// AudioUnit. However, some subclasses require more complex rendering
+	// behaviour
 	virtual OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
 							const AudioTimeStamp *inTimeStamp,
 							UInt32 inOutputBusNumber, 
 							UInt32 inNumberFrames, 
 							AudioBufferList *ioData); 
 	
-	AudioUnitRef getUnit(){return _unit;}
+	// explicit and implicit conversions to the underlying AudioUnit struct
+	AudioUnit getUnit()       {return *_unit;}
+	operator AudioUnit()      {return *_unit;}
+	AudioUnitRef getUnitRef() {return _unit;}
 	
 	// This pair of functions will look for the preset in the 
 	// apps's data folder and append ".aupreset" to the name
