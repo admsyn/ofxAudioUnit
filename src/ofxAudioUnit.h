@@ -23,15 +23,7 @@
 // to the output.
 
 class ofxAudioUnit
-{	
-protected:
-	AudioUnitRef _unit;
-	
-	AudioComponentDescription _desc;
-	void initUnit();
-	bool loadPreset(const CFURLRef &presetURL);
-	bool savePreset(const CFURLRef &presetURL);
-	
+{
 public:
 	ofxAudioUnit(){};
 	ofxAudioUnit(AudioComponentDescription description);
@@ -70,20 +62,23 @@ public:
 	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
-	bool setInputBusCount(unsigned int numberOfInputBusses);
-	unsigned int getInputBusCount() const;
-	bool setOutputBusCount(unsigned int numberOfOutputBusses);
-	unsigned int getOutputBusCount() const;
-	
 #if !(TARGET_OS_IPHONE)
 	void showUI(const std::string &title = "Audio Unit UI",
 				int x = 100,
 				int y = 100,
 				bool forceGeneric = false);
 #endif
+	
+protected:
+	AudioUnitRef _unit;
+	
+	AudioComponentDescription _desc;
+	void initUnit();
+	bool loadPreset(const CFURLRef &presetURL);
+	bool savePreset(const CFURLRef &presetURL);
+	
+	static void AudioUnitDeleter(AudioUnit * unit);
 };
-
-static void AudioUnitDeleter(AudioUnit * unit);
 
 #pragma mark - ofxAudioUnitMixer
 
@@ -112,6 +107,10 @@ public:
 	
 	float getInputLevel(int bus = 0);
 	float getOutputLevel() const;
+	
+	bool setInputBusCount(unsigned int numberOfInputBusses);
+	unsigned int getInputBusCount() const;
+	
 	void  enableInputMetering(int bus = 0);
 	void  enableOutputMetering();
 	void  disableInputMetering(int bus = 0);
@@ -123,11 +122,6 @@ public:
 // ofxAudioUnitFilePlayer wraps the AUAudioFilePlayer unit.
 // This audio unit allows you to play any file that
 // Core Audio supports (mp3, aac, caf, aiff, etc)
-
-enum
-{
-	OFX_AU_LOOP_FOREVER = -1
-};
 
 class ofxAudioUnitFilePlayer : public ofxAudioUnit 
 {
@@ -141,6 +135,10 @@ public:
 	bool   setFile(const std::string &filePath);
 	UInt32 getLength();
 	void   setLength(UInt32 length);
+	
+	enum {
+		OFX_AU_LOOP_FOREVER = -1
+	};
 	
 	// You can get the startTime arg from mach_absolute_time().
 	// Note that all of these args are optional; you can just
@@ -239,7 +237,6 @@ public:
 
 class ofxAudioUnitSampler : public ofxAudioUnit 
 {
-	
 public:
 	ofxAudioUnitSampler();
 	
