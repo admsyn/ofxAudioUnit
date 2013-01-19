@@ -26,11 +26,11 @@ class ofxAudioUnit
 {
 public:
 	ofxAudioUnit(){};
-	ofxAudioUnit(AudioComponentDescription description);
-	ofxAudioUnit(OSType type,
-				 OSType subType,
-				 OSType manufacturer = kAudioUnitManufacturer_Apple);
-	ofxAudioUnit(const ofxAudioUnit &orig);
+	explicit ofxAudioUnit(AudioComponentDescription description);
+	explicit ofxAudioUnit(OSType type,
+						  OSType subType,
+						  OSType manufacturer = kAudioUnitManufacturer_Apple);
+	explicit ofxAudioUnit(const ofxAudioUnit &orig);
 	ofxAudioUnit& operator=(const ofxAudioUnit &orig);
 	
 	virtual ~ofxAudioUnit();
