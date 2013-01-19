@@ -93,7 +93,7 @@ ofxAudioUnitInput::~ofxAudioUnitInput()
 #pragma mark - Connections
 
 // ----------------------------------------------------------
-void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
+ofxAudioUnit& ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
 	AURenderCallbackStruct callback;
@@ -103,7 +103,7 @@ void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, i
 	AudioStreamBasicDescription ASBD;
 	UInt32 ASBDSize = sizeof(ASBD);
 	
-	OFXAU_RETURN(AudioUnitGetProperty(*otherUnit.getUnit(),
+	OFXAU_RETURN(AudioUnitGetProperty(otherUnit,
 									  kAudioUnitProperty_StreamFormat,
 									  kAudioUnitScope_Input,
 									  destinationBus,
@@ -120,6 +120,7 @@ void ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, i
 				 "setting hardware input's output format");
 	
 	otherUnit.setRenderCallback(callback, destinationBus);
+	return otherUnit;
 }
 
 #pragma mark - Start / Stop

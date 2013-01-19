@@ -92,7 +92,7 @@ void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
 #pragma mark - Connections
 
 // ----------------------------------------------------------
-void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
+ofxAudioUnit& ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
 	if(!_unit) return;
@@ -108,13 +108,16 @@ void ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int so
 									 &connection,
 									 sizeof(AudioUnitConnection)),
 				"connecting units");
+	
+	return otherUnit;
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
+ofxAudioUnitTap& ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
 // ----------------------------------------------------------
 {
 	tap.setSource(this);
+	return tap;
 }
 
 // ----------------------------------------------------------

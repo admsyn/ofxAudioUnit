@@ -35,8 +35,8 @@ public:
 	
 	virtual ~ofxAudioUnit();
 	
-	virtual void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
-	virtual void connectTo(ofxAudioUnitTap &tap);
+	virtual ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	virtual ofxAudioUnitTap& connectTo(ofxAudioUnitTap &tap);
 	virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
 	virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
 	
@@ -228,7 +228,7 @@ public:
 	ofxAudioUnitInput();
 	~ofxAudioUnitInput();
 	
-	void connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
 	OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
 					const AudioTimeStamp *inTimeStamp,
 					UInt32 inOutputBusNumber,
