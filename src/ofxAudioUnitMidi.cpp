@@ -128,9 +128,9 @@ void ofxAudioUnitMidiReceiver::disconnectFromMidiSource(unsigned long midiSource
 void ofxAudioUnitMidiReceiver::routeMidiTo(ofxAudioUnit &unitToRouteTo)
 // ----------------------------------------------------------
 {
-	if((unitToRouteTo.getUnit().get()))
+	if((unitToRouteTo.getUnitRef()))
 	{
-		_unit = *(unitToRouteTo.getUnit().get());
+		_unit = unitToRouteTo.getUnit();
 	}
 }
 

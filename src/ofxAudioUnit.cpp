@@ -63,7 +63,7 @@ void ofxAudioUnit::initUnit()
 }
 
 // ----------------------------------------------------------
-void AudioUnitDeleter(AudioUnit * unit)
+void ofxAudioUnit::AudioUnitDeleter(AudioUnit * unit)
 // ----------------------------------------------------------
 {
 	OFXAU_PRINT(AudioUnitUninitialize(*unit),         "uninitializing unit");
@@ -146,68 +146,6 @@ OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
 {
 	return AudioUnitRender(*_unit, ioActionFlags, inTimeStamp,
 						   inOutputBusNumber, inNumberFrames, ioData);
-}
-
-#pragma mark - Busses
-
-// ----------------------------------------------------------
-bool ofxAudioUnit::setInputBusCount(unsigned int numberOfInputBusses)
-// ----------------------------------------------------------
-{
-	UInt32 busCount = numberOfInputBusses;
-	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-										kAudioUnitProperty_ElementCount,
-										kAudioUnitScope_Input,
-										0,
-										&busCount,
-										sizeof(busCount)),
-				   "setting number of input busses");
-}
-
-// ----------------------------------------------------------
-unsigned int ofxAudioUnit::getInputBusCount() const
-// ----------------------------------------------------------
-{
-	UInt32 busCount;
-	UInt32 busCountSize = sizeof(busCount);
-	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
-									 kAudioUnitProperty_ElementCount,
-									 kAudioUnitScope_Input,
-									 0,
-									 &busCount,
-									 &busCountSize),
-				"getting input bus count");
-	return busCount;
-}
-
-// ----------------------------------------------------------
-bool ofxAudioUnit::setOutputBusCount(unsigned int numberOfOutputBusses)
-// ----------------------------------------------------------
-{
-	UInt32 busCount = numberOfOutputBusses;
-	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-										kAudioUnitProperty_ElementCount,
-										kAudioUnitScope_Output,
-										0, 
-										&busCount,
-										sizeof(busCount)),
-				   "setting number of output busses");
-}
-
-// ----------------------------------------------------------
-unsigned int ofxAudioUnit::getOutputBusCount() const
-// ----------------------------------------------------------
-{
-	UInt32 busCount;
-	UInt32 busCountSize = sizeof(busCount);
-	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
-									 kAudioUnitProperty_ElementCount,
-									 kAudioUnitScope_Output,
-									 0,
-									 &busCount,
-									 &busCountSize),
-				"getting output bus count");
-	return busCount;
 }
 
 #pragma mark - Presets

@@ -25,7 +25,7 @@ ofxAudioUnitTap::~ofxAudioUnitTap()
 		AURenderCallbackStruct callbackInfo;
 		callbackInfo.inputProc = silentRenderCallback;
 		callbackInfo.inputProcRefCon = NULL;
-		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit->getUnit(),
+		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit,
 										 kAudioUnitProperty_SetRenderCallback,
 										 kAudioUnitScope_Input,
 										 _destinationBus,
@@ -52,7 +52,7 @@ void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, i
 	AudioStreamBasicDescription asbd = {0};
 	UInt32 dataSize = sizeof(AudioStreamBasicDescription);
 		
-	AudioUnitGetProperty(*(_sourceUnit->getUnit()),
+	AudioUnitGetProperty(*_sourceUnit,
 						 kAudioUnitProperty_StreamFormat,
 						 kAudioUnitScope_Output,
 						 sourceBus,

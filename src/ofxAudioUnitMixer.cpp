@@ -73,6 +73,38 @@ void ofxAudioUnitMixer::setPan(float pan, int bus)
 #endif
 }
 
+#pragma mark - Busses
+
+// ----------------------------------------------------------
+bool ofxAudioUnitMixer::setInputBusCount(unsigned int numberOfInputBusses)
+// ----------------------------------------------------------
+{
+	UInt32 busCount = numberOfInputBusses;
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+										kAudioUnitProperty_ElementCount,
+										kAudioUnitScope_Input,
+										0,
+										&busCount,
+										sizeof(busCount)),
+				   "setting number of input busses");
+}
+
+// ----------------------------------------------------------
+unsigned int ofxAudioUnitMixer::getInputBusCount() const
+// ----------------------------------------------------------
+{
+	UInt32 busCount;
+	UInt32 busCountSize = sizeof(busCount);
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+									 kAudioUnitProperty_ElementCount,
+									 kAudioUnitScope_Input,
+									 0,
+									 &busCount,
+									 &busCountSize),
+				"getting input bus count");
+	return busCount;
+}
+
 #pragma mark - Metering
 
 // ----------------------------------------------------------
