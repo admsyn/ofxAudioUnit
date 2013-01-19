@@ -1,0 +1,10 @@
+0.2.3 ----
+
+- ofxAudioUnit::getUnit() now returns an AudioUnit instead of AudioUnitRef
+  - use getUnitRef() to get the internal shared pointer
+
+- constructors are now explicit
+
+- connectTo() now returns reference of connected-to unit (for chaining)
+
+- now relies on TPCircularBuffer for buffering audio (circularly)
