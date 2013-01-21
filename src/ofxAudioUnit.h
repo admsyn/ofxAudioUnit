@@ -232,7 +232,7 @@ public:
 class ofxAudioUnitTap
 {
 public:
-	ofxAudioUnitTap(unsigned int samplesToTrack = 4096);
+	ofxAudioUnitTap(unsigned int samplesToTrack = 2048);
 	~ofxAudioUnitTap();
 	
 	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
