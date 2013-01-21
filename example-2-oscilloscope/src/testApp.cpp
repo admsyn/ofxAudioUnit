@@ -15,7 +15,7 @@ void testApp::setup(){
 //-------------------------------------------------
 //	filePlayer.setFile(ofFilePath::getAbsolutePath("entertainer.mp3"));
 //	filePlayer.play();
-//	filePlayer >> tap >> output;
+//	filePlayer.connectTo(tap).connectTo(output);
 //	activeUnit = &filePlayer;
 //-------------------------------------------------
 
@@ -27,7 +27,7 @@ void testApp::setup(){
 //-------------------------------------------------
 //	speechSynth.printAvailableVoices();
 //	speechSynth.setVoice("Fred");
-//	speechSynth >> tap >> output;
+//	speechSynth.connectTo(tap).connectTo(output);
 //	activeUnit = &speechSynth; 
 //-------------------------------------------------
 	
@@ -40,9 +40,9 @@ void testApp::setup(){
 //	use your microphone for input and your speakers for
 //	output. This will be unpleasant.
 //	If you get error -10863, make sure your input sample
-//	rate is set to 44100 in Audio MIDI Setup.
+//	rate is set to 44100 and 32-bit float in Audio MIDI Setup.
 //-------------------------------------------------	
-//	input >> tap >> output;
+//	input.connectTo(tap).connectTo(output);
 //	input.start();
 //	activeUnit = &input;
 //-------------------------------------------------
@@ -52,7 +52,7 @@ void testApp::setup(){
 //	on your computer (GarageBand, Ableton, Logic, etc)
 //-------------------------------------------------
 //	netReceive.connectToHost("127.0.0.1");
-//	netReceive >> tap >> output;
+//	netReceive.connectTo(tap).connectTo(output);
 //	activeUnit = &netReceive;
 //-------------------------------------------------
 	
@@ -66,7 +66,7 @@ void testApp::setup(){
 //-------------------------------------------------	
 //	midiReceiver.createMidiDestination("openFrameworks");
 //	midiReceiver.routeMidiTo(sampler);
-//	sampler >> tap >> output;
+//	sampler.connectTo(tap).connectTo(output);
 //	activeUnit = &sampler;
 //-------------------------------------------------
 	
@@ -82,7 +82,7 @@ void testApp::setup(){
 //	ofxAudioUnitMidi::printSourceNames();
 //	midiReceiver.connectToMidiSource(0);
 //	midiReceiver.routeMidiTo(sampler);
-//	sampler >> tap >> output;
+//	sampler.connectTo(tap).connectTo(output);
 //	activeUnit = &sampler;
 //-------------------------------------------------
 	

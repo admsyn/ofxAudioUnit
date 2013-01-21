@@ -55,7 +55,7 @@ void testApp::setup(){
 	reverb = ofxAudioUnit(kAudioUnitType_Effect,
 						  kAudioUnitSubType_MatrixReverb);
 	
-	distortion >> reverb >> tap >> output;
+	distortion.connectTo(reverb).connectTo(tap).connectTo(output);
 	
 //	Now, we'll tell the distortion unit to get its source samples from
 //	our render callback. You need to give the Audio Unit two bits of

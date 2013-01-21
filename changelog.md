@@ -5,6 +5,7 @@
   - use getUnitRef() to get the internal shared pointer
 
 - connectTo() now returns reference of connected-to unit (for chaining)
+- operator >> (alias for connectTo()) now deprecated 
 
 - Tap and Input now rely on TPCircularBuffer for buffering audio (circularly)
 - Tap and Input now support an arbitrary buffer length (buffer length passed in constructor)

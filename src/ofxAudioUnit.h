@@ -37,8 +37,8 @@ public:
 	
 	virtual ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
 	virtual ofxAudioUnitTap& connectTo(ofxAudioUnitTap &tap);
-	virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit);
-	virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap);
+	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit));
+	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnitTap& operator>>(ofxAudioUnitTap& tap));
 	
 	// By default, this just calls AudioUnitRender() on the underlying
 	// AudioUnit. However, some subclasses require more complex rendering
@@ -236,7 +236,7 @@ public:
 	~ofxAudioUnitTap();
 	
 	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
-	ofxAudioUnit& operator>>(ofxAudioUnit& destination);
+	OF_DEPRECATED_MSG("Use connectTo() instead.", ofxAudioUnit& operator>>(ofxAudioUnit& destination));
 	
 	// Container for samples returned from an ofxAudioUnitTap
 	typedef std::vector<AudioUnitSampleType> MonoSamples;

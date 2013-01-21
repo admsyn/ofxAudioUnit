@@ -37,7 +37,7 @@ void testApp::setup(){
 //	an ofxAudioUnitTap to extract the waveform, and an output
 //	to send the resulting audio to your speakers
 	
-	filePlayer >> varispeed >> lowpass >> tap >> output;
+	filePlayer.connectTo(varispeed).connectTo(lowpass).connectTo(tap).connectTo(output);
 	
 //	First, we'll set the lowpass's resonance setting. All of the
 //	Apple-manufactured Audio Units have parameter constants defined

@@ -47,13 +47,13 @@ void testApp::setup()
 //	through its own tap so that we can see the individual waveforms
 //	later
 	
-	source1 >> distortion >> tap1;
-	source2 >> delay      >> tap2;
-	source3 >> filter     >> tap3;
+	source1.connectTo(distortion).connectTo(tap1);
+	source2.connectTo(delay).connectTo(tap2);
+	source3.connectTo(filter).connectTo(tap3);
 	
 //	Now, we'll connect each of these sources to a different
-//	input bus on the mixer. Since we need to specify which bus
-//	we want to connect to, we can't use the ">>" syntax.
+//	input bus on the mixer. We'll also need to specify which
+//	bus we want to connect to on the mixer.
 	
 	mixer.setInputBusCount(3);
 	tap1.connectTo(mixer, 0);
@@ -66,7 +66,7 @@ void testApp::setup()
 	compressor = ofxAudioUnit(kAudioUnitType_Effect,
 							  kAudioUnitSubType_DynamicsProcessor);
 	
-	mixer >> compressor >> output;
+	mixer.connectTo(compressor).connectTo(output);
 	
 //	You can set the individual volume of each input bus on the mixer
 //	Volume is in the range of 0 (muted) to 1 (unchanged)

@@ -93,18 +93,18 @@ void testApp::setup(){
 	speechSynth.connectTo(tap);
 	tap.connectTo(reverb);
 	
-//	Since this can get tedious, ofxAudioUnit lets you use
-//	the >> operator to connect units in a chain. Here, we're
+//	Since this can get tedious, ofxAudioUnit lets you
+//	chain calls to connectTo() on one line. Here, we're
 //	connecting the reverb to an ofxAudioUnitMixer, and then
 //	connecting the mixer to an ofxAudioUnitOutput
 	
-	reverb >> mixer >> output;
+	reverb.connectTo(mixer).connectTo(output);
 	
 //	This syntax makes it a bit easier to visualize the connections.
 //	The entire chain we've set up could have been done with this
 //	one line:
 //	
-//	speechSynth >> tap >> reverb >> mixer >> output;
+//	speechSynth.connectTo(tap).connectTo(reverb).connectTo(mixer).connectTo(output);
 //	
 //	One quirk regarding Audio Units is that they work on a "pull"
 //	model. What this means is that the output requests audio
