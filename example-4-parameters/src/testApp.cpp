@@ -72,7 +72,7 @@ void testApp::setup(){
 	
 //	Here, we're setting the lowpass's resonance to 10
 	
-	AudioUnitSetParameter(*lowpass.getUnit(), kLowPassParam_Resonance,
+	AudioUnitSetParameter(lowpass.getUnit(), kLowPassParam_Resonance,
 						  kAudioUnitScope_Global, 0, 10, 0);
 	
 //	You can also save the state of an Audio Unit's parameters as a
@@ -131,7 +131,7 @@ void testApp::mouseMoved(int x, int y ){
 	
 	float newSpeed = ofMap(x, 0, ofGetWidth(), 0.01, 2, true);
 	
-	AudioUnitSetParameter(*varispeed.getUnit(),
+	AudioUnitSetParameter(varispeed.getUnit(),
 						  kVarispeedParam_PlaybackRate,
 						  kAudioUnitScope_Global,
 						  0,
@@ -140,7 +140,7 @@ void testApp::mouseMoved(int x, int y ){
 	
 	float newCutoff = ofMap(y, 0, ofGetHeight(), 10, 6900);
 	
-	AudioUnitSetParameter(*lowpass.getUnit(),
+	AudioUnitSetParameter(lowpass.getUnit(),
 						  kLowPassParam_CutoffFrequency,
 						  kAudioUnitScope_Global,
 						  0,

@@ -18,8 +18,8 @@
 		6617F16F1546004600EDC48D /* ofxAudioUnitSpeechSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6617F1651546004600EDC48D /* ofxAudioUnitSpeechSynth.cpp */; };
 		6617F1701546004600EDC48D /* ofxAudioUnitTap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6617F1661546004600EDC48D /* ofxAudioUnitTap.cpp */; };
 		6617F17215460B4800EDC48D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6617F17115460B4800EDC48D /* CoreMIDI.framework */; };
-		664BB16115963375002CE192 /* ofxAudioUnitUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 664BB16015963375002CE192 /* ofxAudioUnitUtils.cpp */; };
 		6672B06815A9D1B6007E871E /* ofxAudioUnitSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6672B06715A9D1B6007E871E /* ofxAudioUnitSampler.cpp */; };
+		668828D516AD7BC8006B616B /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 668828D316AD7BC8006B616B /* TPCircularBuffer.c */; };
 		66E870A7159614F600990F14 /* ofxAudioUnitInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66E870A6159614F600990F14 /* ofxAudioUnitInput.cpp */; };
 		66F2ECB21544605100B3DDB5 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F2ECB01544605100B3DDB5 /* AudioUnit.framework */; };
 		66F2ECB31544605100B3DDB5 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F2ECB11544605100B3DDB5 /* CoreAudioKit.framework */; };
@@ -87,8 +87,9 @@
 		6617F1661546004600EDC48D /* ofxAudioUnitTap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitTap.cpp; path = ../src/ofxAudioUnitTap.cpp; sourceTree = "<group>"; };
 		6617F17115460B4800EDC48D /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
 		664BB15F15962D30002CE192 /* ofxAudioUnitUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAudioUnitUtils.h; path = ../src/ofxAudioUnitUtils.h; sourceTree = "<group>"; };
-		664BB16015963375002CE192 /* ofxAudioUnitUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitUtils.cpp; path = ../src/ofxAudioUnitUtils.cpp; sourceTree = "<group>"; };
 		6672B06715A9D1B6007E871E /* ofxAudioUnitSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitSampler.cpp; path = ../src/ofxAudioUnitSampler.cpp; sourceTree = "<group>"; };
+		668828D316AD7BC8006B616B /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
+		668828D416AD7BC8006B616B /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		66E870A6159614F600990F14 /* ofxAudioUnitInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitInput.cpp; path = ../src/ofxAudioUnitInput.cpp; sourceTree = "<group>"; };
 		66F2ECB01544605100B3DDB5 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		66F2ECB11544605100B3DDB5 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
@@ -143,9 +144,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		668828D216AD7BC8006B616B /* TPCircularBuffer */ = {
+			isa = PBXGroup;
+			children = (
+				668828D316AD7BC8006B616B /* TPCircularBuffer.c */,
+				668828D416AD7BC8006B616B /* TPCircularBuffer.h */,
+			);
+			name = TPCircularBuffer;
+			path = ../src/TPCircularBuffer;
+			sourceTree = "<group>";
+		};
 		8119335ee8e352a52d64b71245db4c1f /* src */ = {
 			isa = PBXGroup;
 			children = (
+				668828D216AD7BC8006B616B /* TPCircularBuffer */,
 				6617F15C1546004600EDC48D /* ofxAudioUnit.h */,
 				664BB15F15962D30002CE192 /* ofxAudioUnitUtils.h */,
 				6617F1601546004600EDC48D /* ofxAudioUnitMidi.h */,
@@ -161,7 +173,6 @@
 				6672B06715A9D1B6007E871E /* ofxAudioUnitSampler.cpp */,
 				6617F1651546004600EDC48D /* ofxAudioUnitSpeechSynth.cpp */,
 				6617F1661546004600EDC48D /* ofxAudioUnitTap.cpp */,
-				664BB16015963375002CE192 /* ofxAudioUnitUtils.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -358,8 +369,8 @@
 				6617F16F1546004600EDC48D /* ofxAudioUnitSpeechSynth.cpp in Sources */,
 				6617F1701546004600EDC48D /* ofxAudioUnitTap.cpp in Sources */,
 				66E870A7159614F600990F14 /* ofxAudioUnitInput.cpp in Sources */,
-				664BB16115963375002CE192 /* ofxAudioUnitUtils.cpp in Sources */,
 				6672B06815A9D1B6007E871E /* ofxAudioUnitSampler.cpp in Sources */,
+				668828D516AD7BC8006B616B /* TPCircularBuffer.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
