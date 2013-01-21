@@ -1,4 +1,6 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
+#include "TPCircularBuffer.h"
 
 AudioComponentDescription inputDesc = {
 	kAudioUnitType_Output,
@@ -10,84 +12,76 @@ AudioComponentDescription inputDesc = {
 	kAudioUnitManufacturer_Apple
 };
 
-#pragma mark RingBuffer
+// Handles rendering audio from input unit to internal buffer
+OSStatus RenderCallback(void *inRefCon,
+						AudioUnitRenderActionFlags *ioActionFlags,
+						const AudioTimeStamp *inTimeStamp,
+						UInt32 inBusNumber,
+						UInt32 inNumberFrames,
+						AudioBufferList *ioData);
 
-// ----------------------------------------------------------
-ofxAudioUnitInput::RingBuffer::RingBuffer(UInt32 buffers, UInt32 channels, UInt32 samples) :
-_readItrIndex(0), _writeItrIndex(0)
-// ----------------------------------------------------------
+// Handles pulling audio from internal buffer to a downstream audio unit
+OSStatus PullCallback(void *inRefCon,
+					  AudioUnitRenderActionFlags *ioActionFlags,
+					  const AudioTimeStamp *inTimeStamp,
+					  UInt32 inBusNumber,
+					  UInt32 inNumberFrames,
+					  AudioBufferList *ioData);
+
+typedef ofPtr<AudioBufferList> AudioBufferListRef;
+
+struct InputContext
 {
-	reserve(buffers);
-	
-	for(UInt32 i = 0; i < buffers; i++)
-	{
-		AudioBufferListRef bufferList(allocBufferList(channels,samples), releaseBufferList);
-		push_back(bufferList);
-	}
-	
-	_readItr = _writeItr = begin();
-}
+	vector<TPCircularBuffer> circularBuffers;
+	AudioUnitRef inputUnit;
+	AudioBufferListRef bufferList;
+};
 
-// ----------------------------------------------------------
-ofxAudioUnitInput::RingBuffer::~RingBuffer()
-// ----------------------------------------------------------
+struct ofxAudioUnitInput::InputImpl
 {
-	
-}
-
-// ----------------------------------------------------------
-void ofxAudioUnitInput::RingBuffer::advanceItr(ofxAudioUnitInput::RingBuffer::iterator &itr)
-// ----------------------------------------------------------
-{
-	++itr;
-	if(itr == end()) itr = begin();
-}
-
-// ----------------------------------------------------------
-bool ofxAudioUnitInput::RingBuffer::advanceReadHead()
-// ----------------------------------------------------------
-{
-	if(_readItrIndex >= _writeItrIndex)
-	{
-		return false;
-	}
-	else 
-	{
-		advanceItr(_readItr);
-		_readItrIndex++;
-		return true;
-	}
-}
-
-// ----------------------------------------------------------
-void ofxAudioUnitInput::RingBuffer::advanceWriteHead()
-// ----------------------------------------------------------
-{
-	advanceItr(_writeItr);
-	_writeItrIndex++;
-}
-
+	InputContext ctx;
+};
 
 #pragma mark - ofxAudioUnitInput
 
 // ----------------------------------------------------------
-ofxAudioUnitInput::ofxAudioUnitInput() : _isReady(false)
+ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
+: _isReady(false)
+, _impl(new InputImpl)
 // ----------------------------------------------------------
 {
 	_desc = inputDesc;
 	initUnit();
 	
-	_ringBuffer = RingBufferRef(new ofxAudioUnitInput::RingBuffer());
+	AudioStreamBasicDescription ASBD = {0};
+	UInt32 ASBD_size = sizeof(ASBD);
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+									 kAudioUnitProperty_StreamFormat,
+									 kAudioUnitScope_Output,
+									 1,
+									 &ASBD,
+									 &ASBD_size),
+				"getting input ASBD");
 	
-	_renderContext.inputUnit  = _unit;
-	_renderContext.ringBuffer = _ringBuffer;
+	_impl->ctx.inputUnit  = _unit;
+	_impl->ctx.bufferList = AudioBufferListRef(AudioBufferListAlloc(ASBD.mChannelsPerFrame, 1024), AudioBufferListRelease);
+	_impl->ctx.circularBuffers.resize(ASBD.mChannelsPerFrame);
+	
+	for(int i = 0; i < ASBD.mChannelsPerFrame; i++) {
+		TPCircularBufferInit(&_impl->ctx.circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
+	}
 }
 
 // ----------------------------------------------------------
 ofxAudioUnitInput::~ofxAudioUnitInput()
 // ----------------------------------------------------------
 {
+	cout << "STOP!" << endl;
 	stop();
+	
+	for(int i = 0; i < _impl->ctx.circularBuffers.size(); i++) {
+		TPCircularBufferCleanup(&_impl->ctx.circularBuffers[i]);
+	}
 }
 
 #pragma mark - Connections
@@ -96,29 +90,26 @@ ofxAudioUnitInput::~ofxAudioUnitInput()
 ofxAudioUnit& ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
-	AURenderCallbackStruct callback;
-	callback.inputProc = pullCallback;
-	callback.inputProcRefCon = &_renderContext;
-	
 	AudioStreamBasicDescription ASBD;
 	UInt32 ASBDSize = sizeof(ASBD);
 	
-	OFXAU_RETURN(AudioUnitGetProperty(otherUnit,
-									  kAudioUnitProperty_StreamFormat,
-									  kAudioUnitScope_Input,
-									  destinationBus,
-									  &ASBD,
-									  &ASBDSize),
-				 "getting hardware input destination's format");
+	OFXAU_PRINT(AudioUnitGetProperty(otherUnit,
+									 kAudioUnitProperty_StreamFormat,
+									 kAudioUnitScope_Input,
+									 destinationBus,
+									 &ASBD,
+									 &ASBDSize),
+				"getting hardware input destination's format");
 	
-	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
-									  kAudioUnitProperty_StreamFormat,
-									  kAudioUnitScope_Output,
-									  1,
-									  &ASBD,
-									  sizeof(ASBD)),
-				 "setting hardware input's output format");
+	OFXAU_PRINT(AudioUnitSetProperty(*_unit,
+									 kAudioUnitProperty_StreamFormat,
+									 kAudioUnitScope_Output,
+									 1,
+									 &ASBD,
+									 sizeof(ASBD)),
+				"setting hardware input's output format");
 	
+	AURenderCallbackStruct callback = {PullCallback, &_impl->ctx};
 	otherUnit.setRenderCallback(callback, destinationBus);
 	return otherUnit;
 }
@@ -210,9 +201,7 @@ bool ofxAudioUnitInput::configureInputDevice()
 										 sizeof(deviceASBD)),
 					"setting input sample rate to 44100");
 	
-	AURenderCallbackStruct inputCallback;
-	inputCallback.inputProc = ofxAudioUnitInput::renderCallback;
-	inputCallback.inputProcRefCon = &_renderContext;
+	AURenderCallbackStruct inputCallback = {RenderCallback, &_impl->ctx};
 	
 	OFXAU_RET_FALSE(AudioUnitSetProperty(*_unit,
 										 kAudioOutputUnitProperty_SetInputCallback,
@@ -229,78 +218,78 @@ bool ofxAudioUnitInput::configureInputDevice()
 #pragma mark - Callbacks / Rendering
 
 // ----------------------------------------------------------
-OSStatus ofxAudioUnitInput::render(AudioUnitRenderActionFlags *ioActionFlags, 
-								   const AudioTimeStamp *inTimeStamp,
-								   UInt32 inOutputBusNumber,
-								   UInt32 inNumberFrames,
-								   AudioBufferList *ioData)
+OSStatus ofxAudioUnitInput::render(AudioUnitRenderActionFlags *flags,
+								   const AudioTimeStamp *timestamp,
+								   UInt32 bus,
+								   UInt32 frames,
+								   AudioBufferList *data)
 // ----------------------------------------------------------
 {
-	return pullCallback(&_renderContext, ioActionFlags, inTimeStamp, 
-						inOutputBusNumber, inNumberFrames, ioData);
+	return PullCallback(&_impl->ctx, flags, timestamp, bus, frames, data);
 }
 
 // ----------------------------------------------------------
-OSStatus ofxAudioUnitInput::renderCallback(void *inRefCon,
-										   AudioUnitRenderActionFlags *ioActionFlags,
-										   const AudioTimeStamp *inTimeStamp,
-										   UInt32 inBusNumber,
-										   UInt32 inNumberFrames,
-										   AudioBufferList *ioData)
+OSStatus RenderCallback(void *inRefCon,
+						AudioUnitRenderActionFlags *ioActionFlags,
+						const AudioTimeStamp *inTimeStamp,
+						UInt32 inBusNumber,
+						UInt32 inNumberFrames,
+						AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	RenderContext * ctx = reinterpret_cast<RenderContext *>(inRefCon);
+	InputContext * ctx = static_cast<InputContext *>(inRefCon);
 	
 	OSStatus s = AudioUnitRender(*(ctx->inputUnit),
 								 ioActionFlags,
 								 inTimeStamp,
 								 inBusNumber,
 								 inNumberFrames,
-								 ctx->ringBuffer->writeHead());
+								 ctx->bufferList.get());
 	
 	OFXAU_PRINT(s, "rendering audio input");
 	
-	if(s == noErr) ctx->ringBuffer->advanceWriteHead();
+	if(s == noErr) {
+		size_t buffersToCopy = min(ctx->bufferList->mNumberBuffers, ctx->circularBuffers.size());
+		
+		for(int i = 0; i < buffersToCopy; i++) {
+			TPCircularBuffer * circBuffer = &ctx->circularBuffers[i];
+			if(circBuffer) {
+				TPCircularBufferProduceBytes(circBuffer,
+											 ctx->bufferList->mBuffers[i].mData,
+											 inNumberFrames * sizeof(AudioUnitSampleType));
+			}
+		}
+	}
 	
 	return s;
 }
 
 // ----------------------------------------------------------
-OSStatus ofxAudioUnitInput::pullCallback(void *inRefCon,
-										 AudioUnitRenderActionFlags *ioActionFlags,
-										 const AudioTimeStamp *inTimeStamp,
-										 UInt32 inBusNumber,
-										 UInt32 inNumberFrames,
-										 AudioBufferList *ioData)
+OSStatus PullCallback(void *inRefCon,
+					  AudioUnitRenderActionFlags *ioActionFlags,
+					  const AudioTimeStamp *inTimeStamp,
+					  UInt32 inBusNumber,
+					  UInt32 inNumberFrames,
+					  AudioBufferList *ioData)
 // ----------------------------------------------------------
 {
-	RenderContext * ctx = reinterpret_cast<RenderContext *>(inRefCon);
+	InputContext * ctx = static_cast<InputContext *>(inRefCon);
 	
-	// If we can't advance the read head, render silence.
-	// Otherwise, copy the data from the ring buffer's read head.
-	if(!ctx->ringBuffer->advanceReadHead())
-	{
-		for(int i = 0; i < ioData->mNumberBuffers; i++)
-		{
+	size_t buffersToCopy = min(ioData->mNumberBuffers, ctx->circularBuffers.size());
+	
+	for(int i = 0; i < buffersToCopy; i++) {
+		int32_t circBufferSize;
+		AudioUnitSampleType * circBufferTail = (AudioUnitSampleType *) TPCircularBufferTail(&ctx->circularBuffers[i], &circBufferSize);
+		bool circBufferHasEnoughSamples = circBufferSize / sizeof(AudioUnitSampleType) >= inNumberFrames ? true : false;
+		
+		if(!circBufferHasEnoughSamples) {
+			// clear buffer, so bytes that don't get written are silence instead of noise
 			memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize);
 		}
 		
-		*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
-	}
-	else 
-	{
-		AudioBufferList * bufferedAudio = ctx->ringBuffer->readHead();
-		int buffersToCopy = min(ioData->mNumberBuffers, bufferedAudio->mNumberBuffers);
-		size_t bytesToCopy = min(ioData->mBuffers[0].mDataByteSize, 
-							  bufferedAudio->mBuffers[0].mDataByteSize);
-		bytesToCopy = min(bytesToCopy, inNumberFrames * sizeof(AudioUnitSampleType));
-		
-		for(int i = 0; i < buffersToCopy; i++)
-		{
-			memcpy(ioData->mBuffers[i].mData, 
-				   bufferedAudio->mBuffers[i].mData, 
-				   bytesToCopy);
-		}
+		size_t bytesToConsume = min(ioData->mBuffers[i].mDataByteSize, (UInt32)circBufferSize);
+		memcpy(ioData->mBuffers[i].mData, circBufferTail, bytesToConsume);
+		TPCircularBufferConsume(&ctx->circularBuffers[i], bytesToConsume);
 	}
 	
 	return noErr;

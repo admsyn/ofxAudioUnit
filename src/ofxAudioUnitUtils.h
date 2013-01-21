@@ -8,8 +8,29 @@ class ofxAudioUnit;
 
 typedef ofPtr<AudioUnit> AudioUnitRef;
 
-//static AudioBufferList * AllocBufferList(int channels = 2, size_t size = 512);
-//static void ReleaseBufferList(AudioBufferList * bufferList);
+static AudioBufferList * AudioBufferListAlloc(UInt32 channels, UInt32 samplesPerChannel)
+{
+	AudioBufferList * bufferList = NULL;
+	size_t bufferListSize = offsetof(AudioBufferList, mBuffers[0]) + (sizeof(AudioBuffer) * channels);
+	bufferList = (AudioBufferList *)calloc(1, bufferListSize);
+	bufferList->mNumberBuffers = channels;
+	
+	for(UInt32 i = 0; i < bufferList->mNumberBuffers; i++) {
+		bufferList->mBuffers[i].mNumberChannels = 1;
+		bufferList->mBuffers[i].mDataByteSize   = samplesPerChannel * sizeof(AudioUnitSampleType);
+		bufferList->mBuffers[i].mData           = calloc(samplesPerChannel, sizeof(AudioUnitSampleType));
+	}
+	return bufferList;
+}
+
+static void AudioBufferListRelease(AudioBufferList * bufferList)
+{
+	for(int i = 0; i < bufferList->mNumberBuffers; i++) {
+		free(bufferList->mBuffers[i].mData);
+	}
+	
+	free(bufferList);
+}
 
 // these macros make the "do core audio thing, check for error" process less repetitive
 #define OFXAU_PRINT(s, stage)\

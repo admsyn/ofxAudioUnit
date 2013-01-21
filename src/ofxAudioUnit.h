@@ -175,60 +175,14 @@ public:
 #pragma mark - ofxAudioUnitInput
 
 class ofxAudioUnitInput : public ofxAudioUnit
-{
-	typedef ofPtr<AudioBufferList> AudioBufferListRef;
-	
-	class RingBuffer : private std::vector<AudioBufferListRef>
-	{
-		UInt64 _readItrIndex, _writeItrIndex;
-		RingBuffer::iterator _readItr, _writeItr;
-		void advanceItr(RingBuffer::iterator &itr);
-		
-	public:
-		RingBuffer(UInt32 buffers = 3, 
-				   UInt32 channelsPerBuffer = 2,
-				   UInt32 samplesPerBuffer = 512);
-		~RingBuffer();
-		
-		bool advanceReadHead();
-		void advanceWriteHead();
-		
-		AudioBufferList * readHead() {return (*_readItr).get(); }
-		AudioBufferList * writeHead(){return (*_writeItr).get();}
-	};
-	
-	typedef ofPtr<RingBuffer> RingBufferRef;
-	
-	struct RenderContext
-	{
-		AudioUnitRef  inputUnit;
-		RingBufferRef ringBuffer;
-	};
-	
-	RenderContext _renderContext;
-	RingBufferRef _ringBuffer;
-	bool _isReady;
-	bool configureInputDevice();
-	
-	static OSStatus renderCallback(void *inRefCon, 
-								   AudioUnitRenderActionFlags *ioActionFlags,
-								   const AudioTimeStamp *inTimeStamp,
-								   UInt32 inBusNumber,
-								   UInt32 inNumberFrames,
-								   AudioBufferList *ioData);
-	
-	static OSStatus pullCallback(void *inRefCon, 
-								 AudioUnitRenderActionFlags *ioActionFlags,
-								 const AudioTimeStamp *inTimeStamp,
-								 UInt32 inBusNumber,
-								 UInt32 inNumberFrames,
-								 AudioBufferList *ioData);
-	
+{	
 public:
-	ofxAudioUnitInput();
+	ofxAudioUnitInput(unsigned int samplesToBuffer = 2048);
 	~ofxAudioUnitInput();
 	
 	ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
+	using ofxAudioUnit::connectTo; // for connectTo(ofxAudioUnitTap&)
+	
 	OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
 					const AudioTimeStamp *inTimeStamp,
 					UInt32 inOutputBusNumber,
@@ -237,6 +191,13 @@ public:
 	
 	bool start();
 	bool stop();
+	
+private:
+	struct InputImpl;
+	ofPtr<InputImpl> _impl;
+	
+	bool _isReady;
+	bool configureInputDevice();
 };
 
 #pragma mark - ofxAudioUnitSampler
@@ -298,7 +259,7 @@ public:
 	void setSource(ofxAudioUnit * source);
 	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
 
-protected:
+private:
 	struct TapImpl;
 	ofPtr<TapImpl> _impl;
 };
