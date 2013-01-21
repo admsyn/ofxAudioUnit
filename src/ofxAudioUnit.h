@@ -268,47 +268,39 @@ public:
 // the ofxAudioUnitMixer will allow you to access that
 // value with less CPU overhead.
 
-// At the moment, the size of the vector of samples extracted
-// is basically hardcoded to 512 samples
-
 class ofxAudioUnitTap
-{	
-	struct TapContext
-	{
-		ofxAudioUnit * sourceUnit;
-		AudioBufferList * trackedSamples;
-		ofMutex * bufferMutex;
-	};
-	
-	ofMutex _bufferMutex;
-	AudioBufferList * _trackedSamples;
-	ofxAudioUnit * _sourceUnit;
-	ofxAudioUnit * _destinationUnit;
-	UInt32 _destinationBus;
-	TapContext _tapContext;
-	
-	static OSStatus renderAndCopy(void * inRefCon,
-								  AudioUnitRenderActionFlags * ioActionFlags,
-								  const AudioTimeStamp * inTimeStamp,
-								  UInt32 inBusNumber,
-								  UInt32 inNumberFrames,
-								  AudioBufferList * ioData);
-	
-	void waveformForBuffer(AudioBuffer * buffer, float width, float height, ofPolyline &outLine);
-	
+{
 public:
-	ofxAudioUnitTap();
+	ofxAudioUnitTap(unsigned int samplesToTrack = 4096);
 	~ofxAudioUnitTap();
 	
-	void connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
+	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
 	ofxAudioUnit& operator>>(ofxAudioUnit& destination);
 	
-	void getSamples(ofxAudioUnitTapSamples &outData);
-	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height);
-	void getLeftWaveform(ofPolyline &outLine, float width, float height);
-	void getRightWaveform(ofPolyline &outLine, float width, float height);
+	// Container for samples returned from an ofxAudioUnitTap
+	typedef std::vector<AudioUnitSampleType> MonoSamples;
+	
+	struct StereoSamples
+	{
+		ofxAudioUnitTap::MonoSamples left;
+		ofxAudioUnitTap::MonoSamples right;
+		size_t size(){return min(left.size(), right.size());}
+	};
+	
+	void getSamples(StereoSamples &outData) const;
+	void getSamples(MonoSamples &outData) const;
+	void getSamples(MonoSamples &outData, unsigned int channel) const;
+	
+	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height) const;
+	void getLeftWaveform(ofPolyline &outLine, float width, float height) const;
+	void getRightWaveform(ofPolyline &outLine, float width, float height) const;
 	
 	void setSource(ofxAudioUnit * source);
+	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
+
+protected:
+	struct TapImpl;
+	ofPtr<TapImpl> _impl;
 };
 
 #if !TARGET_OS_IPHONE

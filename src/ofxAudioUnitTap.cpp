@@ -1,163 +1,220 @@
 #include "ofxAudioUnit.h"
+#include "TPCircularBuffer/TPCircularBuffer.h"
 
-static OSStatus silentRenderCallback(void * inRefCon,
+static OSStatus SilentRenderCallback(void * inRefCon,
 									 AudioUnitRenderActionFlags *	ioActionFlags,
 									 const AudioTimeStamp *	inTimeStamp,
 									 UInt32 inBusNumber,
 									 UInt32	inNumberFrames,
 									 AudioBufferList * ioData);
 
+static OSStatus RenderAndCopy(void * inRefCon,
+							  AudioUnitRenderActionFlags *	ioActionFlags,
+							  const AudioTimeStamp *	inTimeStamp,
+							  UInt32 inBusNumber,
+							  UInt32	inNumberFrames,
+							  AudioBufferList * ioData);
+
+typedef enum
+{
+	TapSourceNone,
+	TapSourceUnit,
+	TapSourceCallback
+}
+ofxAudioUnitTapSourceType;
+
+struct TapContext
+{
+	ofxAudioUnitTapSourceType sourceType;
+	ofxAudioUnit * sourceUnit;
+	UInt32 sourceBus;
+	AURenderCallbackStruct sourceCallback;
+	vector<TPCircularBuffer> circularBuffers;
+	UInt32 samplesToTrack;
+	
+	void setCircularBufferCount(UInt32 bufferCount) {
+		for(int i = 0; i < circularBuffers.size(); i++) {
+			TPCircularBufferCleanup(&circularBuffers[i]);
+		}
+		
+		circularBuffers.resize(bufferCount);
+		
+		for(int i = 0; i < circularBuffers.size(); i++) {
+			TPCircularBufferInit(&circularBuffers[i], samplesToTrack * sizeof(AudioUnitSampleType));
+		}
+	}
+};
+
+struct ofxAudioUnitTap::TapImpl
+{
+	TapContext ctx;
+};
+
 // ----------------------------------------------------------
-ofxAudioUnitTap::ofxAudioUnitTap() :
-_trackedSamples(NULL), _sourceUnit(NULL), _destinationUnit(NULL)
+ofxAudioUnitTap::ofxAudioUnitTap(unsigned int samplesToTrack) : _impl(new TapImpl)
 // ----------------------------------------------------------
 {
+	_impl->ctx.samplesToTrack = samplesToTrack;
+	_impl->ctx.sourceBus = 0;
 }
 
 // ----------------------------------------------------------
 ofxAudioUnitTap::~ofxAudioUnitTap()
 // ----------------------------------------------------------
 {
-	// just in case, we'll set the destination's callback to a context-less
-	// silent render callback
-	if(_destinationUnit)
-	{
-		AURenderCallbackStruct callbackInfo;
-		callbackInfo.inputProc = silentRenderCallback;
-		callbackInfo.inputProcRefCon = NULL;
-		OFXAU_PRINT(AudioUnitSetProperty(*_destinationUnit,
-										 kAudioUnitProperty_SetRenderCallback,
-										 kAudioUnitScope_Input,
-										 _destinationBus,
-										 &callbackInfo,
-										 sizeof(callbackInfo)),
-					"setting tap destination to a silent render callback");
+	for(int i = 0; i < _impl->ctx.circularBuffers.size(); i++) {
+		TPCircularBufferCleanup(&_impl->ctx.circularBuffers[i]);
 	}
-	
-	_bufferMutex.lock();
-	{
-		if(_trackedSamples) releaseBufferList(_trackedSamples);
-	}
-	_bufferMutex.unlock();
 }
 
 #pragma mark - Connections
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, int sourceBus)
+ofxAudioUnit& ofxAudioUnitTap::connectTo(ofxAudioUnit &destination, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
-	if(_trackedSamples) releaseBufferList(_trackedSamples);
+	if(_impl->ctx.sourceType == TapSourceNone || !_impl->ctx.sourceUnit) {
+		std::cout << "Tap can't be connected without a source" << std::endl;
+		AURenderCallbackStruct silentCallback = {SilentRenderCallback};
+		destination.setRenderCallback(silentCallback);
+		return destination;
+	}
 	
-	AudioStreamBasicDescription asbd = {0};
-	UInt32 dataSize = sizeof(AudioStreamBasicDescription);
-		
-	AudioUnitGetProperty(*_sourceUnit,
-						 kAudioUnitProperty_StreamFormat,
-						 kAudioUnitScope_Output,
-						 sourceBus,
-						 &asbd,
-						 &dataSize);
-	
-	_trackedSamples = allocBufferList(asbd.mChannelsPerFrame);
-	
-	_tapContext.sourceUnit     = _sourceUnit;
-	_tapContext.bufferMutex    = &_bufferMutex;
-	_tapContext.trackedSamples = _trackedSamples;
-	
-	AURenderCallbackStruct callbackInfo;
-	callbackInfo.inputProc = renderAndCopy;
-	callbackInfo.inputProcRefCon = &_tapContext;
-	destination.setRenderCallback(callbackInfo, destinationBus);
-	
-	_destinationUnit = &destination;
-	_destinationBus  = destinationBus;
+	AURenderCallbackStruct callback = {RenderAndCopy, &_impl->ctx};
+	destination.setRenderCallback(callback, destinationBus);
+	return destination;
 }
 
 // ----------------------------------------------------------
 ofxAudioUnit& ofxAudioUnitTap::operator>>(ofxAudioUnit &destination)
 // ----------------------------------------------------------
 {
-	connectTo(destination);
-	return destination;
+	return connectTo(destination);
 }
 
 // ----------------------------------------------------------
 void ofxAudioUnitTap::setSource(ofxAudioUnit * source)
 // ----------------------------------------------------------
 {
-	_sourceUnit = source;
+	_impl->ctx.sourceUnit = source;
+	_impl->ctx.sourceType = TapSourceUnit;
+	
+	AudioStreamBasicDescription ASBD = {0};
+	UInt32 ASBD_size = sizeof(ASBD);
+	
+	OFXAU_PRINT(AudioUnitGetProperty(source->getUnit(),
+									 kAudioUnitProperty_StreamFormat,
+									 kAudioUnitScope_Output,
+									 0,
+									 &ASBD,
+									 &ASBD_size),
+				"getting tap source's ASBD");
+	
+	_impl->ctx.setCircularBufferCount(ASBD.mChannelsPerFrame);
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitTap::setSource(AURenderCallbackStruct callback, UInt32 channels)
+// ----------------------------------------------------------
+{
+	_impl->ctx.sourceCallback = callback;
+	_impl->ctx.sourceType = TapSourceCallback;
+	
+	_impl->ctx.setCircularBufferCount(channels);
 }
 
 #pragma mark - Getting samples
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getSamples(ofxAudioUnitTapSamples &outData)
+void ExtractSamplesFromCircularBuffer(ofxAudioUnitTap::MonoSamples &outBuffer, TPCircularBuffer * circularBuffer)
 // ----------------------------------------------------------
 {
-	if(!_trackedSamples) return;
-	
-	outData.left.clear();
-	outData.right.clear();
-	
-	_bufferMutex.lock();
-	{
-		AudioUnitSampleType * leftSamples = (AudioUnitSampleType *)_trackedSamples->mBuffers[0].mData;
-		for(int i = 0; i < _trackedSamples->mBuffers[0].mDataByteSize / sizeof(AudioUnitSampleType); i++)
-			outData.left.push_back(leftSamples[i]);
+	if(!circularBuffer) {
+		outBuffer.clear();
+	} else {
+		int32_t circBufferSize;
+		AudioUnitSampleType * circBufferTail = (AudioUnitSampleType *)TPCircularBufferTail(circularBuffer, &circBufferSize);
+		AudioUnitSampleType * circBufferHead = circBufferTail + (circBufferSize / sizeof(AudioUnitSampleType));
 		
-		AudioUnitSampleType * rightSamples = (AudioUnitSampleType *)_trackedSamples->mBuffers[1].mData;
-		for(int i = 0; i < _trackedSamples->mBuffers[1].mDataByteSize / sizeof(AudioUnitSampleType); i++)
-			outData.right.push_back(rightSamples[i]);
+		outBuffer.assign(circBufferTail, circBufferHead);
 	}
-	_bufferMutex.unlock();
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::waveformForBuffer(AudioBuffer *buffer, float width, float height, ofPolyline &outLine)
+void ofxAudioUnitTap::getSamples(MonoSamples &outData) const
+// ----------------------------------------------------------
+{
+	ExtractSamplesFromCircularBuffer(outData, &_impl->ctx.circularBuffers.front());
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitTap::getSamples(MonoSamples &outData, unsigned int channel) const
+// ----------------------------------------------------------
+{
+	if(_impl->ctx.circularBuffers.size() > channel) {
+		ExtractSamplesFromCircularBuffer(outData, &_impl->ctx.circularBuffers[channel]);
+	} else {
+		outData.clear();
+	}
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnitTap::getSamples(StereoSamples &outData) const
+// ----------------------------------------------------------
+{
+	if(_impl->ctx.circularBuffers.size() >= 2) {
+		ExtractSamplesFromCircularBuffer(outData.left,  &_impl->ctx.circularBuffers[0]);
+		ExtractSamplesFromCircularBuffer(outData.right, &_impl->ctx.circularBuffers[1]);
+	} else if(_impl->ctx.circularBuffers.size() == 1) {
+		ExtractSamplesFromCircularBuffer(outData.left, &_impl->ctx.circularBuffers[0]);
+		outData.right.clear();
+	} else {
+		outData.left.clear();
+		outData.right.clear();
+	}
+}
+
+// ----------------------------------------------------------
+void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, float height, ofPolyline &outLine)
 // ----------------------------------------------------------
 {	
 	outLine.clear();
-	_bufferMutex.lock();
+	
+	const float xStep = width / buffer.size();
+	float x = 0;
+	
+	for (int i = 0; i < buffer.size(); i++, x += xStep)
 	{
-		float xStep = width / (buffer->mDataByteSize / sizeof(AudioUnitSampleType));
-		float x = 0;
-		AudioUnitSampleType * samples = (AudioUnitSampleType *)buffer->mData;
-		
-		for (int i = 0; i < buffer->mDataByteSize / sizeof(AudioUnitSampleType); i++, x += xStep) 
-		{
 #if TARGET_OS_IPHONE
-			SInt16 s = SInt16(samples[i] >> 9);
-			float y = ofMap(s, -32768, 32767, height, 0, true);
+		SInt16 s = SInt16(buffer[i] >> 9);
+		float y = ofMap(s, -32768, 32767, height, 0, true);
 #else
-			float y = ofMap(samples[i], -1, 1, height, 0, true);
+		float y = ofMap(buffer[i], -1, 1, height, 0, true);
 #endif
-			outLine.addVertex(ofPoint(x, y));
-		}
+		outLine.addVertex(ofPoint(x, y));
 	}
-	_bufferMutex.unlock();
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getLeftWaveform(ofPolyline &outLine, float width, float height)
+void ofxAudioUnitTap::getLeftWaveform(ofPolyline &outLine, float width, float height) const
 // ----------------------------------------------------------
 {
-	if(!_trackedSamples) return;
-	
-	waveformForBuffer(&_trackedSamples->mBuffers[0], width, height, outLine);
+	MonoSamples leftBuffer;
+	getSamples(leftBuffer, 0);
+	WaveformForBuffer(leftBuffer, width, height, outLine);
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getRightWaveform(ofPolyline &outLine, float width, float height)
+void ofxAudioUnitTap::getRightWaveform(ofPolyline &outLine, float width, float height) const
 // ----------------------------------------------------------
 {
-	if(!_trackedSamples) return;
-	
-	waveformForBuffer(&_trackedSamples->mBuffers[1], width, height, outLine);
+	MonoSamples rightBuffer;
+	getSamples(rightBuffer, 1);
+	WaveformForBuffer(rightBuffer, width, height, outLine);
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height)
+void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height) const
 // ----------------------------------------------------------
 {
 	getLeftWaveform(outLeft, width, height);
@@ -166,71 +223,68 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRigh
 
 #pragma mark - Render callbacks
 
-// ----------------------------------------------------------
-OSStatus ofxAudioUnitTap::renderAndCopy(void * inRefCon,
-										AudioUnitRenderActionFlags * ioActionFlags,
-										const AudioTimeStamp * inTimeStamp,
-										UInt32 inBusNumber,
-										UInt32	inNumberFrames,
-										AudioBufferList * ioData)
-// ----------------------------------------------------------
+inline void CopyAudioBufferIntoCircularBuffer(TPCircularBuffer * circBuffer, const AudioBuffer &audioBuffer)
 {
-	TapContext * context = (TapContext *)inRefCon;
+	int32_t availableBytesInCircBuffer;
+	TPCircularBufferHead(circBuffer, &availableBytesInCircBuffer);
 	
-	// if we don't have a source, render silence (or else you'll get an extremely loud
-	// buzzing noise when we attempt to render a NULL unit. Ow.)
-	if(!(context->sourceUnit))
-	{
-		for(int i = 0; i < ioData->mNumberBuffers; i++)
-		{
-			memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[0].mDataByteSize);
-			*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
-		}
-		return noErr;
+	if(availableBytesInCircBuffer < audioBuffer.mDataByteSize) {
+		TPCircularBufferConsume(circBuffer, audioBuffer.mDataByteSize - availableBytesInCircBuffer);
 	}
 	
-	// if we're all set, render the source unit into the destination unit...
-	OFXAU_PRINT(context->sourceUnit->render(ioActionFlags,
-											inTimeStamp,
-											0,
-											inNumberFrames,
-											ioData),
-				"passing source into destination");
-	
-	// if the tracked sample buffer isn't locked, copy the audio output there as well
-	if(context->bufferMutex->tryLock())
-	{
-		int numChannels = min(ioData->mNumberBuffers, context->trackedSamples->mNumberBuffers);
-		size_t bytesToCopy = min(ioData->mBuffers[0].mDataByteSize, 
-								 context->trackedSamples->mBuffers[0].mDataByteSize);
-		
-		for(int i = 0; i < numChannels; i++)
-		{
-			memcpy(context->trackedSamples->mBuffers[i].mData,
-				   ioData->mBuffers[i].mData,
-				   bytesToCopy);
-			context->trackedSamples->mBuffers[i].mDataByteSize = bytesToCopy;
-		}
-		
-		context->bufferMutex->unlock();
-	}
-	
-	return noErr;
+	TPCircularBufferProduceBytes(circBuffer, audioBuffer.mData, audioBuffer.mDataByteSize);
 }
 
 // ----------------------------------------------------------
-OSStatus silentRenderCallback(void * inRefCon,
-							  AudioUnitRenderActionFlags *	ioActionFlags,
-							  const AudioTimeStamp *	inTimeStamp,
-							  UInt32 inBusNumber,
-							  UInt32	inNumberFrames,
-							  AudioBufferList * ioData)
-// ----------------------------------------------------------
+OSStatus RenderAndCopy(void * inRefCon,
+					   AudioUnitRenderActionFlags * ioActionFlags,
+					   const AudioTimeStamp * inTimeStamp,
+					   UInt32 inBusNumber,
+					   UInt32 inNumberFrames,
+					   AudioBufferList * ioData)
 {
-	for(int i = 0; i < ioData->mNumberBuffers; i++)
-	{
-		memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[0].mDataByteSize);
-		*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
+	TapContext * ctx = static_cast<TapContext *>(inRefCon);
+	
+	OSStatus status;
+	
+	if(ctx->sourceType == TapSourceUnit && ctx->sourceUnit->getUnit()) {
+		status = ctx->sourceUnit->render(ioActionFlags, inTimeStamp, ctx->sourceBus, inNumberFrames, ioData);
+	} else if(ctx->sourceType == TapSourceCallback) {
+		status = (ctx->sourceCallback.inputProc)(ctx->sourceCallback.inputProcRefCon,
+												 ioActionFlags,
+												 inTimeStamp,
+												 ctx->sourceBus,
+												 inNumberFrames,
+												 ioData);
+	} else {
+		// if we don't have a source, render silence (or else you'll get an extremely loud
+		// buzzing noise when we attempt to render a NULL unit. Ow.)
+		status = SilentRenderCallback(inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
 	}
+	
+	if(status == noErr) {
+		const size_t buffersToCopy = min(ctx->circularBuffers.size(), ioData->mNumberBuffers);
+		
+		for(int i = 0; i < buffersToCopy; i++) {
+			CopyAudioBufferIntoCircularBuffer(&ctx->circularBuffers[i], ioData->mBuffers[i]);
+		}
+	}
+	
+	return status;
+}
+
+OSStatus SilentRenderCallback(void * inRefCon,
+							  AudioUnitRenderActionFlags * ioActionFlags,
+							  const AudioTimeStamp * inTimeStamp,
+							  UInt32 inBusNumber,
+							  UInt32 inNumberFrames,
+							  AudioBufferList * ioData)
+{
+	for(int i = 0; i < ioData->mNumberBuffers; i++) {
+		memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[0].mDataByteSize);
+	}
+	
+	*ioActionFlags |= kAudioUnitRenderAction_OutputIsSilence;
+	
 	return noErr;
 }

@@ -124,16 +124,14 @@ ofxAudioUnitTap& ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
 ofxAudioUnit& ofxAudioUnit::operator>>(ofxAudioUnit& otherUnit)
 // ----------------------------------------------------------
 {
-	connectTo(otherUnit);
-	return otherUnit;
+	return connectTo(otherUnit);
 }
 
 // ----------------------------------------------------------
 ofxAudioUnitTap& ofxAudioUnit::operator>>(ofxAudioUnitTap &tap)
 // ----------------------------------------------------------
 {
-	connectTo(tap);
-	return tap;
+	return connectTo(tap);
 }
 
 // ----------------------------------------------------------
