@@ -34,6 +34,7 @@ struct DSPNodeContext
 	UInt32 sourceBus;
 	AURenderCallbackStruct sourceCallback;
 	std::vector<TPCircularBuffer> circularBuffers;
+	ofMutex bufferMutex;
 	
 	DSPNodeContext()
 	: sourceBus(0)
@@ -43,16 +44,20 @@ struct DSPNodeContext
 	
 	void setCircularBufferSize(UInt32 bufferCount, unsigned int samplesToBuffer) {
 		if(bufferCount != circularBuffers.size() || samplesToBuffer != _bufferSize) {
-			for(int i = 0; i < circularBuffers.size(); i++) {
-				TPCircularBufferCleanup(&circularBuffers[i]);
+			bufferMutex.lock();
+			{
+				for(int i = 0; i < circularBuffers.size(); i++) {
+					TPCircularBufferCleanup(&circularBuffers[i]);
+				}
+				
+				circularBuffers.resize(bufferCount);
+				
+				for(int i = 0; i < circularBuffers.size(); i++) {
+					TPCircularBufferInit(&circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
+				}
+				_bufferSize = samplesToBuffer;
 			}
-			
-			circularBuffers.resize(bufferCount);
-			
-			for(int i = 0; i < circularBuffers.size(); i++) {
-				TPCircularBufferInit(&circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
-			}
-			_bufferSize = samplesToBuffer;
+			bufferMutex.unlock();
 		}
 	}
 	
@@ -224,12 +229,15 @@ OSStatus RenderAndCopy(void * inRefCon,
 		status = SilentRenderCallback(inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
 	}
 	
-	if(status == noErr) {
-		const size_t buffersToCopy = min(ctx->circularBuffers.size(), ioData->mNumberBuffers);
-		
-		for(int i = 0; i < buffersToCopy; i++) {
-			CopyAudioBufferIntoCircularBuffer(&ctx->circularBuffers[i], ioData->mBuffers[i]);
+	if(ctx->bufferMutex.tryLock()) {
+		if(status == noErr) {
+			const size_t buffersToCopy = min(ctx->circularBuffers.size(), ioData->mNumberBuffers);
+			
+			for(int i = 0; i < buffersToCopy; i++) {
+				CopyAudioBufferIntoCircularBuffer(&ctx->circularBuffers[i], ioData->mBuffers[i]);
+			}
 		}
+		ctx->bufferMutex.unlock();
 	}
 	
 	return status;
