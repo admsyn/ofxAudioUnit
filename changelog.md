@@ -1,3 +1,11 @@
+0.4
+=====
+
+- Created an abstract class ofxAudioUnitDSPNode, for general purpose DSP
+  - ofxAudioUnitTap is now a subclass of this, so the "render and copy" behaviour is reusable
+
+- ofxAudioUnitTap can now re-adjust its buffer length on the fly w/setBufferLength()
+
 0.3
 =====
 

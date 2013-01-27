@@ -211,6 +211,31 @@ public:
 	bool setSamples(const std::vector<std::string> &samplePaths);
 };
 
+#pragma mark - ofxAudioUnitDSPNode
+
+class ofxAudioUnitDSPNode
+{
+public:
+	ofxAudioUnitDSPNode(unsigned int samplesToBuffer = 2048);
+	virtual ~ofxAudioUnitDSPNode();
+	
+	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
+	OF_DEPRECATED_MSG("Use connectTo() instead.", ofxAudioUnit& operator>>(ofxAudioUnit& destination));
+	
+	void setSource(ofxAudioUnit * source);
+	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
+	
+protected:
+	void getSamplesFromChannel(std::vector<AudioUnitSampleType> &samples, unsigned int channel) const;
+	void setBufferSize(unsigned int samplesToBuffer);
+	
+private:
+	struct NodeImpl;
+	ofPtr<NodeImpl> _impl;
+	unsigned int _samplesToBuffer;
+	unsigned int _channelsToBuffer;
+};
+
 #pragma mark - ofxAudioUnitTap
 
 // ofxAudioUnitTap acts like an Audio Unit (as in, you
@@ -229,14 +254,10 @@ public:
 // the ofxAudioUnitMixer will allow you to access that
 // value with less CPU overhead.
 
-class ofxAudioUnitTap
+class ofxAudioUnitTap : public ofxAudioUnitDSPNode
 {
 public:
-	ofxAudioUnitTap(unsigned int samplesToTrack = 2048);
-	~ofxAudioUnitTap();
-	
-	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
-	OF_DEPRECATED_MSG("Use connectTo() instead.", ofxAudioUnit& operator>>(ofxAudioUnit& destination));
+	ofxAudioUnitTap(unsigned int samplesToBuffer = 2048);
 	
 	// Container for samples returned from an ofxAudioUnitTap
 	typedef std::vector<AudioUnitSampleType> MonoSamples;
@@ -248,20 +269,18 @@ public:
 		size_t size(){return min(left.size(), right.size());}
 	};
 	
+	void setBufferLength(unsigned int samplesToBuffer);
+	
 	void getSamples(StereoSamples &outData) const;
 	void getSamples(MonoSamples &outData) const;
 	void getSamples(MonoSamples &outData, unsigned int channel) const;
 	
-	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height) const;
-	void getLeftWaveform(ofPolyline &outLine, float width, float height) const;
-	void getRightWaveform(ofPolyline &outLine, float width, float height) const;
-	
-	void setSource(ofxAudioUnit * source);
-	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
+	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height);
+	void getLeftWaveform(ofPolyline &outLine, float width, float height);
+	void getRightWaveform(ofPolyline &outLine, float width, float height);
 
 private:
-	struct TapImpl;
-	ofPtr<TapImpl> _impl;
+	MonoSamples _tempBuffer;
 };
 
 #if !TARGET_OS_IPHONE
