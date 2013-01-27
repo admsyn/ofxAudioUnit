@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
 
 AudioComponentDescription outputDesc = {
 	kAudioUnitType_Output,

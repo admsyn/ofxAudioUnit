@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
 
 #if !(TARGET_OS_IPHONE)
 #include <CoreAudioKit/CoreAudioKit.h>

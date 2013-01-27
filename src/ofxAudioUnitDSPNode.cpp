@@ -1,8 +1,9 @@
-#include "ofxAudioUnit.h"
+#include "ofxAudioUnitDSPNode.h"
+#include "ofxAudioUnitBase.h"
+#include "ofxAudioUnitUtils.h"
 #include "TPCircularBuffer.h"
 
-// a render callback which passes audio through, but copies them
-// in the process
+// a passthru render callback which copies the rendered samples in the process
 static OSStatus RenderAndCopy(void * inRefCon,
 							  AudioUnitRenderActionFlags *	ioActionFlags,
 							  const AudioTimeStamp *	inTimeStamp,
@@ -10,8 +11,7 @@ static OSStatus RenderAndCopy(void * inRefCon,
 							  UInt32	inNumberFrames,
 							  AudioBufferList * ioData);
 
-// a render callback which just outputs silence and doesn't
-// require a context
+// a render callback which just outputs silence and doesn't require a context
 static OSStatus SilentRenderCallback(void * inRefCon,
 									 AudioUnitRenderActionFlags *	ioActionFlags,
 									 const AudioTimeStamp *	inTimeStamp,
@@ -62,27 +62,33 @@ private:
 
 struct ofxAudioUnitDSPNode::NodeImpl
 {
+	NodeImpl(unsigned int samplesToBuffer, unsigned int channelsToBuffer)
+	: samplesToBuffer(samplesToBuffer)
+	, channelsToBuffer(channelsToBuffer)
+	{
+		
+	}
+	
 	DSPNodeContext ctx;
+	unsigned int samplesToBuffer;
+	unsigned int channelsToBuffer;
 };
 
+// ----------------------------------------------------------
 ofxAudioUnitDSPNode::ofxAudioUnitDSPNode(unsigned int samplesToBuffer)
-: _impl(new NodeImpl)
-, _samplesToBuffer(samplesToBuffer)
-, _channelsToBuffer(2)
+: _impl(new NodeImpl(samplesToBuffer, 2))
+// ----------------------------------------------------------
 {
+	
 }
 
+// ----------------------------------------------------------
 ofxAudioUnitDSPNode::~ofxAudioUnitDSPNode()
+// ----------------------------------------------------------
 {
 	for(int i = 0; i < _impl->ctx.circularBuffers.size(); i++) {
 		TPCircularBufferCleanup(&_impl->ctx.circularBuffers[i]);
 	}
-}
-
-void ofxAudioUnitDSPNode::setBufferSize(unsigned int samplesToBuffer)
-{
-	_samplesToBuffer = samplesToBuffer;
-	_impl->ctx.setCircularBufferSize(_channelsToBuffer, _samplesToBuffer);
 }
 
 #pragma mark - Connections
@@ -128,8 +134,8 @@ void ofxAudioUnitDSPNode::setSource(ofxAudioUnit * source)
 									 &ASBD_size),
 				"getting tap source's ASBD");
 	
-	_channelsToBuffer = ASBD.mChannelsPerFrame;
-	_impl->ctx.setCircularBufferSize(_channelsToBuffer, _samplesToBuffer);
+	_impl->channelsToBuffer = ASBD.mChannelsPerFrame;
+	setBufferSize(_impl->samplesToBuffer);
 }
 
 // ----------------------------------------------------------
@@ -138,8 +144,18 @@ void ofxAudioUnitDSPNode::setSource(AURenderCallbackStruct callback, UInt32 chan
 {
 	_impl->ctx.sourceCallback = callback;
 	_impl->ctx.sourceType = NodeSourceCallback;
-	_channelsToBuffer = channels;
-	_impl->ctx.setCircularBufferSize(_channelsToBuffer, _samplesToBuffer);
+	_impl->channelsToBuffer = channels;
+	setBufferSize(_impl->samplesToBuffer);
+}
+
+#pragma mark - Buffer Size
+
+// ----------------------------------------------------------
+void ofxAudioUnitDSPNode::setBufferSize(unsigned int samplesToBuffer)
+// ----------------------------------------------------------
+{
+	_impl->samplesToBuffer = samplesToBuffer;
+	_impl->ctx.setCircularBufferSize(_impl->channelsToBuffer, _impl->samplesToBuffer);
 }
 
 #pragma mark - Getting Samples

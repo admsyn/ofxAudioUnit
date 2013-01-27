@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
 #include "ofUtils.h"
 #include <iostream>
 
@@ -113,11 +114,11 @@ ofxAudioUnit& ofxAudioUnit::connectTo(ofxAudioUnit &otherUnit, int destinationBu
 }
 
 // ----------------------------------------------------------
-ofxAudioUnitTap& ofxAudioUnit::connectTo(ofxAudioUnitTap &tap)
+ofxAudioUnitDSPNode& ofxAudioUnit::connectTo(ofxAudioUnitDSPNode &node)
 // ----------------------------------------------------------
 {
-	tap.setSource(this);
-	return tap;
+	node.setSource(this);
+	return node;
 }
 
 // ----------------------------------------------------------
@@ -128,10 +129,10 @@ ofxAudioUnit& ofxAudioUnit::operator>>(ofxAudioUnit& otherUnit)
 }
 
 // ----------------------------------------------------------
-ofxAudioUnitTap& ofxAudioUnit::operator>>(ofxAudioUnitTap &tap)
+ofxAudioUnitDSPNode& ofxAudioUnit::operator>>(ofxAudioUnitDSPNode &node)
 // ----------------------------------------------------------
 {
-	return connectTo(tap);
+	return connectTo(node);
 }
 
 // ----------------------------------------------------------
