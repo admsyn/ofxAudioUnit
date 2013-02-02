@@ -1,31 +1,53 @@
 #include "ofxAudioUnitFftNode.h"
+#include <math.h>
 
-ofxAudioUnitFftNode::ofxAudioUnitFftNode()
-: _log2N(10)
-, _N(1 << _log2N)
+ofxAudioUnitFftNode::ofxAudioUnitFftNode(unsigned int fftBufferSize)
+: _currentMaxLog2N(0)
 {
-	_log2N = 10;
-	_N = 1 << _log2N;
-	_fftSetup = vDSP_create_fftsetup(_log2N, kFFTRadix2);
-	_fftData.realp = (float *)calloc(_N / 2, sizeof(float));
-	_fftData.imagp = (float *)calloc(_N / 2, sizeof(float));
-	_window = (float *)calloc(_N, sizeof(float));
-	vDSP_hamm_window(_window, _N, 0);
+	setFftBufferSize(fftBufferSize);
 }
 
 ofxAudioUnitFftNode::~ofxAudioUnitFftNode()
 {
-	vDSP_destroy_fftsetup(_fftSetup);
-	free(_fftData.realp);
-	free(_fftData.imagp);
-	free(_window);
+	freeBuffers();
 }
 
-void ofxAudioUnitFftNode::getFft(FftSample &outSample, bool logarithmic, bool normalize)
+void ofxAudioUnitFftNode::freeBuffers()
+{
+	if(_fftSetup)      vDSP_destroy_fftsetup(_fftSetup);
+	if(_fftData.realp) free(_fftData.realp);
+	if(_fftData.imagp) free(_fftData.imagp);
+	if(_window)        free(_window);
+}
+
+void ofxAudioUnitFftNode::setFftBufferSize(unsigned int bufferSize)
+{
+	_log2N = (unsigned int) ceilf(log2f(bufferSize));
+	_N = 1 << _log2N;
+	
+	// if the new buffer size is bigger than what we've allocated for,
+	// free everything and allocate anew (otherwise re-use)
+	if(_log2N > _currentMaxLog2N) {
+		freeBuffers();
+		_fftData.realp = (float *)calloc(_N / 2, sizeof(float));
+		_fftData.imagp = (float *)calloc(_N / 2, sizeof(float));
+		_window = (float *)calloc(_N, sizeof(float));
+		_fftSetup = vDSP_create_fftsetup(_log2N, kFFTRadix2);
+		_currentMaxLog2N = _log2N;
+	}
+
+	vDSP_hamm_window(_window, _N, 0);
+	setBufferSize(_N);
+}
+
+bool ofxAudioUnitFftNode::getFft(FftSample &outSample, bool logarithmic, bool normalize)
 {
 	getSamplesFromChannel(_sampleBuffer, 0);
 	
-	if(_sampleBuffer.size() < _N) return;
+	if(_sampleBuffer.size() < _N) {
+		outSample.clear();
+		return false;
+	}
 	
 	float timeDomainMax;
 	vDSP_maxv(&_sampleBuffer[0], 1, &timeDomainMax, _sampleBuffer.size());
@@ -51,4 +73,5 @@ void ofxAudioUnitFftNode::getFft(FftSample &outSample, bool logarithmic, bool no
 	}
 	
 	outSample.assign(_fftData.realp, _fftData.realp + _N/2);
+	return true;
 }
