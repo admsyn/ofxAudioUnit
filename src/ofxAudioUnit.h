@@ -18,3 +18,4 @@
 
 // ofxAudioUnitDSPNode subclasses for specific DSP tasks
 #include "ofxAudioUnitTap.h"
+#include "ofxAudioUnitFftNode.h"
