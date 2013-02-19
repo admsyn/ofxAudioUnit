@@ -1,9 +1,15 @@
 #include "ofxAudioUnitFftNode.h"
 #include <math.h>
 
-ofxAudioUnitFftNode::ofxAudioUnitFftNode(unsigned int fftBufferSize, ofxAudioUnitWindowType windowType)
+// these values taken from the Simple Spectrum Analyser project here
+// https://github.com/fredguile/SimpleSpectrumAnalyzer
+const float DB_CORRECTION_HAMMING  = 1.0;
+const float DB_CORRECTION_HANNING  = -3.2;
+const float DB_CORRECTION_BLACKMAN = 2.37;
+
+ofxAudioUnitFftNode::ofxAudioUnitFftNode(unsigned int fftBufferSize, Settings settings)
 : _currentMaxLog2N(0)
-, _windowType(windowType)
+, _outputSettings(settings)
 {
 	setFftBufferSize(fftBufferSize);
 }
@@ -27,11 +33,9 @@ void generateWindow(ofxAudioUnitWindowType windowType, float * window, size_t si
 		case OFXAU_WINDOW_HAMMING:
 			vDSP_hamm_window(window, size, 0);
 			break;
-			
 		case OFXAU_WINDOW_HANNING:
 			vDSP_hann_window(window, size, 0);
 			break;
-			
 		case OFXAU_WINDOW_BLACKMAN:
 			vDSP_blkman_window(window, size, 0);
 			break;
@@ -54,48 +58,138 @@ void ofxAudioUnitFftNode::setFftBufferSize(unsigned int bufferSize)
 		_currentMaxLog2N = _log2N;
 	}
 
-	generateWindow(_windowType, _window, _N);
+	generateWindow(_outputSettings.window, _window, _N);
 	setBufferSize(_N);
 }
 
 void ofxAudioUnitFftNode::setWindowType(ofxAudioUnitWindowType windowType)
 {
-	_windowType = windowType;
-	generateWindow(_windowType, _window, _N);
+	_outputSettings.window = windowType;
+	generateWindow(_outputSettings.window, _window, _N);
 }
 
-bool ofxAudioUnitFftNode::getFft(FftSample &outSample, bool logarithmic, bool normalize)
+void ofxAudioUnitFftNode::setScale(ofxAudioUnitScaleType scaleType)
+{
+	_outputSettings.scale = scaleType;
+}
+
+void ofxAudioUnitFftNode::setNormalizeInput(bool normalizeInput)
+{
+	_outputSettings.normalizeInput = normalizeInput;
+}
+
+void ofxAudioUnitFftNode::setNormalizeOutput(bool normalizeOutput)
+{
+	_outputSettings.normalizeOutput = normalizeOutput;
+}
+
+void ofxAudioUnitFftNode::setClampMinToZero(bool clampToZero)
+{
+	_outputSettings.clampMinToZero = clampToZero;
+}
+
+void ofxAudioUnitFftNode::setSettings(const ofxAudioUnitFftNode::Settings &settings)
+{
+	_outputSettings = settings;
+	generateWindow(_outputSettings.window, _window, _N);
+}
+
+static void PerformFFT(float * input, float * window, COMPLEX_SPLIT &fftData, FFTSetup &setup, size_t N)
+{	
+	// windowing
+	vDSP_vmul(input, 1, window, 1, input, 1, N);
+	
+	// FFT
+	vDSP_ctoz((COMPLEX *) input, 2, &fftData, 1, N/2);
+	vDSP_fft_zrip(setup, &fftData, 1, (size_t)ceilf(log2f(N)), kFFTDirection_Forward);
+	
+	// zero-ing out Nyquist freq
+	fftData.imagp[0] = 0.0f;
+}
+
+bool ofxAudioUnitFftNode::getAmplitude(vector<float> &outAmplitude)
+{
+	getSamplesFromChannel(_sampleBuffer, 0);
+	
+	// return empty if we don't have enough samples yet
+	if(_sampleBuffer.size() < _N) {
+		outAmplitude.clear();
+		return false;
+	}
+	
+	// normalize input waveform
+	if(_outputSettings.normalizeInput) {
+		float timeDomainMax;
+		vDSP_maxv(&_sampleBuffer[0], 1, &timeDomainMax, _N);
+		vDSP_vsdiv(&_sampleBuffer[0], 1, &timeDomainMax, &_sampleBuffer[0], 1, _N);
+	}
+	
+	PerformFFT(&_sampleBuffer[0], _window, _fftData, _fftSetup, _N);
+	
+	// get amplitude
+	vDSP_zvmags(&_fftData, 1, _fftData.realp, 1, _N/2);
+	
+	// normalize magnitudes
+	float two = 2.0;
+	vDSP_vsdiv(_fftData.realp, 1, &two, _fftData.realp, 1, _N/2);
+
+	// scale output according to requested settings
+	if(_outputSettings.scale == OFXAU_SCALE_LOG10) {
+		for(int i = 0; i < (_N / 2); i++) {
+			_fftData.realp[i] = log10f(_fftData.realp[i] + 1);
+		}
+	} else if(_outputSettings.scale == OFXAU_SCALE_DECIBEL) {
+		float ref = 1.0;
+		vDSP_vdbcon(_fftData.realp, 1, &ref, _fftData.realp, 1, _N / 2, 1);
+		
+		float dbCorrectionFactor = 0;
+		switch (_outputSettings.window) {
+			case OFXAU_WINDOW_HAMMING:
+				dbCorrectionFactor = DB_CORRECTION_HAMMING;
+				break;
+			case OFXAU_WINDOW_HANNING:
+				dbCorrectionFactor = DB_CORRECTION_HAMMING;
+				break;
+			case OFXAU_WINDOW_BLACKMAN:
+				dbCorrectionFactor = DB_CORRECTION_HAMMING;
+				break;
+		}
+		
+		vDSP_vsadd(_fftData.realp, 1, &dbCorrectionFactor, _fftData.realp, 1, _N / 2);
+	}
+	
+	// restrict minimum to 0
+	if(_outputSettings.clampMinToZero) {
+		float min = 0.0;
+		float max = INFINITY;
+		vDSP_vclip(_fftData.realp, 1, &min, &max, _fftData.realp, 1, _N / 2);
+	}
+	
+	// normalize output between 0 and 1
+	if(_outputSettings.normalizeOutput) {
+		float max;
+		vDSP_maxv(_fftData.realp, 1, &max, _N / 2);
+		if(max > 0) {
+			vDSP_vsdiv(_fftData.realp, 1, &max, _fftData.realp, 1, _N / 2);
+		}
+	}
+	
+	outAmplitude.assign(_fftData.realp, _fftData.realp + _N/2);
+	return true;
+}
+
+bool ofxAudioUnitFftNode::getPhase(std::vector<float> &outPhase)
 {
 	getSamplesFromChannel(_sampleBuffer, 0);
 	
 	if(_sampleBuffer.size() < _N) {
-		outSample.clear();
+		outPhase.clear();
 		return false;
 	}
 	
-	float timeDomainMax;
-	vDSP_maxv(&_sampleBuffer[0], 1, &timeDomainMax, _sampleBuffer.size());
-	vDSP_vsdiv(&_sampleBuffer[0], 1, &timeDomainMax, &_sampleBuffer[0], 1, _sampleBuffer.size());
+	PerformFFT(&_sampleBuffer[0], _window, _fftData, _fftSetup, _N);
 	
-	vDSP_vmul(&_sampleBuffer[0], 1, _window, 1, &_sampleBuffer[0], 1, _N);
-	vDSP_ctoz((COMPLEX *) &_sampleBuffer[0], 2, &_fftData, 1, _N/2);
-	vDSP_fft_zrip(_fftSetup, &_fftData, 1, _log2N, kFFTDirection_Forward);
+	vDSP_zvphas(&_fftData, 1, &_sampleBuffer[0], 1, _N / 2);
 	
-	_fftData.imagp[0] = 0.0f;	
-	vDSP_zvmags(&_fftData, 1, _fftData.realp, 1, _N/2);
-
-	if(logarithmic) {
-		for(int i = 0; i < _N/2; i++) {
-			_fftData.realp[i] = log10f(_fftData.realp[i] + 1);
-		}
-	}
-	
-	if(normalize) {
-		float max;
-		vDSP_maxv(_fftData.realp, 1, &max, _N / 2);
-		vDSP_vsdiv(_fftData.realp, 1, &max, _fftData.realp, 1, _N / 2);
-	}
-	
-	outSample.assign(_fftData.realp, _fftData.realp + _N/2);
-	return true;
+	outPhase.assign(_sampleBuffer.begin(), _sampleBuffer.begin() + (_N / 2));
 }
