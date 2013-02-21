@@ -1,12 +1,6 @@
 #pragma once
 
 #include <AudioToolbox/AudioToolbox.h>
-#include "ofTypes.h"
-
-class ofxAudioUnitTap;
-class ofxAudioUnit;
-
-typedef ofPtr<AudioUnit> AudioUnitRef;
 
 static AudioBufferList * AudioBufferListAlloc(UInt32 channels, UInt32 samplesPerChannel)
 {

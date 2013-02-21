@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
 #import <mach/mach_time.h>
 
 AudioComponentDescription filePlayerDesc =
