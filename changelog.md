@@ -1,3 +1,13 @@
+0.4
+=====
+
+- Created an abstract class ofxAudioUnitDSPNode, for general purpose DSP
+  - You can subclass ofxAudioUnitDSPNode to do arbitrary analysis (read-only)
+  - Added an FFT node, which is a functional example of the new DSP feature
+  - ofxAudioUnitTap is now a subclass of ofxAudioUnitDSPNode, so the "render and copy" behaviour is reusable
+
+- ofxAudioUnitTap can now re-adjust its buffer length on the fly w/setBufferLength()
+
 0.3
 =====
 

@@ -1,4 +1,5 @@
-#include "ofxAudioUnit.h"
+#include "ofxAudioUnitSampler.h"
+#include "ofxAudioUnitUtils.h"
 
 #if (MAC_OS_X_VERSION_10_7 || __IPHONE_5_0)
 

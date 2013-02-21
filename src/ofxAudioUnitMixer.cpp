@@ -1,4 +1,5 @@
-#include "ofxAudioUnit.h"
+#include "ofxAudioUnitMixer.h"
+#include "ofxAudioUnitUtils.h"
 
 AudioComponentDescription mixerDesc = {
 	kAudioUnitType_Mixer,

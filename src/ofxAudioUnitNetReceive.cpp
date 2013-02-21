@@ -1,6 +1,6 @@
 #include "ofxAudioUnit.h"
+#include "ofxAudioUnitUtils.h"
 
-#if !(TARGET_OS_IPHONE)
 #include <sstream>
 
 AudioComponentDescription netReceiveDesc = {
@@ -61,5 +61,3 @@ void ofxAudioUnitNetReceive::disconnect()
 									 sizeof(disconnect)),
 				"disconnecting net receive");
 }
-
-#endif //TARGET_OS_IPHONE
