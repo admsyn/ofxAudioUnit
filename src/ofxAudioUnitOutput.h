@@ -16,4 +16,6 @@ public:
 	
 	bool start();
 	bool stop();
+
+	static void listOutputDevices();
 };
