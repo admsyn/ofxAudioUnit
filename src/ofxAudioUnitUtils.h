@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AudioToolbox/AudioToolbox.h>
+#include <iostream>
 
 static AudioBufferList * AudioBufferListAlloc(UInt32 channels, UInt32 samplesPerChannel)
 {
