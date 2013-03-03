@@ -1,6 +1,15 @@
+0.5
+=====
+
+New Features
+------------
+- ofxAudioUnitInput and ofxAudioUnitOutput can now represent arbitrary audio devices (instead of just the default device)
+
 0.4
 =====
 
+New Features
+------------
 - Created an abstract class ofxAudioUnitDSPNode, for general purpose DSP
   - You can subclass ofxAudioUnitDSPNode to do arbitrary analysis (read-only)
   - Added an FFT node, which is a functional example of the new DSP feature
