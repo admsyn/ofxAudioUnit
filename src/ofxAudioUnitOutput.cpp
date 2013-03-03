@@ -43,6 +43,6 @@ void ofxAudioUnitOutput::listOutputDevices()
 	vector<AudioDeviceID> deviceList = AudioOutputDeviceList();
 	
 	for(int i = 0; i < deviceList.size(); i++) {
-		cout << deviceList[i] << " : " << DeviceNameForAudioDeviceID(deviceList[i]) << endl;
+		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]\n";
 	}
 }

@@ -1,5 +1,6 @@
 #include "ofxAudioUnit.h"
 #include "ofxAudioUnitUtils.h"
+#include "ofxAudioUnitHardwareUtils.h"
 #include "TPCircularBuffer.h"
 
 AudioComponentDescription inputDesc = {
@@ -133,7 +134,18 @@ bool ofxAudioUnitInput::stop()
 	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
 }
 
-#pragma mark - Configuration
+#pragma mark - Hardware
+
+// ----------------------------------------------------------
+void ofxAudioUnitInput::listInputDevices()
+// ----------------------------------------------------------
+{
+	vector<AudioDeviceID> deviceList = AudioInputDeviceList();
+	
+	for(int i = 0; i < deviceList.size(); i++) {
+		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]" << endl;
+	}
+}
 
 // ----------------------------------------------------------
 bool ofxAudioUnitInput::configureInputDevice()

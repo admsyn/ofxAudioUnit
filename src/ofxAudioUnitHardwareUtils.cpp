@@ -44,19 +44,68 @@ std::vector<AudioDeviceID> AudioDeviceList()
 	}
 }
 
+std::vector<AudioDeviceID> AudioDeviceListForScope(AudioObjectPropertyScope scope)
+{
+	std::vector<AudioDeviceID> allDevices = AudioDeviceList();
+	std::vector<AudioDeviceID> validDevices;
+	
+	AudioObjectPropertyAddress outStreamProp = {
+		.mSelector = kAudioDevicePropertyStreamConfiguration,
+		.mScope    = scope,
+		.mElement  = kAudioObjectPropertyElementMaster
+	};
+	
+	for(int i = 0; i < allDevices.size(); i++) {
+		OSStatus s;
+		UInt32 dataSize;
+		s = AudioObjectGetPropertyDataSize(allDevices[i], &outStreamProp, 0, NULL, &dataSize);
+		if(s != noErr) continue;
+		
+		AudioBufferList * streamFormat = (AudioBufferList *)malloc(dataSize);
+		s = AudioObjectGetPropertyData(allDevices[i], &outStreamProp, 0, NULL, &dataSize, streamFormat);
+		
+		if(s == noErr && streamFormat->mNumberBuffers > 0) {
+			validDevices.push_back(allDevices[i]);
+		}
+		
+		free(streamFormat);
+	}
+	
+	return validDevices;
+}
+
 std::vector<AudioDeviceID> AudioOutputDeviceList()
 {
-	return AudioDeviceList();
+	return AudioDeviceListForScope(kAudioDevicePropertyScopeOutput);
 }
 
 std::vector<AudioDeviceID> AudioInputDeviceList()
 {
-	return AudioDeviceList();
+	return AudioDeviceListForScope(kAudioDevicePropertyScopeInput);
 }
 
 #pragma mark - Device Info
 
-std::string DeviceNameForAudioDeviceID(AudioDeviceID deviceID)
+std::string StringForPropertyOnDevice(AudioObjectPropertyAddress prop, AudioDeviceID deviceID)
+{
+	CFStringRef stringRef;
+	UInt32 dataSize = sizeof(stringRef);
+	OFXAU_PRINT(AudioObjectGetPropertyData(deviceID, &prop, 0, NULL, &dataSize, &stringRef), "getting device info");
+	
+	std::string propertyString("Unknown");
+	
+	if(stringRef) {
+		CFIndex bufferSize = CFStringGetMaximumSizeForEncoding(CFStringGetLength(stringRef), kCFStringEncodingUTF8);
+		char buffer[bufferSize];
+		CFStringGetCString(stringRef, buffer, bufferSize, kCFStringEncodingUTF8);
+		propertyString = std::string(buffer);
+		CFRelease(stringRef);
+	}
+	
+	return propertyString;
+}
+
+std::string AudioDeviceName(AudioDeviceID deviceID)
 {
 	AudioObjectPropertyAddress deviceNameProp = {
 		.mSelector = kAudioObjectPropertyName,
@@ -64,24 +113,16 @@ std::string DeviceNameForAudioDeviceID(AudioDeviceID deviceID)
 		.mElement  = kAudioObjectPropertyElementMaster
 	};
 	
-	CFStringRef deviceName;
-	UInt32 deviceNameDataSize = sizeof(deviceName);
-	OFXAU_PRINT(AudioObjectGetPropertyData(deviceID,
-										   &deviceNameProp,
-										   0,
-										   NULL,
-										   &deviceNameDataSize,
-										   &deviceName),
-				"getting device name");
+	return StringForPropertyOnDevice(deviceNameProp, deviceID);
+}
+
+std::string AudioDeviceManufacturer(AudioDeviceID deviceID)
+{
+	AudioObjectPropertyAddress deviceManuProp = {
+		.mSelector = kAudioObjectPropertyManufacturer,
+		.mScope    = kAudioObjectPropertyScopeGlobal,
+		.mElement  = kAudioObjectPropertyElementMaster
+	};
 	
-	std::string deviceNameString("Unknown");
-	
-	if(deviceName) {
-		char buffer[255];
-		CFStringGetCString(deviceName, buffer, 255, kCFStringEncodingUTF8);
-		deviceNameString = std::string(buffer);
-		CFRelease(deviceName);
-	}
-	
-	return deviceNameString;
+	return StringForPropertyOnDevice(deviceManuProp, deviceID);
 }

@@ -20,6 +20,8 @@ public:
 	bool start();
 	bool stop();
 	
+	static void listInputDevices();
+	
 private:
 	struct InputImpl;
 	ofPtr<InputImpl> _impl;
