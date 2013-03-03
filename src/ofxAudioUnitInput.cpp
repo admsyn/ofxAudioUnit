@@ -169,27 +169,13 @@ bool ofxAudioUnitInput::configureInputDevice()
 										 sizeof(off)),
 					"disabling output on HAL unit");
 	
-	AudioDeviceID inputDeviceID = kAudioObjectUnknown;
-	UInt32 deviceIDSize = sizeof( AudioDeviceID );
-	AudioObjectPropertyAddress prop_addr = {
-		kAudioHardwarePropertyDefaultInputDevice,
-		kAudioObjectPropertyScopeGlobal,
-		kAudioObjectPropertyElementMaster
-	};
-	
-	OFXAU_RET_FALSE(AudioObjectGetPropertyData(kAudioObjectSystemObject,
-											   &prop_addr,
-											   0,
-											   NULL,
-											   &deviceIDSize,
-											   &inputDeviceID),
-					"getting device ID for default input");
-	
+	AudioDeviceID defaultInputDevice = DefaultAudioInputDevice();
+	UInt32 deviceIDSize = sizeof(defaultInputDevice);
 	OFXAU_RET_FALSE(AudioUnitSetProperty(*_unit,
 										 kAudioOutputUnitProperty_CurrentDevice,
 										 kAudioUnitScope_Global,
 										 0,
-										 &inputDeviceID,
+										 &defaultInputDevice,
 										 deviceIDSize), 
 					"setting HAL unit's device ID");
 	

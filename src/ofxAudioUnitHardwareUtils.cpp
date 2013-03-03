@@ -74,14 +74,37 @@ std::vector<AudioDeviceID> AudioDeviceListForScope(AudioObjectPropertyScope scop
 	return validDevices;
 }
 
-std::vector<AudioDeviceID> AudioOutputDeviceList()
+#pragma mark - Default Devices
+
+AudioDeviceID DefaultAudioDeviceForSelector(AudioObjectPropertySelector selector)
 {
-	return AudioDeviceListForScope(kAudioDevicePropertyScopeOutput);
+	AudioDeviceID deviceID = kAudioObjectUnknown;
+	UInt32 deviceIDSize = sizeof( AudioDeviceID );
+	AudioObjectPropertyAddress deviceProperty = {
+		.mSelector = selector,
+		.mScope    = kAudioObjectPropertyScopeGlobal,
+		.mElement  = kAudioObjectPropertyElementMaster
+	};
+	
+	OFXAU_PRINT(AudioObjectGetPropertyData(kAudioObjectSystemObject,
+										   &deviceProperty,
+										   0,
+										   NULL,
+										   &deviceIDSize,
+										   &deviceID),
+				"getting default device ID");
+	
+	return deviceID;
 }
 
-std::vector<AudioDeviceID> AudioInputDeviceList()
+AudioDeviceID DefaultAudioInputDevice()
 {
-	return AudioDeviceListForScope(kAudioDevicePropertyScopeInput);
+	return DefaultAudioDeviceForSelector(kAudioHardwarePropertyDefaultInputDevice);
+}
+
+AudioDeviceID DefaultAudioOutputDevice()
+{
+	return DefaultAudioDeviceForSelector(kAudioHardwarePropertyDefaultOutputDevice);
 }
 
 #pragma mark - Device Info
