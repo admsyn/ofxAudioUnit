@@ -20,12 +20,12 @@ public:
 	bool start();
 	bool stop();
 	
+	bool setDeviceID(AudioDeviceID deviceID);
+	
 	static void listInputDevices();
 	
 private:
 	struct InputImpl;
 	ofPtr<InputImpl> _impl;
-	
-	bool _isReady;
 	bool configureInputDevice();
 };

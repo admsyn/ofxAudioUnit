@@ -16,6 +16,8 @@ public:
 	
 	bool start();
 	bool stop();
+	
+	bool setDeviceID(AudioDeviceID deviceID);
 
 	static void listOutputDevices();
 };

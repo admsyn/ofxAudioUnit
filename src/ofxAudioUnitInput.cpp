@@ -41,14 +41,15 @@ struct InputContext
 struct ofxAudioUnitInput::InputImpl
 {
 	InputContext ctx;
+	bool isReady;
+	AudioDeviceID inputDeviceID;
 };
 
 #pragma mark - ofxAudioUnitInput
 
 // ----------------------------------------------------------
 ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
-: _isReady(false)
-, _impl(new InputImpl)
+: _impl(new InputImpl)
 // ----------------------------------------------------------
 {
 	_desc = inputDesc;
@@ -67,6 +68,8 @@ ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
 	_impl->ctx.inputUnit  = _unit;
 	_impl->ctx.bufferList = AudioBufferListRef(AudioBufferListAlloc(ASBD.mChannelsPerFrame, 1024), AudioBufferListRelease);
 	_impl->ctx.circularBuffers.resize(ASBD.mChannelsPerFrame);
+	_impl->isReady = false;
+	_impl->inputDeviceID = DefaultAudioInputDevice();
 	
 	for(int i = 0; i < ASBD.mChannelsPerFrame; i++) {
 		TPCircularBufferInit(&_impl->ctx.circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
@@ -77,7 +80,6 @@ ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
 ofxAudioUnitInput::~ofxAudioUnitInput()
 // ----------------------------------------------------------
 {
-	cout << "STOP!" << endl;
 	stop();
 	
 	for(int i = 0; i < _impl->ctx.circularBuffers.size(); i++) {
@@ -121,8 +123,8 @@ ofxAudioUnit& ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinat
 bool ofxAudioUnitInput::start()
 // ----------------------------------------------------------
 {
-	if(!_isReady) _isReady = configureInputDevice();
-	if(!_isReady) return false;
+	if(!_impl->isReady) _impl->isReady = configureInputDevice();
+	if(!_impl->isReady) return false;
 	
 	OFXAU_RET_BOOL(AudioOutputUnitStart(*_unit), "starting hardware input unit");
 }
@@ -135,6 +137,21 @@ bool ofxAudioUnitInput::stop()
 }
 
 #pragma mark - Hardware
+
+// ----------------------------------------------------------
+bool ofxAudioUnitInput::setDeviceID(AudioDeviceID deviceID)
+// ----------------------------------------------------------
+{
+	_impl->inputDeviceID = deviceID;
+	UInt32 deviceIDSize = sizeof(deviceID);
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+										kAudioOutputUnitProperty_CurrentDevice,
+										kAudioUnitScope_Global,
+										0,
+										&deviceID,
+										deviceIDSize),
+				   "setting input unit's device ID");
+}
 
 // ----------------------------------------------------------
 void ofxAudioUnitInput::listInputDevices()
@@ -169,13 +186,12 @@ bool ofxAudioUnitInput::configureInputDevice()
 										 sizeof(off)),
 					"disabling output on HAL unit");
 	
-	AudioDeviceID defaultInputDevice = DefaultAudioInputDevice();
-	UInt32 deviceIDSize = sizeof(defaultInputDevice);
+	UInt32 deviceIDSize = sizeof(AudioDeviceID);
 	OFXAU_RET_FALSE(AudioUnitSetProperty(*_unit,
 										 kAudioOutputUnitProperty_CurrentDevice,
 										 kAudioUnitScope_Global,
 										 0,
-										 &defaultInputDevice,
+										 &_impl->inputDeviceID,
 										 deviceIDSize), 
 					"setting HAL unit's device ID");
 	

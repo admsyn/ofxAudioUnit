@@ -1,4 +1,4 @@
-#include "ofxAudioUnit.h"
+#include "ofxAudioUnitOutput.h"
 #include "ofxAudioUnitUtils.h"
 #include "ofxAudioUnitHardwareUtils.h"
 #include <CoreFoundation/CoreFoundation.h>
@@ -34,6 +34,22 @@ bool ofxAudioUnitOutput::stop()
 // ----------------------------------------------------------
 {
 	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping output unit");
+}
+
+#pragma mark - Hardware
+
+// ----------------------------------------------------------
+bool ofxAudioUnitOutput::setDeviceID(AudioDeviceID deviceID)
+// ----------------------------------------------------------
+{
+	UInt32 deviceIDSize = sizeof(deviceID);
+	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+										kAudioOutputUnitProperty_CurrentDevice,
+										kAudioUnitScope_Global,
+										0,
+										&deviceID,
+										deviceIDSize),
+				   "setting output unit's device ID");
 }
 
 // ----------------------------------------------------------
