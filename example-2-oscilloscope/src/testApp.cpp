@@ -33,15 +33,16 @@ void testApp::setup(){
 	
 //	This will use an ofxAudioUnitInput to get audio from
 //	your selected audio input source (probably your mic
-//	or line in). You can change the source in your sound
-//	preferences, or by using Audio MIDI Setup.app (in
-//	/Applications/Utilities).
-//	WARNING: You will get feedback if you attempt to 
+//	or line in). You can change the source device by calling
+//	setDevice() on the input with either a device ID or just
+//	the name of the device.
+//	WARNING: You will get feedback if you attempt to
 //	use your microphone for input and your speakers for
 //	output. This will be unpleasant.
 //	If you get error -10863, make sure your input sample
-//	rate is set to 44100 and 32-bit float in Audio MIDI Setup.
-//-------------------------------------------------	
+//	rate is set to 44100 and 32-bit float in Audio MIDI Setup.app
+//-------------------------------------------------
+//	input.listInputDevices();
 //	input.connectTo(tap).connectTo(output);
 //	input.start();
 //	activeUnit = &input;
