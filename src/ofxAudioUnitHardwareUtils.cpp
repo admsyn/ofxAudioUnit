@@ -1,11 +1,3 @@
-//
-//  ofxAudioUnitHardwareUtils.cpp
-//  example-busses
-//
-//  Created by Adam on 2013-03-01.
-//
-//
-
 #include "ofxAudioUnitHardwareUtils.h"
 #include "ofxAudioUnitUtils.h"
 
@@ -64,6 +56,8 @@ std::vector<AudioDeviceID> AudioDeviceListForScope(AudioObjectPropertyScope scop
 		AudioBufferList * streamFormat = (AudioBufferList *)malloc(dataSize);
 		s = AudioObjectGetPropertyData(allDevices[i], &outStreamProp, 0, NULL, &dataSize, streamFormat);
 		
+		// an "input" device is one which reports having a buffer topology with > 0
+		// buffers on the input scope (and vice versa for output)
 		if(s == noErr && streamFormat->mNumberBuffers > 0) {
 			validDevices.push_back(allDevices[i]);
 		}
@@ -72,6 +66,16 @@ std::vector<AudioDeviceID> AudioDeviceListForScope(AudioObjectPropertyScope scop
 	}
 	
 	return validDevices;
+}
+
+std::vector<AudioDeviceID> AudioOutputDeviceList()
+{
+	return AudioDeviceListForScope(kAudioDevicePropertyScopeOutput);
+}
+
+std::vector<AudioDeviceID> AudioInputDeviceList()
+{
+	return AudioDeviceListForScope(kAudioDevicePropertyScopeInput);
 }
 
 #pragma mark - Default Devices

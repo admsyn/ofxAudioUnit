@@ -6,8 +6,8 @@
 
 std::vector<AudioDeviceID> AudioDeviceList();
 std::vector<AudioDeviceID> AudioDeviceListForScope(AudioObjectPropertyScope scope);
-std::vector<AudioDeviceID> AudioOutputDeviceList(){return AudioDeviceListForScope(kAudioDevicePropertyScopeOutput);}
-std::vector<AudioDeviceID> AudioInputDeviceList(){return AudioDeviceListForScope(kAudioDevicePropertyScopeInput);}
+std::vector<AudioDeviceID> AudioOutputDeviceList();
+std::vector<AudioDeviceID> AudioInputDeviceList();
 
 AudioDeviceID DefaultAudioInputDevice();
 AudioDeviceID DefaultAudioOutputDevice();
