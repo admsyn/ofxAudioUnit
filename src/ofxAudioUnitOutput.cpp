@@ -39,7 +39,7 @@ bool ofxAudioUnitOutput::stop()
 #pragma mark - Hardware
 
 // ----------------------------------------------------------
-bool ofxAudioUnitOutput::setDeviceID(AudioDeviceID deviceID)
+bool ofxAudioUnitOutput::setDevice(AudioDeviceID deviceID)
 // ----------------------------------------------------------
 {
 	UInt32 deviceIDSize = sizeof(deviceID);
@@ -50,6 +50,29 @@ bool ofxAudioUnitOutput::setDeviceID(AudioDeviceID deviceID)
 										&deviceID,
 										deviceIDSize),
 				   "setting output unit's device ID");
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnitOutput::setDevice(const string &deviceName)
+// ----------------------------------------------------------
+{
+	std::vector<AudioDeviceID> outputDevices = AudioOutputDeviceList();
+	AudioDeviceID deviceID;
+	bool found = false;
+	for(int i = 0; i < outputDevices.size(); i++) {
+		int diff = AudioDeviceName(outputDevices[i]).compare(deviceName);
+		if(!diff) {
+			deviceID = outputDevices[i];
+			found = true;
+			break;
+		}
+	}
+	
+	if(found) {
+		return setDevice(deviceID);
+	} else {
+		return false;
+	}
 }
 
 // ----------------------------------------------------------

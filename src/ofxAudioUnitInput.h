@@ -20,7 +20,8 @@ public:
 	bool start();
 	bool stop();
 	
-	bool setDeviceID(AudioDeviceID deviceID);
+	bool setDevice(AudioDeviceID deviceID);
+	bool setDevice(const string &deviceName);
 	
 	static void listInputDevices();
 	
