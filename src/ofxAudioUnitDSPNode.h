@@ -21,6 +21,7 @@ public:
 protected:
 	void getSamplesFromChannel(std::vector<AudioUnitSampleType> &samples, unsigned int channel) const;
 	void setBufferSize(unsigned int samplesToBuffer);
+	unsigned int getBufferSize() const;
 	
 private:
 	struct NodeImpl;

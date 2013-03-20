@@ -167,6 +167,13 @@ void ofxAudioUnitDSPNode::setBufferSize(unsigned int samplesToBuffer)
 	_impl->ctx.setCircularBufferSize(_impl->channelsToBuffer, _impl->samplesToBuffer);
 }
 
+// ----------------------------------------------------------
+unsigned int ofxAudioUnitDSPNode::getBufferSize() const
+// ----------------------------------------------------------
+{
+	return _impl->samplesToBuffer;
+}
+
 #pragma mark - Getting Samples
 
 // ----------------------------------------------------------

@@ -10,8 +10,27 @@ const float DB_CORRECTION_BLACKMAN = 2.37;
 ofxAudioUnitFftNode::ofxAudioUnitFftNode(unsigned int fftBufferSize, Settings settings)
 : _currentMaxLog2N(0)
 , _outputSettings(settings)
+, _fftSetup(NULL)
+, _fftData((COMPLEX_SPLIT){NULL, NULL})
+, _window(NULL)
 {
 	setFftBufferSize(fftBufferSize);
+}
+
+ofxAudioUnitFftNode::ofxAudioUnitFftNode(const ofxAudioUnitFftNode &orig)
+: _currentMaxLog2N(0)
+, _outputSettings(orig._outputSettings)
+, _fftSetup(NULL)
+, _fftData((COMPLEX_SPLIT){NULL, NULL})
+, _window(NULL)
+{
+	setFftBufferSize(orig._N);
+}
+
+ofxAudioUnitFftNode& ofxAudioUnitFftNode::operator=(const ofxAudioUnitFftNode &orig)
+{
+	setFftBufferSize(orig._N);
+	setSettings(orig._outputSettings);
 }
 
 ofxAudioUnitFftNode::~ofxAudioUnitFftNode()

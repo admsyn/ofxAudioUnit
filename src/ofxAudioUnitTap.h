@@ -22,7 +22,10 @@
 class ofxAudioUnitTap : public ofxAudioUnitDSPNode
 {
 public:
-	ofxAudioUnitTap(unsigned int samplesToBuffer = 2048);
+	explicit ofxAudioUnitTap(unsigned int samplesToBuffer = 2048);
+	explicit ofxAudioUnitTap(const ofxAudioUnitTap &orig);
+	ofxAudioUnitTap& operator=(const ofxAudioUnitTap &orig);
+	virtual ~ofxAudioUnitTap();
 	
 	// Container for samples returned from an ofxAudioUnitTap
 	typedef std::vector<AudioUnitSampleType> MonoSamples;

@@ -8,6 +8,28 @@ ofxAudioUnitTap::ofxAudioUnitTap(unsigned int samplesToTrack)
 }
 
 // ----------------------------------------------------------
+ofxAudioUnitTap::~ofxAudioUnitTap()
+// ----------------------------------------------------------
+{
+	
+}
+
+// ----------------------------------------------------------
+ofxAudioUnitTap::ofxAudioUnitTap(const ofxAudioUnitTap& orig)
+// ----------------------------------------------------------
+{
+	setBufferSize(orig.getBufferSize());
+}
+
+// ----------------------------------------------------------
+ofxAudioUnitTap& ofxAudioUnitTap::operator=(const ofxAudioUnitTap &orig)
+// ----------------------------------------------------------
+{
+	setBufferSize(orig.getBufferSize());
+	return *this;
+}
+
+// ----------------------------------------------------------
 void ofxAudioUnitTap::setBufferLength(unsigned int samplesToBuffer)
 // ----------------------------------------------------------
 {

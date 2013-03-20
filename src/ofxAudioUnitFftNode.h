@@ -36,7 +36,9 @@ public:
 	};
 	
 	ofxAudioUnitFftNode(unsigned int fftBufferSize = 1024, Settings settings = Settings());
-	~ofxAudioUnitFftNode();
+	ofxAudioUnitFftNode(const ofxAudioUnitFftNode &orig);
+	ofxAudioUnitFftNode& operator=(const ofxAudioUnitFftNode &orig);
+	virtual ~ofxAudioUnitFftNode();
 	
 	bool getAmplitude(std::vector<float> &outAmplitude);
 	bool getPhase(std::vector<float> &outPhase);
