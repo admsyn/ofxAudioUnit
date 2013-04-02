@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxAudioUnitBase.h"    // for base Audio Unit class ofxAudioUnit
-#include "ofxAudioUnitDSPNode.h" // for base DSP class ofxAudioUnitDSPNode
+//#include "ofxAudioUnitDSPNode.h" // for base DSP class ofxAudioUnitDSPNode
 
 // ofxAudioUnit subclasses for specific audio units
 #include "ofxAudioUnitFilePlayer.h"
@@ -19,3 +19,6 @@
 // ofxAudioUnitDSPNode subclasses for specific DSP tasks
 #include "ofxAudioUnitTap.h"
 #include "ofxAudioUnitFftNode.h"
+
+// class to get AU parameters if they're non-Apple AUs
+//#include "ofxAudioUnitGetParametersExtra.h"
