@@ -448,7 +448,6 @@
 					"-D__MACOSX_CORE__",
 					"-lpthread",
 				);
-				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -483,7 +482,6 @@
 					"-D__MACOSX_CORE__",
 					"-lpthread",
 				);
-				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
