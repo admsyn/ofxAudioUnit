@@ -31,6 +31,7 @@ ofxAudioUnitFftNode& ofxAudioUnitFftNode::operator=(const ofxAudioUnitFftNode &o
 {
 	setFftBufferSize(orig._N);
 	setSettings(orig._outputSettings);
+	return *this;
 }
 
 ofxAudioUnitFftNode::~ofxAudioUnitFftNode()
@@ -211,4 +212,5 @@ bool ofxAudioUnitFftNode::getPhase(std::vector<float> &outPhase)
 	vDSP_zvphas(&_fftData, 1, &_sampleBuffer[0], 1, _N / 2);
 	
 	outPhase.assign(_sampleBuffer.begin(), _sampleBuffer.begin() + (_N / 2));
+	return true;
 }

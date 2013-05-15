@@ -58,17 +58,20 @@ bool ofxAudioUnitSampler::setSamples(const std::vector<std::string> &samplePaths
 	
 	CFArrayRef samples = CFArrayCreate(NULL, (const void **)&sampleURLs, samplePaths.size(), &kCFTypeArrayCallBacks);
 	
-	OFXAU_PRINT(AudioUnitSetProperty(*_unit,
+	OSStatus s = AudioUnitSetProperty(*_unit,
 									 kAUSamplerProperty_LoadAudioFiles,
 									 kAudioUnitScope_Global,
 									 0,
 									 &samples,
-									 sizeof(samples)),
-				"setting ofxAudioUnitSampler's source samples");
+									 sizeof(samples));
+	
+	OFXAU_PRINT(s, "setting ofxAudioUnitSampler's source samples");
 	
 	for(int i = 0; i < samplePaths.size(); i++) CFRelease(sampleURLs[i]);
 	
 	CFRelease(samples);
+	
+	return s == noErr;
 }
 
 
