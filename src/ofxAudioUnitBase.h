@@ -26,7 +26,7 @@ public:
 	explicit ofxAudioUnit(OSType type,
 						  OSType subType,
 						  OSType manufacturer = kAudioUnitManufacturer_Apple);
-	explicit ofxAudioUnit(const ofxAudioUnit &orig);
+	ofxAudioUnit(const ofxAudioUnit &orig);
 	ofxAudioUnit& operator=(const ofxAudioUnit &orig);
 	
 	virtual ~ofxAudioUnit();

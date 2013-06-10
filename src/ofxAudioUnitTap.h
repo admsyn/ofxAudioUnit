@@ -23,7 +23,7 @@ class ofxAudioUnitTap : public ofxAudioUnitDSPNode
 {
 public:
 	explicit ofxAudioUnitTap(unsigned int samplesToBuffer = 2048);
-	explicit ofxAudioUnitTap(const ofxAudioUnitTap &orig);
+	ofxAudioUnitTap(const ofxAudioUnitTap &orig);
 	ofxAudioUnitTap& operator=(const ofxAudioUnitTap &orig);
 	virtual ~ofxAudioUnitTap();
 	
