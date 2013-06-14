@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6617F17215460B4800EDC48D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6617F17115460B4800EDC48D /* CoreMIDI.framework */; };
+		663F7BD0176BBB6800F9972E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 663F7BCF176BBB6800F9972E /* Accelerate.framework */; };
 		668AA25F16E3EB7A0026A04D /* ofxAudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668AA23D16E3EB7A0026A04D /* ofxAudioUnit.cpp */; };
 		668AA26016E3EB7A0026A04D /* ofxAudioUnitCocoaUtilties.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668AA24016E3EB7A0026A04D /* ofxAudioUnitCocoaUtilties.mm */; };
 		668AA26116E3EB7A0026A04D /* ofxAudioUnitDSPNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668AA24116E3EB7A0026A04D /* ofxAudioUnitDSPNode.cpp */; };
@@ -77,6 +78,7 @@
 
 /* Begin PBXFileReference section */
 		6617F17115460B4800EDC48D /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		663F7BCF176BBB6800F9972E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		668AA23D16E3EB7A0026A04D /* ofxAudioUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAudioUnit.cpp; sourceTree = "<group>"; };
 		668AA23E16E3EB7A0026A04D /* ofxAudioUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAudioUnit.h; sourceTree = "<group>"; };
 		668AA23F16E3EB7A0026A04D /* ofxAudioUnitBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAudioUnitBase.h; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663F7BD0176BBB6800F9972E /* Accelerate.framework in Frameworks */,
 				6617F17215460B4800EDC48D /* CoreMIDI.framework in Frameworks */,
 				66F2ECB21544605100B3DDB5 /* AudioUnit.framework in Frameworks */,
 				66F2ECB31544605100B3DDB5 /* CoreAudioKit.framework in Frameworks */,
@@ -231,6 +234,7 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				663F7BCF176BBB6800F9972E /* Accelerate.framework */,
 				6617F17115460B4800EDC48D /* CoreMIDI.framework */,
 				66F2ECB01544605100B3DDB5 /* AudioUnit.framework */,
 				66F2ECB11544605100B3DDB5 /* CoreAudioKit.framework */,
