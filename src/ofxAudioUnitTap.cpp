@@ -1,4 +1,5 @@
 #include "ofxAudioUnit.h"
+#include <Accelerate/Accelerate.h>
 
 // ----------------------------------------------------------
 ofxAudioUnitTap::ofxAudioUnitTap(unsigned int samplesToTrack)
@@ -36,7 +37,7 @@ void ofxAudioUnitTap::setBufferLength(unsigned int samplesToBuffer)
 	setBufferSize(samplesToBuffer);
 }
 
-#pragma mark - Getting samples
+#pragma mark - Samples
 
 // ----------------------------------------------------------
 void ofxAudioUnitTap::getSamples(MonoSamples &outData) const
@@ -59,6 +60,20 @@ void ofxAudioUnitTap::getSamples(StereoSamples &outData) const
 	getSamplesFromChannel(outData.left, 0);
 	getSamplesFromChannel(outData.right, 0);
 }
+
+#pragma mark - RMS
+
+// ----------------------------------------------------------
+float ofxAudioUnitTap::getRMS(unsigned int channel)
+// ----------------------------------------------------------
+{
+	getSamplesFromChannel(_tempBuffer, channel);
+	float rms;
+	vDSP_rmsqv(&_tempBuffer[0], 1, &rms, _tempBuffer.size());
+	return rms;
+}
+
+#pragma mark - Waveforms
 
 // ----------------------------------------------------------
 void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, float height, ofPolyline &outLine)

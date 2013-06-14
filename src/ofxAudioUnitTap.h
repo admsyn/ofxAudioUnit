@@ -47,6 +47,10 @@ public:
 	void getLeftWaveform(ofPolyline &outLine, float width, float height);
 	void getRightWaveform(ofPolyline &outLine, float width, float height);
 	
+	float getRMS(unsigned int channel);
+	float getLeftChannelRMS()  {return getRMS(0);}
+	float getRightChannelRMS() {return getRMS(1);}
+	
 private:
 	MonoSamples _tempBuffer;
 };
