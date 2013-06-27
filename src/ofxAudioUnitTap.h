@@ -43,10 +43,14 @@ public:
 	void getSamples(MonoSamples &outData) const;
 	void getSamples(MonoSamples &outData, unsigned int channel) const;
 	
-	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height);
-	void getLeftWaveform(ofPolyline &outLine, float width, float height);
-	void getRightWaveform(ofPolyline &outLine, float width, float height);
+	// These output an ofPolyline representing the waveform of the most recent samples in the buffer.
+	// You can use the "sampleRate" param to skip samples for the sake of speed (i.e. a sampleRate
+	// of 3 = every 3rd sample will be represented in the resulting ofPolyline)
+	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height, unsigned sampleRate = 1);
+	void getLeftWaveform(ofPolyline &outLine, float width, float height, unsigned sampleRate = 1);
+	void getRightWaveform(ofPolyline &outLine, float width, float height, unsigned sampleRate = 1);
 	
+	// These output the RMS (i.e. "loudness") of the most recent buffer
 	float getRMS(unsigned int channel);
 	float getLeftChannelRMS()  {return getRMS(0);}
 	float getRightChannelRMS() {return getRMS(1);}

@@ -76,15 +76,15 @@ float ofxAudioUnitTap::getRMS(unsigned int channel)
 #pragma mark - Waveforms
 
 // ----------------------------------------------------------
-void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, float height, ofPolyline &outLine)
+void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, float height, ofPolyline &outLine, unsigned sampleRate)
 // ----------------------------------------------------------
 {	
 	outLine.clear();
 	
-	const float xStep = width / buffer.size();
+	const float xStep = width / (buffer.size() / sampleRate);
 	float x = 0;
 	
-	for (int i = 0; i < buffer.size(); i++, x += xStep)
+	for (int i = 0; i < buffer.size(); i += sampleRate, x += xStep)
 	{
 #if TARGET_OS_IPHONE
 		SInt16 s = SInt16(buffer[i] >> 9);
@@ -97,25 +97,25 @@ void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, 
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getLeftWaveform(ofPolyline &outLine, float width, float height)
+void ofxAudioUnitTap::getLeftWaveform(ofPolyline &outLine, float w, float h, unsigned sampleRate)
 // ----------------------------------------------------------
 {
 	getSamples(_tempBuffer, 0);
-	WaveformForBuffer(_tempBuffer, width, height, outLine);
+	WaveformForBuffer(_tempBuffer, w, h, outLine, sampleRate);
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getRightWaveform(ofPolyline &outLine, float width, float height)
+void ofxAudioUnitTap::getRightWaveform(ofPolyline &outLine, float w, float h, unsigned sampleRate)
 // ----------------------------------------------------------
 {
 	getSamples(_tempBuffer, 1);
-	WaveformForBuffer(_tempBuffer, width, height, outLine);
+	WaveformForBuffer(_tempBuffer, w, h, outLine, sampleRate);
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnitTap::getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height)
+void ofxAudioUnitTap::getStereoWaveform(ofPolyline &l, ofPolyline &r, float w, float h, unsigned rate)
 // ----------------------------------------------------------
 {
-	getLeftWaveform(outLeft, width, height);
-	getRightWaveform(outRight, width, height);
+	getLeftWaveform(l, w, h, rate);
+	getRightWaveform(r, w, h, rate);
 }
