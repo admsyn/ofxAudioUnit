@@ -8,15 +8,12 @@
 
 class ofxAudioUnitFilePlayer : public ofxAudioUnit
 {
-	AudioFileID _fileID[1];
-	ScheduledAudioFileRegion _region;
-	
 public:
 	ofxAudioUnitFilePlayer();
 	~ofxAudioUnitFilePlayer();
 	
 	bool   setFile(const std::string &filePath);
-	UInt32 getLength();
+	UInt32 getLength() const;
 	void   setLength(UInt32 length);
 	
 	enum {
@@ -28,5 +25,12 @@ public:
 	// call play() / loop() and it will start right away.
 	void play(uint64_t startTime = 0);
 	void loop(unsigned int timesToLoop = OFX_AU_LOOP_FOREVER, uint64_t startTime = 0);
+	
 	void stop();
+	
+	AudioTimeStamp getCurrentTimestamp() const;
+	
+private:
+	AudioFileID _fileID[1];
+	ScheduledAudioFileRegion _region;
 };

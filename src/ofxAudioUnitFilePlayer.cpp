@@ -93,10 +93,28 @@ void ofxAudioUnitFilePlayer::setLength(UInt32 length)
 }
 
 // ----------------------------------------------------------
-UInt32 ofxAudioUnitFilePlayer::getLength()
+UInt32 ofxAudioUnitFilePlayer::getLength() const
 // ----------------------------------------------------------
 {
 	return _region.mFramesToPlay;
+}
+
+// ----------------------------------------------------------
+AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
+// ----------------------------------------------------------
+{
+	AudioTimeStamp timeStamp = {0};
+	UInt32 timeStampSize = sizeof(AudioTimeStamp);
+	
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+									 kAudioUnitProperty_CurrentPlayTime,
+									 kAudioUnitScope_Global,
+									 0,
+									 &timeStamp,
+									 &timeStampSize),
+				"getting time stamp from file player");
+	
+	return timeStamp;
 }
 
 #pragma mark - Playback
@@ -131,6 +149,7 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 	{
 		startTime = mach_absolute_time();
 	}
+	
 	AudioTimeStamp startTimeStamp = {0};
 	FillOutAudioTimeStampWithHostTime(startTimeStamp, startTime);
 	
