@@ -75,6 +75,7 @@ protected:
 	AudioUnitRef _unit;
 	
 	AudioComponentDescription _desc;
+	AudioUnitRef allocUnit(AudioComponentDescription desc);
 	void initUnit();
 	bool loadPreset(const CFURLRef &presetURL);
 	bool savePreset(const CFURLRef &presetURL);

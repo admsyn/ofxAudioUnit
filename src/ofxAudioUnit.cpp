@@ -48,7 +48,7 @@ ofxAudioUnit& ofxAudioUnit::operator=(const ofxAudioUnit &orig)
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnit::initUnit()
+AudioUnitRef ofxAudioUnit::allocUnit(AudioComponentDescription desc)
 // ----------------------------------------------------------
 {
 	AudioComponent component = AudioComponentFindNext(NULL, &_desc);
@@ -58,9 +58,17 @@ void ofxAudioUnit::initUnit()
 		return;
 	}
 	
-	_unit = ofPtr<AudioUnit>((AudioUnit *)malloc(sizeof(AudioUnit)), AudioUnitDeleter);
-	OFXAU_RETURN(AudioComponentInstanceNew(component, _unit.get()), "creating new unit");
-	OFXAU_RETURN(AudioUnitInitialize(*_unit),                       "initializing unit");
+	ofPtr<AudioUnit> unit((AudioUnit *)malloc(sizeof(AudioUnit)), AudioUnitDeleter);
+	OFXAU_PRINT(AudioComponentInstanceNew(component, unit.get()), "creating new unit");
+	return unit;
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnit::initUnit()
+// ----------------------------------------------------------
+{
+	_unit = allocUnit(_desc);
+	OFXAU_RETURN(AudioUnitInitialize(*_unit), "initializing unit");
 }
 
 // ----------------------------------------------------------
