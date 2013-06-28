@@ -33,6 +33,18 @@ ofxAudioUnitSampler::ofxAudioUnitSampler(OSType type,
     midiChannelInUse = 0;
 };
 
+
+// ----------------------------------------------------------
+ofxAudioUnitSampler::ofxAudioUnitSampler(const ofxAudioUnitSampler &orig)
+// ----------------------------------------------------------
+{
+	_desc = orig._desc;
+    initUnit();
+    midiChannelInUse = orig.midiChannelInUse;
+}
+
+
+
 // ----------------------------------------------------------
 ofxAudioUnitSampler& ofxAudioUnitSampler::operator=(const ofxAudioUnitSampler &orig)
 // ----------------------------------------------------------

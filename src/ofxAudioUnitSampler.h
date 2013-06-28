@@ -10,7 +10,7 @@ public:
                         OSType subType,
                         OSType manufacturer);
     
-//    ofxAudioUnitSampler(const ofxAudioUnit &orig);
+    ofxAudioUnitSampler(const ofxAudioUnitSampler &orig);
     ofxAudioUnitSampler& operator=(const ofxAudioUnitSampler &orig);
     
     
