@@ -98,6 +98,48 @@ void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
 	OFXAU_PRINT(AudioUnitSetParameter(*_unit, parameter, scope, bus, value, 0), "setting parameter");
 }
 
+// ----------------------------------------------------------
+vector<AudioUnitParameterInfo> ofxAudioUnit::getParameterList(bool includeExpert, bool includeReadOnly)
+// ----------------------------------------------------------
+{
+	vector<AudioUnitParameterInfo> paramList;
+	
+	AUParamInfo info(*_unit, includeExpert, includeReadOnly);
+	
+	for (int i = 0; i < info.NumParams(); ++i) {
+		if (info.GetParamInfo(i)) {
+			paramList.push_back(info.GetParamInfo(i)->ParamInfo());
+		}
+	}
+	return paramList;
+}
+
+// ----------------------------------------------------------
+void ofxAudioUnit::printParameterList(bool includeExpert, bool includeReadOnly)
+// ----------------------------------------------------------
+{
+	vector<AudioUnitParameterInfo> paramList = getParameterList(includeExpert, includeReadOnly);
+	
+	cout << "\n[id] param name [min : max : default]" << endl;
+	
+	for(size_t i = 0; i < paramList.size(); ++i) {
+		AudioUnitParameterInfo& p = paramList[i];
+		
+		char buf[PATH_MAX];
+		CFStringGetCString(p.cfNameString, buf, PATH_MAX, kCFStringEncodingUTF8);
+		string paramName(buf);
+		
+		cout << "[" << i << "] " << paramName << " [";
+		cout << p.minValue << " : " << p.maxValue << " : " << p.defaultValue << "]" << endl;
+		
+		if(p.flags & kAudioUnitParameterFlag_CFNameRelease) {
+			CFRelease(p.cfNameString);
+		}
+	}
+	
+	cout << endl;
+}
+
 #pragma mark - Connections
 
 // ----------------------------------------------------------

@@ -2,7 +2,9 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <string>
+#include <vector>
 #include "ofTypes.h"
+#include "AUParamInfo.h"
 
 typedef ofPtr<AudioUnit> AudioUnitRef;
 class ofxAudioUnitDSPNode;
@@ -36,30 +38,33 @@ public:
 	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit));
 	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnitDSPNode& operator>>(ofxAudioUnitDSPNode& node));
 	
-	// By default, this just calls AudioUnitRender() on the underlying
-	// AudioUnit. However, some subclasses require more complex rendering
-	// behaviour
+	// By default, this just calls AudioUnitRender() on the underlying AudioUnit. However, some
+	// subclasses require more complex rendering behaviour
 	virtual OSStatus render(AudioUnitRenderActionFlags *ioActionFlags,
 							const AudioTimeStamp *inTimeStamp,
 							UInt32 inOutputBusNumber,
 							UInt32 inNumberFrames,
 							AudioBufferList *ioData);
 	
-	// explicit and implicit conversions to the underlying AudioUnit struct
+	// explicit and implicit conversions to the underlying AudioUnit pointer
 	AudioUnit getUnit()       {return *_unit;}
 	operator AudioUnit()      {return *_unit;}
 	AudioUnitRef getUnitRef() {return _unit;}
 	
-	// This pair of functions will look for the preset in the
-	// apps's data folder and append ".aupreset" to the name
+	// This pair of functions will look for the preset in the apps's data folder and
+	// append ".aupreset" to the name parameter
 	bool loadCustomPreset(const std::string &presetName);
 	bool saveCustomPreset(const std::string &presetName);
 	
-	// This pair of functions expect an absolute path (including
-	// the file extension)
+	// This pair of functions expect an absolute path (including the file extension)
 	bool saveCustomPresetAtPath(const std::string &presetPath);
 	bool loadCustomPresetAtPath(const std::string &presetPath);
 	
+	// Retrieves a list of all parameters the unit is advertising (helpful for 3rd party units)
+	std::vector<AudioUnitParameterInfo> getParameterList(bool includeExpert = true, bool includeReadOnly = false);
+	void printParameterList(bool includeExpert = true, bool includeReadOnly = false);
+	
+	// some convenience functions for common properties
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}

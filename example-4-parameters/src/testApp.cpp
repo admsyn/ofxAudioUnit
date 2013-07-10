@@ -75,6 +75,13 @@ void testApp::setup(){
 	AudioUnitSetParameter(lowpass.getUnit(), kLowPassParam_Resonance,
 						  kAudioUnitScope_Global, 0, 10, 0);
 	
+//	If you're using a 3rd party unit (i.e. one that's not made by Apple)
+//	you'll need to retrieve and set parameters by finding their parameter
+//	ID (which is effectively just an index). This call will print a
+//	unit's parameter list to the console.
+	
+	lowpass.printParameterList();
+	
 //	You can also save the state of an Audio Unit's parameters as a
 //	preset file. Saving / Loading a preset file is done like this:
 
@@ -114,7 +121,6 @@ void testApp::draw(){
 	ofSetColor(20, 255, 150);
 	ofCircle(ofGetMouseX(), ofGetHeight() - 20, 15);
 	ofDrawBitmapString("<- Playback Speed ->", ofPoint(ofGetWidth()/2 - 100, ofGetHeight() - 40));
-	
 }
 
 //--------------------------------------------------------------
