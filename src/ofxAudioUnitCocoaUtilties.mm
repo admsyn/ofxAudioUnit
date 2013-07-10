@@ -368,21 +368,24 @@ void ofxAudioUnit::showUI(const string &title, int x, int y, bool forceGeneric)
 {
 	if(!_unit.get()) return;
 	
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	
-	ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*_unit.get()
-																		 forceGeneric:forceGeneric];
-	
 	NSString * windowTitle = [NSString stringWithUTF8String:title.c_str()];
-	if(!windowTitle) windowTitle = @"Audio Unit UI";
 	
-	CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
+	if(!windowTitle) {
+		windowTitle = @"Audio Unit UI";
+	}
 	
-	[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
-	[auWindow setTitle:windowTitle];
-	[auWindow makeKeyAndOrderFront:nil];
-	
-	[pool drain];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		@autoreleasepool {
+			ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*_unit.get()
+																				 forceGeneric:forceGeneric];
+			
+			CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
+			
+			[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
+			[auWindow setTitle:windowTitle];
+			[auWindow makeKeyAndOrderFront:nil];
+		}
+	});
 }
 
 #endif //TARGET_OS_IPHONE
