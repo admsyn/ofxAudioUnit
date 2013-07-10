@@ -14,6 +14,9 @@
 		660FCEDF15470B5C00F01C6F /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660FCEDE15470B5C00F01C6F /* AudioUnit.framework */; };
 		663F7BD3176BBB9C00F9972E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 663F7BD2176BBB9C00F9972E /* Accelerate.framework */; };
 		6672B08215AA455F007E871E /* ofxAudioUnitSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6672B08115AA455F007E871E /* ofxAudioUnitSampler.cpp */; };
+		6676B535178DDAFF001F55C4 /* AUParamInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B52E178DDAFF001F55C4 /* AUParamInfo.cpp */; };
+		6676B536178DDAFF001F55C4 /* CAAUParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B530178DDAFF001F55C4 /* CAAUParameter.cpp */; };
+		6676B537178DDAFF001F55C4 /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B532178DDAFF001F55C4 /* CADebugMacros.cpp */; };
 		668AA27716E3F2DF0026A04D /* ofxAudioUnitHardwareUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668AA27516E3F2DF0026A04D /* ofxAudioUnitHardwareUtils.cpp */; };
 		66D8EF7016AD6F5C0001F600 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 66D8EF6E16AD6F5C0001F600 /* TPCircularBuffer.c */; };
 		66D8EF7116AD72130001F600 /* ofxAudioUnitInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 667D359115976A120060F322 /* ofxAudioUnitInput.cpp */; };
@@ -22,7 +25,7 @@
 		71239fabd9dd8dade3e2eff959fb267b /* ofxAudioUnitMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2939367276df781697e0d879aaf79d86 /* ofxAudioUnitMixer.cpp */; };
 		87b337624802e70c0bdb11f33d9e5da5 /* ofxAudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2dc2346096c29d44d4517679d9de2c6c /* ofxAudioUnit.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
+		E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworks.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -88,6 +91,13 @@
 		660FCEDE15470B5C00F01C6F /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		663F7BD2176BBB9C00F9972E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		6672B08115AA455F007E871E /* ofxAudioUnitSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitSampler.cpp; path = ../src/ofxAudioUnitSampler.cpp; sourceTree = "<group>"; };
+		6676B52E178DDAFF001F55C4 /* AUParamInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AUParamInfo.cpp; sourceTree = "<group>"; };
+		6676B52F178DDAFF001F55C4 /* AUParamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUParamInfo.h; sourceTree = "<group>"; };
+		6676B530178DDAFF001F55C4 /* CAAUParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAAUParameter.cpp; sourceTree = "<group>"; };
+		6676B531178DDAFF001F55C4 /* CAAUParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAUParameter.h; sourceTree = "<group>"; };
+		6676B532178DDAFF001F55C4 /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
+		6676B533178DDAFF001F55C4 /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
+		6676B534178DDAFF001F55C4 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
 		667D359115976A120060F322 /* ofxAudioUnitInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitInput.cpp; path = ../src/ofxAudioUnitInput.cpp; sourceTree = "<group>"; };
 		667D359315976A120060F322 /* ofxAudioUnitUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAudioUnitUtils.h; path = ../src/ofxAudioUnitUtils.h; sourceTree = "<group>"; };
 		668AA27516E3F2DF0026A04D /* ofxAudioUnitHardwareUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitHardwareUtils.cpp; path = ../src/ofxAudioUnitHardwareUtils.cpp; sourceTree = "<group>"; };
@@ -145,7 +155,7 @@
 				660FCEDD15470B5100F01C6F /* CoreAudioKit.framework in Frameworks */,
 				E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */,
 				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
-				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
+				E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
 				E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */,
 				E45BE97E0E8CC7DD009D7055 /* Carbon.framework in Frameworks */,
@@ -163,6 +173,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6676B52D178DDAFF001F55C4 /* CAPublicUtility */ = {
+			isa = PBXGroup;
+			children = (
+				6676B52E178DDAFF001F55C4 /* AUParamInfo.cpp */,
+				6676B52F178DDAFF001F55C4 /* AUParamInfo.h */,
+				6676B530178DDAFF001F55C4 /* CAAUParameter.cpp */,
+				6676B531178DDAFF001F55C4 /* CAAUParameter.h */,
+				6676B532178DDAFF001F55C4 /* CADebugMacros.cpp */,
+				6676B533178DDAFF001F55C4 /* CADebugMacros.h */,
+				6676B534178DDAFF001F55C4 /* CAXException.h */,
+			);
+			name = CAPublicUtility;
+			path = ../src/CAPublicUtility;
+			sourceTree = "<group>";
+		};
 		66D8EF6D16AD6F5C0001F600 /* TPCircularBuffer */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,6 +232,7 @@
 				3bf3233a625c876fdabfab0c722ef1b3 /* ofxAudioUnitTap.cpp */,
 				66F9E97A16D6715500367060 /* ofxAudioUnitTap.h */,
 				667D359315976A120060F322 /* ofxAudioUnitUtils.h */,
+				6676B52D178DDAFF001F55C4 /* CAPublicUtility */,
 				66D8EF6D16AD6F5C0001F600 /* TPCircularBuffer */,
 			);
 			name = src;
@@ -261,7 +287,7 @@
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4328148138ABC890047C5CB /* openFrameworksDebug.a */,
+				E4328148138ABC890047C5CB /* openFrameworks.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -361,9 +387,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4328148138ABC890047C5CB /* openFrameworksDebug.a */ = {
+		E4328148138ABC890047C5CB /* openFrameworks.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
+			name = openFrameworks.a;
 			path = openFrameworksDebug.a;
 			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -409,6 +436,9 @@
 				66F9E97B16D6715500367060 /* ofxAudioUnitDSPNode.cpp in Sources */,
 				66F9E97C16D6715500367060 /* ofxAudioUnitFftNode.cpp in Sources */,
 				668AA27716E3F2DF0026A04D /* ofxAudioUnitHardwareUtils.cpp in Sources */,
+				6676B535178DDAFF001F55C4 /* AUParamInfo.cpp in Sources */,
+				6676B536178DDAFF001F55C4 /* CAAUParameter.cpp in Sources */,
+				6676B537178DDAFF001F55C4 /* CADebugMacros.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
