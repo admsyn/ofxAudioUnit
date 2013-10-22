@@ -25,12 +25,16 @@ public:
 	// call play() / loop() and it will start right away.
 	void play(uint64_t startTime = 0);
 	void loop(unsigned int timesToLoop = OFX_AU_LOOP_FOREVER, uint64_t startTime = 0);
-	
 	void stop();
+	
+	// returns the timestamp the file player is paused at
+	AudioTimeStamp pause();
 	
 	AudioTimeStamp getCurrentTimestamp() const;
 	
 private:
 	AudioFileID _fileID[1];
 	ScheduledAudioFileRegion _region;
+	AudioTimeStamp _pauseTimeStamp;
+	unsigned int _loopCount;
 };

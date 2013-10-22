@@ -2,6 +2,8 @@
 #include "ofxAudioUnitUtils.h"
 #import <mach/mach_time.h>
 
+static ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID);
+
 AudioComponentDescription filePlayerDesc =
 {
 	kAudioUnitType_Generator,
@@ -9,17 +11,14 @@ AudioComponentDescription filePlayerDesc =
 	kAudioUnitManufacturer_Apple
 };
 
-// ----------------------------------------------------------
 ofxAudioUnitFilePlayer::ofxAudioUnitFilePlayer()
-// ----------------------------------------------------------
+: _loopCount(0)
 {
 	_desc = filePlayerDesc;
 	initUnit();
 }
 
-// ----------------------------------------------------------
 ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer()
-// ----------------------------------------------------------
 {
 	stop();
 	AudioFileClose(_fileID[0]);
@@ -27,9 +26,7 @@ ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer()
 
 #pragma mark - Properties
 
-// ----------------------------------------------------------
 bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
-// ----------------------------------------------------------
 {
 	CFURLRef fileURL;
 	fileURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
@@ -37,7 +34,11 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	                                                  filePath.length(),
 	                                                  NULL);
 	
-	if(_fileID[0]) AudioFileClose(_fileID[0]);
+	if(_fileID[0])
+	{
+		AudioFileClose(_fileID[0]);
+		_fileID[0] = NULL;
+	}
 	
 	OSStatus s = AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, _fileID);
 	
@@ -48,30 +49,6 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 		cout << "Error " << s << " while opening file at " << filePath << endl;
 		return false;
 	}
-	
-	UInt64 numPackets = 0;
-	UInt32 dataSize   = sizeof(numPackets);
-	
-	AudioFileGetProperty(_fileID[0],
-	                     kAudioFilePropertyAudioDataPacketCount,
-	                     &dataSize,
-	                     &numPackets);
-	
-	AudioStreamBasicDescription asbd = {0};
-	dataSize = sizeof(asbd);
-	
-	AudioFileGetProperty(_fileID[0], kAudioFilePropertyDataFormat, &dataSize, &asbd);
-	
-	// defining a region which basically says "play the whole file"
-	memset(&_region, 0, sizeof(_region));
-	_region.mTimeStamp.mFlags       = kAudioTimeStampHostTimeValid;
-	_region.mTimeStamp.mSampleTime  = 0;
-	_region.mCompletionProc         = NULL;
-	_region.mCompletionProcUserData = NULL;
-	_region.mAudioFile              = _fileID[0];
-	_region.mLoopCount              = 0;
-	_region.mStartFrame             = 0;
-	_region.mFramesToPlay           = numPackets * asbd.mFramesPerPacket;
 	
 	// setting the file ID now since it seems to have some overhead.
 	// Doing it now ensures you'll get sound pretty much instantly after
@@ -85,23 +62,17 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	               "setting file player's file ID");
 }
 
-// ----------------------------------------------------------
 void ofxAudioUnitFilePlayer::setLength(UInt32 length)
-// ----------------------------------------------------------
 {
 	_region.mFramesToPlay = length;
 }
 
-// ----------------------------------------------------------
 UInt32 ofxAudioUnitFilePlayer::getLength() const
-// ----------------------------------------------------------
 {
 	return _region.mFramesToPlay;
 }
 
-// ----------------------------------------------------------
 AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
-// ----------------------------------------------------------
 {
 	AudioTimeStamp timeStamp = {0};
 	UInt32 timeStampSize = sizeof(AudioTimeStamp);
@@ -119,10 +90,20 @@ AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
 
 #pragma mark - Playback
 
-// ----------------------------------------------------------
 void ofxAudioUnitFilePlayer::play(uint64_t startTime)
-// ----------------------------------------------------------
 {
+	_region = RegionForEntireFile(_fileID[0]);
+	
+	if(_pauseTimeStamp.mSampleTime > 0) {
+		_region.mStartFrame = _pauseTimeStamp.mSampleTime;
+		memset(&_pauseTimeStamp, 0, sizeof(_pauseTimeStamp));
+	}
+	
+	if(_loopCount > 0) {
+		_region.mLoopCount = _loopCount;
+		_loopCount = 0;
+	}
+	
 	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid))
 	{
 		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
@@ -162,17 +143,59 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 	             "setting file player start time");
 }
 
-// ----------------------------------------------------------
 void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop, uint64_t startTime)
-// ----------------------------------------------------------
 {
-	_region.mLoopCount = timesToLoop;
+	_loopCount = timesToLoop;
 	play(startTime);
 }
 
-// ----------------------------------------------------------
+AudioTimeStamp ofxAudioUnitFilePlayer::pause()
+{
+	UInt32 size = sizeof(_pauseTimeStamp);
+	AudioUnitGetProperty(*_unit,
+						 kAudioUnitProperty_CurrentPlayTime,
+						 kAudioUnitScope_Global,
+						 0,
+						 &_pauseTimeStamp,
+						 &size);
+	
+	stop();
+	
+	return _pauseTimeStamp;
+}
+
 void ofxAudioUnitFilePlayer::stop()
-// ----------------------------------------------------------
 {
 	reset();
+}
+
+#pragma mark - Util
+
+ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID)
+{
+	ScheduledAudioFileRegion region = {0};
+	UInt64 numPackets = 0;
+	UInt32 dataSize   = sizeof(numPackets);
+	
+	AudioFileGetProperty(fileID,
+	                     kAudioFilePropertyAudioDataPacketCount,
+	                     &dataSize,
+	                     &numPackets);
+	
+	AudioStreamBasicDescription asbd = {0};
+	dataSize = sizeof(asbd);
+	
+	AudioFileGetProperty(fileID, kAudioFilePropertyDataFormat, &dataSize, &asbd);
+	
+	// defining a region which basically says "play the whole file"
+	region.mTimeStamp.mFlags       = kAudioTimeStampHostTimeValid;
+	region.mTimeStamp.mSampleTime  = 0;
+	region.mCompletionProc         = NULL;
+	region.mCompletionProcUserData = NULL;
+	region.mAudioFile              = fileID;
+	region.mLoopCount              = 0;
+	region.mStartFrame             = 0;
+	region.mFramesToPlay           = numPackets * asbd.mFramesPerPacket;
+	
+	return region;
 }
