@@ -15,22 +15,20 @@ ofxAudioUnitFilePlayer::ofxAudioUnitFilePlayer()
 , _pauseTimeStamp((AudioTimeStamp){0})
 , _loopCount(0)
 , _pauseTimeAccumulator(0)
-{
+, _primed(false) {
 	_fileID[0] = NULL;
 	_desc = filePlayerDesc;
 	initUnit();
 }
 
-ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer()
-{
+ofxAudioUnitFilePlayer::~ofxAudioUnitFilePlayer() {
 	stop();
 	AudioFileClose(_fileID[0]);
 }
 
 #pragma mark - Properties
 
-bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
-{
+bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath) {
 	CFURLRef fileURL;
 	fileURL = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault,
 	                                                  (const UInt8 *)filePath.c_str(),
@@ -43,24 +41,25 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	}
 	
 	OSStatus s = AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, _fileID);
-	
 	CFRelease(fileURL);
+	
+	_primed = false;
 	
 	if(s != noErr) {
 		cout << "Error " << s << " while opening file at " << filePath << endl;
 		return false;
+	} else {
+		// setting the file ID now since it seems to have some overhead.
+		// Doing it now ensures you'll get sound pretty much instantly after
+		// calling play() (subsequent calls don't have the overhead)
+		OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+											kAudioUnitProperty_ScheduledFileIDs,
+											kAudioUnitScope_Global,
+											0,
+											_fileID,
+											sizeof(_fileID)),
+					   "setting file player's file ID");
 	}
-	
-	// setting the file ID now since it seems to have some overhead.
-	// Doing it now ensures you'll get sound pretty much instantly after
-	// calling play() (subsequent calls don't have the overhead)
-	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-	                                    kAudioUnitProperty_ScheduledFileIDs,
-	                                    kAudioUnitScope_Global,
-	                                    0,
-	                                    _fileID,
-	                                    sizeof(_fileID)),
-	               "setting file player's file ID");
 }
 
 void ofxAudioUnitFilePlayer::setLength(UInt32 length) {
@@ -71,8 +70,7 @@ UInt32 ofxAudioUnitFilePlayer::getLength() const {
 	return RegionForEntireFile(_fileID[0]).mFramesToPlay;
 }
 
-AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
-{
+AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const {
 	AudioTimeStamp timeStamp = {0};
 	UInt32 timeStampSize = sizeof(AudioTimeStamp);
 	
@@ -89,8 +87,7 @@ AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
 
 #pragma mark - Playback
 
-void ofxAudioUnitFilePlayer::play(uint64_t startTime)
-{
+void ofxAudioUnitFilePlayer::prime() {
 	_region = RegionForEntireFile(_fileID[0]);
 	
 	if(_pauseTimeStamp.mSampleTime > 0) {
@@ -134,6 +131,14 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 									  sizeof(framesToPrime)),
 				 "priming file player");
 	
+	_primed = true;
+}
+
+void ofxAudioUnitFilePlayer::play(uint64_t startTime) {
+	if(!_primed) {
+		prime();
+	}
+	
 	if(startTime == 0) {
 		startTime = mach_absolute_time();
 	}
@@ -150,14 +155,12 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 	             "setting file player start time");
 }
 
-void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop, uint64_t startTime)
-{
+void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop, uint64_t startTime) {
 	_loopCount = timesToLoop;
 	play(startTime);
 }
 
-AudioTimeStamp ofxAudioUnitFilePlayer::pause()
-{
+AudioTimeStamp ofxAudioUnitFilePlayer::pause() {
 	UInt32 size = sizeof(_pauseTimeStamp);
 	AudioUnitGetProperty(*_unit,
 						 kAudioUnitProperty_CurrentPlayTime,
@@ -170,10 +173,14 @@ AudioTimeStamp ofxAudioUnitFilePlayer::pause()
 	return _pauseTimeStamp;
 }
 
+void ofxAudioUnitFilePlayer::stop() {
+	_primed = false;
+	reset();
+}
+
 #pragma mark - Util
 
-ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID)
-{
+ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID) {
 	ScheduledAudioFileRegion region = {0};
 	UInt64 numPackets = 0;
 	UInt32 dataSize = sizeof(numPackets);

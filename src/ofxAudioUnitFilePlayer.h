@@ -29,7 +29,7 @@ public:
 	// call play() / loop() and it will start right away.
 	void play(uint64_t startTime = 0);
 	void loop(unsigned int timesToLoop = OFX_AU_LOOP_FOREVER, uint64_t startTime = 0);
-	void stop(){reset();}
+	void stop();
 	AudioTimeStamp pause(); // returns the timestamp the file player is paused at
 	
 	// this call will block until the file player is ready to play.
@@ -46,4 +46,5 @@ private:
 	AudioTimeStamp _pauseTimeStamp;
 	Float64 _pauseTimeAccumulator;
 	unsigned int _loopCount;
+	bool _primed;
 };
