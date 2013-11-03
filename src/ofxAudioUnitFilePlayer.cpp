@@ -4,16 +4,19 @@
 
 static ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID);
 
-AudioComponentDescription filePlayerDesc =
-{
+static AudioComponentDescription filePlayerDesc = {
 	kAudioUnitType_Generator,
 	kAudioUnitSubType_AudioFilePlayer,
 	kAudioUnitManufacturer_Apple
 };
 
 ofxAudioUnitFilePlayer::ofxAudioUnitFilePlayer()
-: _loopCount(0)
+: _region((ScheduledAudioFileRegion){0})
+, _pauseTimeStamp((AudioTimeStamp){0})
+, _loopCount(0)
+, _pauseTimeAccumulator(0)
 {
+	_fileID[0] = NULL;
 	_desc = filePlayerDesc;
 	initUnit();
 }
@@ -34,8 +37,7 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	                                                  filePath.length(),
 	                                                  NULL);
 	
-	if(_fileID[0])
-	{
+	if(_fileID[0]) {
 		AudioFileClose(_fileID[0]);
 		_fileID[0] = NULL;
 	}
@@ -44,8 +46,7 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	
 	CFRelease(fileURL);
 	
-	if(s != noErr)
-	{
+	if(s != noErr) {
 		cout << "Error " << s << " while opening file at " << filePath << endl;
 		return false;
 	}
@@ -62,13 +63,11 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath)
 	               "setting file player's file ID");
 }
 
-void ofxAudioUnitFilePlayer::setLength(UInt32 length)
-{
+void ofxAudioUnitFilePlayer::setLength(UInt32 length) {
 	_region.mFramesToPlay = length;
 }
 
-UInt32 ofxAudioUnitFilePlayer::getLength() const
-{
+UInt32 ofxAudioUnitFilePlayer::getLength() const {
 	return _region.mFramesToPlay;
 }
 
@@ -95,7 +94,8 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 	_region = RegionForEntireFile(_fileID[0]);
 	
 	if(_pauseTimeStamp.mSampleTime > 0) {
-		_region.mStartFrame = _pauseTimeStamp.mSampleTime;
+		_region.mStartFrame = _pauseTimeStamp.mSampleTime + _pauseTimeAccumulator;
+		_pauseTimeAccumulator += _pauseTimeStamp.mSampleTime;
 		memset(&_pauseTimeStamp, 0, sizeof(_pauseTimeStamp));
 	}
 	
@@ -104,8 +104,7 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 		_loopCount = 0;
 	}
 	
-	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid))
-	{
+	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid)) {
 		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
 		return;
 	}
@@ -160,13 +159,7 @@ AudioTimeStamp ofxAudioUnitFilePlayer::pause()
 						 &size);
 	
 	stop();
-	
 	return _pauseTimeStamp;
-}
-
-void ofxAudioUnitFilePlayer::stop()
-{
-	reset();
 }
 
 #pragma mark - Util
@@ -175,7 +168,7 @@ ScheduledAudioFileRegion RegionForEntireFile(AudioFileID fileID)
 {
 	ScheduledAudioFileRegion region = {0};
 	UInt64 numPackets = 0;
-	UInt32 dataSize   = sizeof(numPackets);
+	UInt32 dataSize = sizeof(numPackets);
 	
 	AudioFileGetProperty(fileID,
 	                     kAudioFilePropertyAudioDataPacketCount,
