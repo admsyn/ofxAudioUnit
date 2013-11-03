@@ -32,6 +32,12 @@ public:
 	void stop(){reset();}
 	AudioTimeStamp pause(); // returns the timestamp the file player is paused at
 	
+	// this call will block until the file player is ready to play.
+	// play() will call this on its own, so you only need to call this
+	// ahead of time if you want the minimum amount of latency after
+	// calling play()
+	void prime();
+	
 	AudioTimeStamp getCurrentTimestamp() const;
 	
 private:

@@ -125,8 +125,16 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime)
 	                                  sizeof(_region)),
 	             "setting file player region");
 	
-	if(startTime == 0)
-	{
+	UInt32 framesToPrime = 0; // 0 = "use the default"
+	OFXAU_RETURN(AudioUnitSetProperty(*_unit,
+									  kAudioUnitProperty_ScheduledFilePrime,
+									  kAudioUnitScope_Global,
+									  0,
+									  &framesToPrime,
+									  sizeof(framesToPrime)),
+				 "priming file player");
+	
+	if(startTime == 0) {
 		startTime = mach_absolute_time();
 	}
 	
