@@ -68,7 +68,7 @@ void ofxAudioUnitFilePlayer::setLength(UInt32 length) {
 }
 
 UInt32 ofxAudioUnitFilePlayer::getLength() const {
-	return _region.mFramesToPlay;
+	return RegionForEntireFile(_fileID[0]).mFramesToPlay;
 }
 
 AudioTimeStamp ofxAudioUnitFilePlayer::getCurrentTimestamp() const
