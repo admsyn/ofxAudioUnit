@@ -187,12 +187,15 @@ AudioTimeStamp ofxAudioUnitFilePlayer::pause() {
 						 &_pauseTimeStamp,
 						 &size);
 	
-	stop();
+	reset();
 	return _pauseTimeStamp;
 }
 
 void ofxAudioUnitFilePlayer::stop() {
 	_primed = false;
+	_pauseTimeAccumulator = 0;
+	_seekSampleTime = 0;
+	_pauseTimeStamp = (AudioTimeStamp){0};
 	reset();
 }
 
