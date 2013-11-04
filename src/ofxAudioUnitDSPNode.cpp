@@ -113,6 +113,7 @@ ofxAudioUnit& ofxAudioUnitDSPNode::connectTo(ofxAudioUnit &destination, int dest
 		return destination;
 	}
 	
+	_impl->ctx.sourceBus = sourceBus;
 	AURenderCallbackStruct callback = {RenderAndCopy, &_impl->ctx};
 	destination.setRenderCallback(callback, destinationBus);
 	return destination;
@@ -122,6 +123,7 @@ ofxAudioUnit& ofxAudioUnitDSPNode::connectTo(ofxAudioUnit &destination, int dest
 ofxAudioUnitDSPNode& ofxAudioUnitDSPNode::connectTo(ofxAudioUnitDSPNode &destination, int destinationBus, int sourceBus)
 // ----------------------------------------------------------
 {
+	_impl->ctx.sourceBus = sourceBus;
 	AURenderCallbackStruct callback = {RenderAndCopy, &_impl->ctx};
 	destination.setSource(callback);
 	return destination;
