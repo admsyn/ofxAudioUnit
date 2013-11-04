@@ -14,6 +14,7 @@ public:
 	
 	ofxAudioUnit& connectTo(ofxAudioUnit &destination, int destinationBus = 0, int sourceBus = 0);
 	OF_DEPRECATED_MSG("Use connectTo() instead.", ofxAudioUnit& operator>>(ofxAudioUnit& destination));
+	ofxAudioUnitDSPNode& connectTo(ofxAudioUnitDSPNode &destination, int destinationBus = 0, int sourceBus = 0);
 	
 	void setSource(ofxAudioUnit * source);
 	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
