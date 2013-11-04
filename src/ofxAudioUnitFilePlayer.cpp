@@ -91,7 +91,10 @@ void ofxAudioUnitFilePlayer::prime() {
 	
 	_region = RegionForEntireFile(_fileID[0]);
 	
-	if(_pauseTimeStamp.mSampleTime > 0) {
+	if(_seekSampleTime) {
+		_region.mStartFrame = _seekSampleTime;
+		_pauseTimeAccumulator += _seekSampleTime;
+	} else if(_pauseTimeStamp.mSampleTime > 0) {
 		_region.mStartFrame = _pauseTimeStamp.mSampleTime + _pauseTimeAccumulator;
 		_pauseTimeAccumulator += _pauseTimeStamp.mSampleTime;
 	} else {
@@ -105,6 +108,7 @@ void ofxAudioUnitFilePlayer::prime() {
 	// resetting time-tracking members
 	memset(&_pauseTimeStamp, 0, sizeof(_pauseTimeStamp));
 	_loopCount = 0;
+	_seekSampleTime = 0;
 	
 	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid)) {
 		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
@@ -161,6 +165,12 @@ void ofxAudioUnitFilePlayer::play(uint64_t startTime) {
 	                                  &startTimeStamp,
 	                                  sizeof(startTimeStamp)),
 	             "setting file player start time");
+}
+
+void ofxAudioUnitFilePlayer::playAtSampleTime(SInt64 sampleTime) {
+	_seekSampleTime = sampleTime;
+	_pauseTimeAccumulator = 0;
+	play();
 }
 
 void ofxAudioUnitFilePlayer::loop(unsigned int timesToLoop, uint64_t startTime) {

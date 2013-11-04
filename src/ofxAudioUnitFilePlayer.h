@@ -41,6 +41,11 @@ public:
 	void stop();
 	AudioTimeStamp pause(); // returns the timestamp the file player is paused at
 	
+	// this will start playback at a specified sample time (e.g. if your
+	// file is 44100hz (likely) then starting at 44100 * 3 will start
+	// playback 3 seconds into the file)
+	void playAtSampleTime(SInt64 sampleTime);
+	
 	// this call will block until the file player is ready to play.
 	// play() will call this on its own, so you only need to call this
 	// ahead of time if you want the minimum amount of latency after
@@ -54,6 +59,7 @@ private:
 	ScheduledAudioFileRegion _region;
 	AudioTimeStamp _pauseTimeStamp;
 	Float64 _pauseTimeAccumulator;
+	SInt64 _seekSampleTime;
 	unsigned int _loopCount;
 	bool _primed;
 };
