@@ -21,8 +21,17 @@ public:
 	
 protected:
 	void getSamplesFromChannel(std::vector<AudioUnitSampleType> &samples, unsigned int channel) const;
+	
+	// sets the internal circular buffer size
 	void setBufferSize(unsigned int samplesToBuffer);
 	unsigned int getBufferSize() const;
+	
+	// sets a callback that will be called every time audio is
+	// passed through the node (note: this will be called on the
+	// render thread)
+	void setProcessCallback(AURenderCallbackStruct processCallback);
+	
+	AudioStreamBasicDescription getSourceASBD(int sourceBus = 0) const;
 	
 private:
 	struct NodeImpl;

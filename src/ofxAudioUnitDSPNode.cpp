@@ -33,12 +33,16 @@ struct DSPNodeContext
 	ofxAudioUnit * sourceUnit;
 	UInt32 sourceBus;
 	AURenderCallbackStruct sourceCallback;
+	AURenderCallbackStruct processCallback;
 	std::vector<TPCircularBuffer> circularBuffers;
 	ofMutex bufferMutex;
 	
 	DSPNodeContext()
 	: sourceBus(0)
 	, sourceType(NodeSourceNone)
+	, sourceCallback((AURenderCallbackStruct){0})
+	, processCallback((AURenderCallbackStruct){0})
+	, sourceUnit(NULL)
 	, _bufferSize(0)
 	{ }
 	
@@ -168,6 +172,28 @@ void ofxAudioUnitDSPNode::setSource(AURenderCallbackStruct callback, UInt32 chan
 	setBufferSize(_impl->samplesToBuffer);
 }
 
+// ----------------------------------------------------------
+AudioStreamBasicDescription ofxAudioUnitDSPNode::getSourceASBD(int sourceBus) const
+// ----------------------------------------------------------
+{
+	AudioStreamBasicDescription ASBD = {0};
+	
+	if(_impl->ctx.sourceType == NodeSourceUnit && _impl->ctx.sourceUnit != NULL) {
+		UInt32 dataSize = sizeof(ASBD);
+		OSStatus s = AudioUnitGetProperty(*(_impl->ctx.sourceUnit),
+										  kAudioUnitProperty_StreamFormat,
+										  kAudioUnitScope_Output,
+										  sourceBus,
+										  &ASBD,
+										  &dataSize);
+		if(s != noErr) {
+			ASBD = (AudioStreamBasicDescription){0};
+		}
+	}
+	
+	return ASBD;
+}
+
 #pragma mark - Buffer Size
 
 // ----------------------------------------------------------
@@ -210,6 +236,13 @@ void ofxAudioUnitDSPNode::getSamplesFromChannel(std::vector<AudioUnitSampleType>
 	}
 }
 
+void ofxAudioUnitDSPNode::setProcessCallback(AURenderCallbackStruct processCallback)
+{
+	_impl->ctx.bufferMutex.lock();
+	_impl->ctx.processCallback = processCallback;
+	_impl->ctx.bufferMutex.unlock();
+}
+
 #pragma mark - Render callbacks
 
 inline void CopyAudioBufferIntoCircularBuffer(TPCircularBuffer * circBuffer, const AudioBuffer &audioBuffer)
@@ -249,6 +282,15 @@ OSStatus RenderAndCopy(void * inRefCon,
 		// if we don't have a source, render silence (or else you'll get an extremely loud
 		// buzzing noise when we attempt to render a NULL unit. Ow.)
 		status = SilentRenderCallback(inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
+	}
+	
+	if(ctx->processCallback.inputProc) {
+		(ctx->processCallback.inputProc)(ctx->processCallback.inputProcRefCon,
+										 ioActionFlags,
+										 inTimeStamp,
+										 ctx->sourceBus,
+										 inNumberFrames,
+										 ioData);
 	}
 	
 	if(ctx->bufferMutex.tryLock()) {

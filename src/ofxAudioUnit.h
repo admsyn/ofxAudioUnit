@@ -14,6 +14,7 @@
 	#include "ofxAudioUnitNetReceive.h"
 	#include "ofxAudioUnitNetSend.h"
 	#include "ofxAudioUnitSpeechSynth.h"
+	#include "ofxAudioUnitRecorder.h"
 #endif
 
 // ofxAudioUnitDSPNode subclasses for specific DSP tasks
