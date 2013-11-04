@@ -24,9 +24,18 @@ public:
 		OFX_AU_LOOP_FOREVER = -1
 	};
 	
-	// You can get the startTime arg from mach_absolute_time().
-	// Note that all of these args are optional; you can just
-	// call play() / loop() and it will start right away.
+	// the startTime arg for play() and loop() allows you to specify
+	// a time in the future for playback to start. The intention for
+	// this is to make it easier to get a handful of ofxAudioUnitFilePlayers
+	// to start in sync with each other. It is not necessary to specify
+	// a start time.
+	
+	// Ex.
+	// uint64_t now = mach_absolute_time();
+	// player1.play(now);
+	// player2.play(now);
+	// .. etc ..
+	
 	void play(uint64_t startTime = 0);
 	void loop(unsigned int timesToLoop = OFX_AU_LOOP_FOREVER, uint64_t startTime = 0);
 	void stop();
