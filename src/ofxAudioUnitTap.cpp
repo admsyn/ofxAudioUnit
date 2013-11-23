@@ -58,7 +58,7 @@ void ofxAudioUnitTap::getSamples(StereoSamples &outData) const
 // ----------------------------------------------------------
 {
 	getSamplesFromChannel(outData.left, 0);
-	getSamplesFromChannel(outData.right, 0);
+	getSamplesFromChannel(outData.right, 1);
 }
 
 #pragma mark - RMS
