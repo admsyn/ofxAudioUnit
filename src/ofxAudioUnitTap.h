@@ -35,7 +35,7 @@ public:
 		ofxAudioUnitTap::MonoSamples left;
 		ofxAudioUnitTap::MonoSamples right;
 		size_t size(){return min(left.size(), right.size());}
-		size_t empty(){return left.empty() || right.empty();}
+		bool empty(){return left.empty() || right.empty();}
 	};
 	
 	void setBufferLength(unsigned int samplesToBuffer);
