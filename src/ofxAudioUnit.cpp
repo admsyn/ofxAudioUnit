@@ -55,7 +55,7 @@ AudioUnitRef ofxAudioUnit::allocUnit(AudioComponentDescription desc)
 	if(!component)
 	{
 		cout << "Couldn't locate component for description" << endl;
-		return;
+		return AudioUnitRef();
 	}
 	
 	ofPtr<AudioUnit> unit((AudioUnit *)malloc(sizeof(AudioUnit)), AudioUnitDeleter);
