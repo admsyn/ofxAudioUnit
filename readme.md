@@ -26,8 +26,10 @@ I highly recommend that you check out the examples, as they demonstrate the impo
 Adding ofxAudioUnit to your oF app
 ---------------------------------
 
+If you have [OFPlugin](https://github.com/admsyn/OFPlugin), it will sort out the frameworks dependencies for you. If you'd like to set ofxAudioUnit up manually:
+
 * Add the ofxAudioUnit src folder to your Xcode project
-* Add the AudioUnit and CoreAudioKit frameworks to your project
+* Add the AudioUnit, CoreAudioKit and Carbon frameworks to your project
 * If you're using ofxAudioUnitMidi, add the CoreMidi framework to your project as well
 
 [See here if you need help adding frameworks to your project](http://stackoverflow.com/questions/3352664/how-to-add-existing-frameworks-in-xcode-4)
