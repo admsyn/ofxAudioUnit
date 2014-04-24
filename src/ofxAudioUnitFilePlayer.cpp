@@ -15,7 +15,9 @@ ofxAudioUnitFilePlayer::ofxAudioUnitFilePlayer()
 , _pauseTimeStamp((AudioTimeStamp){0})
 , _loopCount(0)
 , _pauseTimeAccumulator(0)
-, _primed(false) {
+, _seekSampleTime(0)
+, _primed(false)
+{
 	_fileID[0] = NULL;
 	_desc = filePlayerDesc;
 	initUnit();
