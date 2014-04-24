@@ -43,6 +43,8 @@ public:
 	void getSamples(StereoSamples &outData) const;
 	void getSamples(MonoSamples &outData) const;
 	void getSamples(MonoSamples &outData, unsigned int channel) const;
+	void getLeftSamples(MonoSamples &outData) const { getSamples(outData, 0); }
+	void getRightSamples(MonoSamples &outData) const { getSamples(outData, 1); }
 	
 	// These output an ofPolyline representing the waveform of the most recent samples in the buffer.
 	// You can use the "sampleRate" param to skip samples for the sake of speed (i.e. a sampleRate
