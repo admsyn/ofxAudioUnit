@@ -146,19 +146,7 @@ void ofxAudioUnitDSPNode::setSource(ofxAudioUnit * source)
 {
 	_impl->ctx.sourceUnit = source;
 	_impl->ctx.sourceType = NodeSourceUnit;
-	
-	AudioStreamBasicDescription ASBD = {0};
-	UInt32 ASBD_size = sizeof(ASBD);
-	
-	OFXAU_PRINT(AudioUnitGetProperty(source->getUnit(),
-									 kAudioUnitProperty_StreamFormat,
-									 kAudioUnitScope_Output,
-									 0,
-									 &ASBD,
-									 &ASBD_size),
-				"getting tap source's ASBD");
-	
-	_impl->channelsToBuffer = ASBD.mChannelsPerFrame;
+	_impl->channelsToBuffer = source->getNumOutputChannels();
 	setBufferSize(_impl->samplesToBuffer);
 }
 

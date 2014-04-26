@@ -117,6 +117,13 @@ ofxAudioUnit& ofxAudioUnitInput::connectTo(ofxAudioUnit &otherUnit, int destinat
 	return otherUnit;
 }
 
+// ----------------------------------------------------------
+UInt32 ofxAudioUnitInput::getNumOutputChannels() const
+// ----------------------------------------------------------
+{
+	return _impl->ctx.circularBuffers.size();
+}
+
 #pragma mark - Start / Stop
 
 // ----------------------------------------------------------
@@ -133,7 +140,9 @@ bool ofxAudioUnitInput::start()
 bool ofxAudioUnitInput::stop()
 // ----------------------------------------------------------
 {
-	OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
+	if(_unit) {
+		OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
+	}
 }
 
 #pragma mark - Hardware

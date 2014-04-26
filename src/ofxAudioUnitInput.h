@@ -17,6 +17,8 @@ public:
 					UInt32 inNumberFrames,
 					AudioBufferList *ioData);
 	
+	UInt32 getNumOutputChannels() const;
+	
 	bool start();
 	bool stop();
 	

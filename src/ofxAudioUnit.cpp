@@ -199,6 +199,24 @@ OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
 						   inOutputBusNumber, inNumberFrames, ioData);
 }
 
+// ----------------------------------------------------------
+UInt32 ofxAudioUnit::getNumOutputChannels() const
+// ----------------------------------------------------------
+{
+	AudioStreamBasicDescription ASBD = {0};
+	UInt32 ASBD_size = sizeof(ASBD);
+	
+	OFXAU_PRINT(AudioUnitGetProperty(*_unit,
+									 kAudioUnitProperty_StreamFormat,
+									 kAudioUnitScope_Output,
+									 0,
+									 &ASBD,
+									 &ASBD_size),
+				"getting unit's output ASBD");
+	
+	return ASBD.mChannelsPerFrame;
+}
+
 #pragma mark - Presets
 
 // ----------------------------------------------------------

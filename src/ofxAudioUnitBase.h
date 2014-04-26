@@ -46,6 +46,8 @@ public:
 							UInt32 inNumberFrames,
 							AudioBufferList *ioData);
 	
+	virtual UInt32 getNumOutputChannels() const;
+	
 	// explicit and implicit conversions to the underlying AudioUnit pointer
 	AudioUnit getUnit()       {return *_unit;}
 	operator AudioUnit()      {return *_unit;}
