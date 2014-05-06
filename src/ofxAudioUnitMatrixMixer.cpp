@@ -24,6 +24,7 @@ ofxAudioUnitMatrixMixer& ofxAudioUnitMatrixMixer::operator=(const ofxAudioUnitMa
 	vector<UInt32> origBusCount = orig.getBusCount();
 	vector<AudioStreamBasicDescription> origASBDs = orig.getASBDs();
 	initWithLayout(origBusCount[0], origBusCount[1], &origASBDs[0], &origASBDs[1]);
+	return *this;
 }
 
 void ofxAudioUnitMatrixMixer::initWithLayout(UInt32 inputBusCount, UInt32 outputBusCount, AudioStreamBasicDescription * inASBD, AudioStreamBasicDescription * outASBD)
