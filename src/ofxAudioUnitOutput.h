@@ -17,8 +17,10 @@ public:
 	bool start();
 	bool stop();
 	
+#if !TARGET_OS_IPHONE
 	bool setDevice(AudioDeviceID deviceID);
 	bool setDevice(const string &deviceName);
 
 	static void listOutputDevices();
+#endif
 };
