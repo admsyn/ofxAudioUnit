@@ -44,6 +44,10 @@
  Copyright (C) 2013 Apple Inc. All Rights Reserved. 
   
 */
+
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "CAAUParameter.h"
 
 CAAUParameter::CAAUParameter() 
@@ -398,3 +402,5 @@ void	CAAUParameter::Print() const
 	free (chars);
 }
 #endif
+
+#endif // !TARGET_OS_IPHONE

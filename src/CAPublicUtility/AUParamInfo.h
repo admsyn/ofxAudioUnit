@@ -44,6 +44,9 @@
  Copyright (C) 2013 Apple Inc. All Rights Reserved. 
   
 */
+
+#if !TARGET_OS_IPHONE
+
 #include <map>
 #include <vector>
 #include <AudioUnit/AudioUnit.h>
@@ -110,3 +113,5 @@ private:
 	AUParamInfo (const AUParamInfo &c) {}
 	AUParamInfo& operator= (const AUParamInfo& c) { return *this; }
 };
+
+#endif // !TARGET_OS_IPHONE
