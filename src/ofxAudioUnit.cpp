@@ -88,6 +88,8 @@ ofxAudioUnit::~ofxAudioUnit()
 
 #pragma mark - Parameters
 
+#if !TARGET_OS_IPHONE
+
 // ----------------------------------------------------------
 void ofxAudioUnit::setParameter(AudioUnitParameterID parameter,
 								AudioUnitScope scope,
@@ -139,6 +141,8 @@ void ofxAudioUnit::printParameterList(bool includeExpert, bool includeReadOnly)
 	
 	cout << endl;
 }
+
+#endif // !TARGET_OS_IPHONE
 
 #pragma mark - Connections
 
@@ -287,6 +291,7 @@ bool ofxAudioUnit::loadPreset(const CFURLRef &presetURL)
 	
 	bool presetSetSuccess = presetReadSuccess && (presetSetStatus == noErr);
 	
+#if !TARGET_OS_IPHONE
 	if(presetSetSuccess)
 	{
 		// Notify any listeners that params probably changed
@@ -295,6 +300,7 @@ bool ofxAudioUnit::loadPreset(const CFURLRef &presetURL)
 		paramNotification.mParameterID = kAUParameterListener_AnyParameter;
 		AUParameterListenerNotify(NULL, NULL, &paramNotification);
 	}
+#endif
 	
 	return presetSetSuccess;
 }

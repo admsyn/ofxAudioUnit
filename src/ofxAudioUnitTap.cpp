@@ -1,3 +1,6 @@
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "ofxAudioUnit.h"
 #include <Accelerate/Accelerate.h>
 
@@ -119,3 +122,5 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &l, ofPolyline &r, float w, f
 	getLeftWaveform(l, w, h, rate);
 	getRightWaveform(r, w, h, rate);
 }
+
+#endif // !TARGET_OS_IPHONE

@@ -1,3 +1,6 @@
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "ofxAudioUnitFftNode.h"
 #include <math.h>
 
@@ -214,3 +217,5 @@ bool ofxAudioUnitFftNode::getPhase(std::vector<float> &outPhase)
 	outPhase.assign(_sampleBuffer.begin(), _sampleBuffer.begin() + (_N / 2));
 	return true;
 }
+
+#endif // !TARGET_OS_IPHONE

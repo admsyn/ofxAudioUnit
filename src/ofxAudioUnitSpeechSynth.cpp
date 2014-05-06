@@ -1,3 +1,6 @@
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "ofxAudioUnit.h"
 #include "ofxAudioUnitUtils.h"
 
@@ -112,3 +115,5 @@ bool ofxAudioUnitSpeechSynth::setVoice(const std::string &voiceName)
 	
 	return false;
 }
+
+#endif //!TARGET_OS_IPHONE

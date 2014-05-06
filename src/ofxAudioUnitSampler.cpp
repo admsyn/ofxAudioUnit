@@ -190,12 +190,16 @@ void ofxAudioUnitSampler::midiNoteOff(const UInt32 note, const UInt32 vel)
 void ofxAudioUnitSampler::setVolume(float volume)
 // ----------------------------------------------------------
 {
+#if !TARGET_OS_IPHONE
     AudioUnitSetParameter(*_unit,
                           kMusicDeviceParam_Volume,
                           kAudioUnitScope_Global,
                           0,
                           volume,
                           0);
+#else
+	std::cout << "ofxAudioUnitSampler::setVolume() isn't implemented on iOS" << std::endl;
+#endif
 }
 
 

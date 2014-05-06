@@ -62,16 +62,17 @@ public:
 	bool saveCustomPresetAtPath(const std::string &presetPath);
 	bool loadCustomPresetAtPath(const std::string &presetPath);
 	
-	// Retrieves a list of all parameters the unit is advertising (helpful for 3rd party units)
-	std::vector<AudioUnitParameterInfo> getParameterList(bool includeExpert = true, bool includeReadOnly = false);
-	void printParameterList(bool includeExpert = true, bool includeReadOnly = false);
-	
 	// some convenience functions for common properties
 	void setRenderCallback(AURenderCallbackStruct callback, int destinationBus = 0);
 	void setParameter(AudioUnitParameterID property, AudioUnitScope scope, AudioUnitParameterValue value, int bus = 0);
 	void reset(){AudioUnitReset(*_unit, kAudioUnitScope_Global, 0);}
 	
 #if !(TARGET_OS_IPHONE)
+	
+	// Retrieves a list of all parameters the unit is advertising (helpful for 3rd party units)
+	std::vector<AudioUnitParameterInfo> getParameterList(bool includeExpert = true, bool includeReadOnly = false);
+	void printParameterList(bool includeExpert = true, bool includeReadOnly = false);
+	
 	void showUI(const std::string &title = "Audio Unit UI",
 				int x = 100,
 				int y = 100,

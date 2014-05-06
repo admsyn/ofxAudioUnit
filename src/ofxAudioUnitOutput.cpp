@@ -38,6 +38,8 @@ bool ofxAudioUnitOutput::stop()
 
 #pragma mark - Hardware
 
+#if !TARGET_OS_IPHONE
+
 // ----------------------------------------------------------
 bool ofxAudioUnitOutput::setDevice(AudioDeviceID deviceID)
 // ----------------------------------------------------------
@@ -85,3 +87,5 @@ void ofxAudioUnitOutput::listOutputDevices()
 		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]\n";
 	}
 }
+
+#endif // !TARGET_OS_IPHONE

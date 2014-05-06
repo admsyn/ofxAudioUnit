@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxAudioUnit.h"
-#if !(TARGET_OS_IPHONE)
+//#if !(TARGET_OS_IPHONE)
 #include <CoreMIDI/CoreMIDI.h>
 #include <string>
 #include <vector>
@@ -39,4 +39,4 @@ static void ofxAudioUnitMidiInputProc(const MIDINotification *message,
 static void ofxAudioUnitMidiReadProc(const MIDIPacketList *pktlist, 
 									 void *readProcRefCon,
 									 void *srcConnRefCon);
-#endif //TARGET_OS_IPHONE
+//#endif //TARGET_OS_IPHONE

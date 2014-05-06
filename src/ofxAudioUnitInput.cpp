@@ -42,7 +42,11 @@ struct ofxAudioUnitInput::InputImpl
 {
 	InputContext ctx;
 	bool isReady;
+
+#if !TARGET_OS_IPHONE
 	AudioDeviceID inputDeviceID;
+#endif
+	
 };
 
 #pragma mark - ofxAudioUnitInput
@@ -69,7 +73,10 @@ ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
 	_impl->ctx.bufferList = AudioBufferListRef(AudioBufferListAlloc(ASBD.mChannelsPerFrame, 1024), AudioBufferListRelease);
 	_impl->ctx.circularBuffers.resize(ASBD.mChannelsPerFrame);
 	_impl->isReady = false;
+	
+#if !TARGET_OS_IPHONE
 	_impl->inputDeviceID = DefaultAudioInputDevice();
+#endif
 	
 	for(int i = 0; i < ASBD.mChannelsPerFrame; i++) {
 		TPCircularBufferInit(&_impl->ctx.circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
@@ -143,9 +150,13 @@ bool ofxAudioUnitInput::stop()
 	if(_unit) {
 		OFXAU_RET_BOOL(AudioOutputUnitStop(*_unit), "stopping hardware input unit");
 	}
+	
+	return false;
 }
 
 #pragma mark - Hardware
+
+#if !TARGET_OS_IPHONE
 
 // ----------------------------------------------------------
 bool ofxAudioUnitInput::setDevice(AudioDeviceID deviceID)
@@ -195,6 +206,8 @@ void ofxAudioUnitInput::listInputDevices()
 		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]" << endl;
 	}
 }
+
+#pragma mark OSX
 
 // ----------------------------------------------------------
 bool ofxAudioUnitInput::configureInputDevice()
@@ -260,6 +273,20 @@ bool ofxAudioUnitInput::configureInputDevice()
 	OFXAU_RET_BOOL(AudioUnitInitialize(*_unit), 
 				   "initializing hardware input unit after setting it to input mode");
 }
+
+#else
+
+#pragma mark iOS
+
+// ----------------------------------------------------------
+bool ofxAudioUnitInput::configureInputDevice()
+// ----------------------------------------------------------
+{
+	std::cout << "ofxAudioUnitInput not implemented on iOS yet" << std::endl;
+	return false;
+}
+
+#endif
 
 #pragma mark - Callbacks / Rendering
 

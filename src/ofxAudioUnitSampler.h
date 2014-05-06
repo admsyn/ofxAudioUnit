@@ -13,8 +13,6 @@ public:
     ofxAudioUnitSampler(const ofxAudioUnitSampler &orig);
     ofxAudioUnitSampler& operator=(const ofxAudioUnitSampler &orig);
     
-    
-	
 	bool setSample(const std::string &samplePath);
 	bool setSamples(const std::vector<std::string> &samplePaths);
     void setVolume(float volume);
@@ -28,7 +26,6 @@ public:
     void midiNoteOn(const UInt32 note, const UInt32 vel);
     void midiNoteOff(const UInt32 note, const UInt32 vel);
     
-    
     UInt32 midiChannelInUse;
     
     enum {
@@ -39,7 +36,5 @@ public:
         kMidiMessage_NoteOn             = 0x9,
         kMidiMessage_NoteOff            = 0x8
     };
-
-
 
 };

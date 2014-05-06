@@ -44,6 +44,10 @@
  Copyright (C) 2013 Apple Inc. All Rights Reserved. 
   
 */
+
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "AUParamInfo.h"
 #include "CAXException.h"
 
@@ -137,3 +141,5 @@ const CAAUParameter*	AUParamInfo::GetParamInfo (AudioUnitParameterID inParamID) 
 	}
 	return NULL;
 }
+
+#endif // !TARGET_OS_IPHONE

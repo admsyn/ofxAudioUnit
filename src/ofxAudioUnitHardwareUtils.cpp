@@ -1,4 +1,5 @@
-#ifdef TARGET_OS_MAC
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
 
 #include "ofxAudioUnitHardwareUtils.h"
 #include "ofxAudioUnitUtils.h"

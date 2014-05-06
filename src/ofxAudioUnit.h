@@ -10,13 +10,14 @@
 #include "ofxAudioUnitOutput.h"
 #include "ofxAudioUnitSampler.h"
 
+#include "TargetConditionals.h"
 #if !TARGET_OS_IPHONE
 	#include "ofxAudioUnitNetReceive.h"
 	#include "ofxAudioUnitNetSend.h"
 	#include "ofxAudioUnitSpeechSynth.h"
 	#include "ofxAudioUnitRecorder.h"
-#endif
 
-// ofxAudioUnitDSPNode subclasses for specific DSP tasks
-#include "ofxAudioUnitTap.h"
-#include "ofxAudioUnitFftNode.h"
+	// ofxAudioUnitDSPNode subclasses for specific DSP tasks
+	#include "ofxAudioUnitTap.h"
+	#include "ofxAudioUnitFftNode.h"
+#endif

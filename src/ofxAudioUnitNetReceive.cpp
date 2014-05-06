@@ -1,3 +1,6 @@
+#include "TargetConditionals.h"
+#if !TARGET_OS_IPHONE
+
 #include "ofxAudioUnit.h"
 #include "ofxAudioUnitUtils.h"
 
@@ -61,3 +64,5 @@ void ofxAudioUnitNetReceive::disconnect()
 									 sizeof(disconnect)),
 				"disconnecting net receive");
 }
+
+#endif // !TARGET_OS_IPHONE
