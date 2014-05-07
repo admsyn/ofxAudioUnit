@@ -6,10 +6,10 @@ meta:
 	ADDON_URL = https://github.com/admsyn/ofxAudioUnit
 
 common:
-	ADDON_FRAMEWORKS = AudioUnit
-	ADDON_FRAMEWORKS += CoreMIDI
+	ADDON_FRAMEWORKS = CoreMIDI
 		
 osx:
 	ADDON_FRAMEWORKS += CoreAudioKit
 	ADDON_FRAMEWORKS += Carbon
+	ADDON_FRAMEWORKS += AudioUnit
     
