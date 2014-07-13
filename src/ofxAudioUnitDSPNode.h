@@ -20,7 +20,7 @@ public:
 	void setSource(AURenderCallbackStruct callback, UInt32 channels = 2);
 	
 protected:
-	void getSamplesFromChannel(std::vector<AudioUnitSampleType> &samples, unsigned int channel) const;
+	void getSamplesFromChannel(std::vector<Float32> &samples, unsigned int channel) const;
 	
 	// sets the internal circular buffer size
 	void setBufferSize(unsigned int samplesToBuffer);

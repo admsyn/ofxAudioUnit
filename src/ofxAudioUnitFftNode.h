@@ -61,6 +61,6 @@ private:
 	FFTSetup _fftSetup;
 	COMPLEX_SPLIT _fftData;
 	float * _window;
-	std::vector<AudioUnitSampleType> _sampleBuffer;
+	std::vector<Float32> _sampleBuffer;
 	void freeBuffers();
 };

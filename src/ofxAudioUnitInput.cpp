@@ -79,7 +79,7 @@ ofxAudioUnitInput::ofxAudioUnitInput(unsigned int samplesToBuffer)
 #endif
 	
 	for(int i = 0; i < ASBD.mChannelsPerFrame; i++) {
-		TPCircularBufferInit(&_impl->ctx.circularBuffers[i], samplesToBuffer * sizeof(AudioUnitSampleType));
+		TPCircularBufferInit(&_impl->ctx.circularBuffers[i], samplesToBuffer * sizeof(Float32));
 	}
 }
 
@@ -329,7 +329,7 @@ OSStatus RenderCallback(void *inRefCon,
 			if(circBuffer) {
 				TPCircularBufferProduceBytes(circBuffer,
 											 ctx->bufferList->mBuffers[i].mData,
-											 inNumberFrames * sizeof(AudioUnitSampleType));
+											 inNumberFrames * sizeof(Float32));
 			}
 		}
 	}
@@ -352,8 +352,8 @@ OSStatus PullCallback(void *inRefCon,
 	
 	for(int i = 0; i < buffersToCopy; i++) {
 		int32_t circBufferSize;
-		AudioUnitSampleType * circBufferTail = (AudioUnitSampleType *) TPCircularBufferTail(&ctx->circularBuffers[i], &circBufferSize);
-		bool circBufferHasEnoughSamples = circBufferSize / sizeof(AudioUnitSampleType) >= inNumberFrames ? true : false;
+		Float32 * circBufferTail = (Float32 *) TPCircularBufferTail(&ctx->circularBuffers[i], &circBufferSize);
+		bool circBufferHasEnoughSamples = circBufferSize / sizeof(Float32) >= inNumberFrames ? true : false;
 		
 		if(!circBufferHasEnoughSamples) {
 			// clear buffer, so bytes that don't get written are silence instead of noise

@@ -12,8 +12,8 @@ static AudioBufferList * AudioBufferListAlloc(UInt32 channels, UInt32 samplesPer
 	
 	for(UInt32 i = 0; i < bufferList->mNumberBuffers; i++) {
 		bufferList->mBuffers[i].mNumberChannels = 1;
-		bufferList->mBuffers[i].mDataByteSize   = samplesPerChannel * sizeof(AudioUnitSampleType);
-		bufferList->mBuffers[i].mData           = calloc(samplesPerChannel, sizeof(AudioUnitSampleType));
+		bufferList->mBuffers[i].mDataByteSize   = samplesPerChannel * sizeof(Float32);
+		bufferList->mBuffers[i].mData           = calloc(samplesPerChannel, sizeof(Float32));
 	}
 	return bufferList;
 }

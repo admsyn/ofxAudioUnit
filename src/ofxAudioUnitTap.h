@@ -28,7 +28,7 @@ public:
 	virtual ~ofxAudioUnitTap();
 	
 	// Container for samples returned from an ofxAudioUnitTap
-	typedef std::vector<AudioUnitSampleType> MonoSamples;
+	typedef std::vector<Float32> MonoSamples;
 	
 	struct StereoSamples
 	{
