@@ -35,5 +35,5 @@ protected:
 	
 private:
 	struct NodeImpl;
-	ofPtr<NodeImpl> _impl;
+	std::shared_ptr<NodeImpl> _impl;
 };

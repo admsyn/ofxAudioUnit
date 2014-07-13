@@ -29,7 +29,7 @@ OSStatus PullCallback(void *inRefCon,
 					  UInt32 inNumberFrames,
 					  AudioBufferList *ioData);
 
-typedef ofPtr<AudioBufferList> AudioBufferListRef;
+typedef std::shared_ptr<AudioBufferList> AudioBufferListRef;
 
 struct InputContext
 {

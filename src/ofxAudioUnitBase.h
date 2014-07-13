@@ -6,7 +6,7 @@
 #include "ofTypes.h"
 #include "AUParamInfo.h"
 
-typedef ofPtr<AudioUnit> AudioUnitRef;
+typedef std::shared_ptr<AudioUnit> AudioUnitRef;
 class ofxAudioUnitDSPNode;
 
 // ofxAudioUnit is a general-purpose class to simplify using Audio Units in

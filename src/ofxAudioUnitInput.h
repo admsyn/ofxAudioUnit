@@ -31,6 +31,6 @@ public:
 	
 private:
 	struct InputImpl;
-	ofPtr<InputImpl> _impl;
+	shared_ptr<InputImpl> _impl;
 	bool configureInputDevice();
 };
