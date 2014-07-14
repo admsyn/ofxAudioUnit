@@ -175,8 +175,8 @@ void ofApp::draw(){
 	ofSetColor(255, 230, 120);
 	ofDrawBitmapString("<- Panning ->", ofGetWidth()/2 - 50, ofGetHeight() - 55);
 	ofCircle(ofGetMouseX(), ofGetHeight() - 30, 15);
-	ofDrawBitmapString("Press space to show the reverb unit's UI\nPress 's'\
-										 to make the speech synth speak again", ofPoint(20,20));
+	ofDrawBitmapString("Press space to show the reverb unit's UI,", ofPoint(20,20));
+	ofDrawBitmapString("Press 's' to make the speech synth speak again", ofPoint(20, 40));
 }
 
 //--------------------------------------------------------------
