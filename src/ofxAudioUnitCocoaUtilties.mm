@@ -39,6 +39,8 @@
 		[self initWithCocoaViewForUnit:unit];
 	} else if([ofxAudioUnitUIWindow audioUnitHasCarbonView:unit]) {
 		[self printUnsupportedCarbonMessage:unit];
+	} else {
+		[self initWithGenericViewForUnit:unit];
 	}
 	
 	return self;
