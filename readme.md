@@ -29,7 +29,7 @@ Adding ofxAudioUnit to your oF app
 If you have [OFPlugin](https://github.com/admsyn/OFPlugin), it will sort out the frameworks dependencies for you. If you'd like to set ofxAudioUnit up manually:
 
 * Add the ofxAudioUnit src folder to your Xcode project
-* Add the AudioUnit, CoreAudioKit and Carbon frameworks to your project
+* Add the AudioUnit and CoreAudioKit frameworks to your project
 * If you're using ofxAudioUnitMidi, add the CoreMidi framework to your project as well
 
 [See here if you need help adding frameworks to your project](http://stackoverflow.com/questions/3352664/how-to-add-existing-frameworks-in-xcode-4)
@@ -38,12 +38,13 @@ After this, just add
 ```C++
 #include "ofxAudioUnit.h"
 ```
-in your testApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include ofxAudioUnitMidi.h` as well.
+in your ofApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include ofxAudioUnitMidi.h` as well.
 
-Soon
----------------
-* Proper iOS support
-* Direct, port-less MIDI (for sending MIDI messages directly to the units)
+iOS
+---
+ofxAudioUnit has rudimentary iOS support, but doesn't have 1:1 coverage. The DSP stuff (FFT, tap, recorder..) won't work at the moment, because they haven't been ported to adapt to the different sample format on iOS. You'll also have to manage your own audio session. Also, be aware that the Apple-supplied audio units aren't the same between iOS and OSX.
+
+I would gladly accept a PR that adds more support for iOS.
 
 License
 ----------
