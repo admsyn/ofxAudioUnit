@@ -283,7 +283,7 @@ OSStatus RenderAndCopy(void * inRefCon,
 	
 	if(ctx->bufferMutex.tryLock()) {
 		if(status == noErr) {
-			const size_t buffersToCopy = min(ctx->circularBuffers.size(), ioData->mNumberBuffers);
+			const size_t buffersToCopy = std::min<size_t>(ctx->circularBuffers.size(), ioData->mNumberBuffers);
 			
 			for(int i = 0; i < buffersToCopy; i++) {
 				CopyAudioBufferIntoCircularBuffer(&ctx->circularBuffers[i], ioData->mBuffers[i]);
