@@ -4,39 +4,19 @@
 #if !(TARGET_OS_IPHONE)
 #include <CoreAudioKit/CoreAudioKit.h>
 #include <AudioUnit/AUCocoaUIView.h>
-#include <AudioUnit/AudioUnitCarbonView.h>
-
-pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, EventRef event, void * userData);
 
 #pragma mark Objective-C
 
 @interface ofxAudioUnitUIWindow : NSWindow
 {
 	NSView * _AUView;
-	WindowRef _carbonWindow;
-	AudioUnitCarbonView _carbonView;
-	EventHandlerRef _carbonEventHandler;
 }
 
-+ (BOOL) audioUnitHasCocoaView:(AudioUnit)unit;
-+ (BOOL) audioUnitHasCarbonView:(AudioUnit)unit;
-
-- (void) initWithCocoaViewForUnit:(AudioUnit)unit;
-- (void) initWithCarbonViewForUnit:(AudioUnit)unit;
-- (void) initWithGenericViewForUnit:(AudioUnit)unit;
-- (void) initWithAudioUnitCocoaView:(NSView *)audioUnitView;
-
 - (id) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric;
-
-- (void) audioUnitChangedViewSize:(NSNotification *)notification;
-
-@property (readonly) WindowRef carbonWindow;
 
 @end
 
 @implementation ofxAudioUnitUIWindow
-
-@synthesize carbonWindow = _carbonWindow;
 
 // ----------------------------------------------------------
 - (void) dealloc
@@ -46,10 +26,6 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 													name:NSViewFrameDidChangeNotification
 												  object:_AUView];
 	
-	if(_carbonView)         CloseComponent(_carbonView);
-	if(_carbonWindow)       DisposeWindow(_carbonWindow);
-	if(_carbonEventHandler) RemoveEventHandler(_carbonEventHandler);
-	
 	[super dealloc];
 }
 
@@ -57,17 +33,12 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 - (id) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric
 // ----------------------------------------------------------
 {
-	if(!useGeneric && [ofxAudioUnitUIWindow audioUnitHasCocoaView:unit])
-	{
-		[self initWithCocoaViewForUnit:unit];
-	}
-	else if(!useGeneric && [ofxAudioUnitUIWindow audioUnitHasCarbonView:unit])
-	{
-		[self initWithCarbonViewForUnit:unit];
-	}
-	else 
-	{
+	if(useGeneric) {
 		[self initWithGenericViewForUnit:unit];
+	} else if([ofxAudioUnitUIWindow audioUnitHasCocoaView:unit]) {
+		[self initWithCocoaViewForUnit:unit];
+	} else if([ofxAudioUnitUIWindow audioUnitHasCarbonView:unit]) {
+		[self printUnsupportedCarbonMessage:unit];
 	}
 	
 	return self;
@@ -174,130 +145,14 @@ pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef, Eve
 }
 
 // ----------------------------------------------------------
-- (void) initWithCarbonViewForUnit:(AudioUnit)unit
+- (void) printUnsupportedCarbonMessage:(AudioUnit)unit
 // ----------------------------------------------------------
 {
-	// This technique embeds a carbon window inside of a cocoa
-	// window wrapper, as described by Technical Note TN2213
-	// ("Audio Units: Embedding a Carbon View in a Cocoa Window")
+	NSString * msg = @"This audio unit only has a Carbon-based UI. Carbon\
+	support has been removed from ofxAudioUnit. Checkout the \"carbon\" tag\
+	for the last commit which has Carbon support";
 	
-	// Getting carbon view description
-	UInt32 dataSize;
-	Boolean isWriteable;
-	
-	OFXAU_RETURN(AudioUnitGetPropertyInfo(unit,
-										  kAudioUnitProperty_GetUIComponentList,
-										  kAudioUnitScope_Global,
-										  0,
-										  &dataSize,
-										  &isWriteable),
-				 "getting size of carbon view info");
-	
-	ComponentDescription * desc = (ComponentDescription *)malloc(dataSize);
-	
-	OFXAU_RETURN(AudioUnitGetProperty(unit,
-									  kAudioUnitProperty_GetUIComponentList,
-									  kAudioUnitScope_Global,
-									  0,
-									  desc,
-									  &dataSize),
-				 "getting carbon view info");
-	
-	ComponentDescription d = desc[0];
-	
-	// Creating carbon view component
-	Component comp = FindNextComponent(NULL, &d);
-	OFXAU_RETURN(OpenAComponent(comp, &_carbonView), "opening carbon view component");
-	
-	// Creating a carbon window for the view
-	Rect carbonWindowBounds = {100,100,300,300};
-	OFXAU_RETURN(CreateNewWindow(kPlainWindowClass,
-								 (kWindowStandardHandlerAttribute |
-								  kWindowCompositingAttribute),
-								 &carbonWindowBounds,
-								 &_carbonWindow),
-				 "creating carbon window");
-	
-	// Creating carbon controls
-	ControlRef rootControl, viewPane;
-	OFXAU_RETURN(GetRootControl(_carbonWindow, &rootControl),
-				 "getting root control of carbon window");
-	
-	// Creating the view
-	Float32Point size = {0,0};
-	Float32Point location = {0,0};
-	OFXAU_RETURN(AudioUnitCarbonViewCreate(_carbonView,
-										   unit,
-										   _carbonWindow,
-										   rootControl,
-										   &location,
-										   &size,
-										   &viewPane),
-				 "creating carbon view for audio unit");
-	
-	// Putting everything in place
-	GetControlBounds(viewPane, &carbonWindowBounds);
-	size.x = carbonWindowBounds.right  - carbonWindowBounds.left;
-	size.y = carbonWindowBounds.bottom - carbonWindowBounds.top;
-	SizeWindow(_carbonWindow, (short) (size.x + 0.5), (short) (size.y + 0.5), true);
-	ShowWindow(_carbonWindow);
-	
-	// Listening to window events
-	EventTypeSpec windowEventTypes[] = {
-		{kEventClassWindow, kEventWindowGetClickActivation},
-		{kEventClassWindow, kEventWindowHandleDeactivate}
-	};
-	
-	EventHandlerUPP ehUPP = NewEventHandlerUPP(CarbonWindowEventHandler);
-	OFXAU_RETURN(InstallWindowEventHandler(_carbonWindow,
-										   ehUPP,
-										   sizeof(windowEventTypes) / sizeof(EventTypeSpec),
-										   windowEventTypes,
-										   self,
-										   &_carbonEventHandler),
-				 "setting up carbon window event handler");
-	
-	NSWindow * wrapperWindow = [[[NSWindow alloc] initWithWindowRef:_carbonWindow] autorelease];
-	
-	self = [super initWithContentRect:NSMakeRect(0, 0, size.x + 1, size.y + 1)
-							styleMask:(NSClosableWindowMask | 
-									   NSMiniaturizableWindowMask |
-									   NSTitledWindowMask)
-							  backing:NSBackingStoreBuffered
-								defer:NO];
-	
-	if(self)
-	{
-		[wrapperWindow setFrameOrigin:self.frame.origin];
-		[self addChildWindow:wrapperWindow ordered:NSWindowAbove];
-		self.level = NSNormalWindowLevel;
-	}
-}
-
-pascal OSStatus CarbonWindowEventHandler(EventHandlerCallRef nextHandlerRef,
-										 EventRef event,
-										 void * userData)
-{
-	ofxAudioUnitUIWindow * uiWindow = (ofxAudioUnitUIWindow *)userData;
-	UInt32 eventKind = GetEventKind(event);
-	switch (eventKind) 
-	{
-		case kEventWindowHandleDeactivate:
-			ActivateWindow([uiWindow carbonWindow], true);
-			return noErr;
-			
-		case kEventWindowGetClickActivation:
-			[uiWindow makeKeyAndOrderFront:nil];
-			ClickActivationResult howToHandleClick = kActivateAndHandleClick;
-			SetEventParameter(event, 
-							  kEventParamClickActivation,
-							  typeClickActivationResult,
-							  sizeof(ClickActivationResult),
-							  &howToHandleClick);
-			return noErr;
-	}
-	
-	return eventNotHandledErr;
+	NSLog(@"%@", msg);
 }
 
 // ----------------------------------------------------------

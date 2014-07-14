@@ -10,6 +10,5 @@ common:
 		
 osx:
 	ADDON_FRAMEWORKS += CoreAudioKit
-	ADDON_FRAMEWORKS += Carbon
 	ADDON_FRAMEWORKS += AudioUnit
     
