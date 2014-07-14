@@ -12,6 +12,7 @@
 		2d5ff7f2acfb45212bc7739d19593e1b /* ofxAudioUnitCocoaUtilties.mm in Sources */ = {isa = PBXBuildFile; fileRef = ff9373cf95715bd3b8b9e8f943c9103c /* ofxAudioUnitCocoaUtilties.mm */; };
 		660FCEDD15470B5100F01C6F /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660FCEDC15470B5100F01C6F /* CoreAudioKit.framework */; };
 		660FCEDF15470B5C00F01C6F /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660FCEDE15470B5C00F01C6F /* AudioUnit.framework */; };
+		6639AF34197360FE005BD77F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6639AF33197360FE005BD77F /* CoreVideo.framework */; };
 		663F7BD3176BBB9C00F9972E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 663F7BD2176BBB9C00F9972E /* Accelerate.framework */; };
 		6672B08215AA455F007E871E /* ofxAudioUnitSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6672B08115AA455F007E871E /* ofxAudioUnitSampler.cpp */; };
 		6676B535178DDAFF001F55C4 /* AUParamInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B52E178DDAFF001F55C4 /* AUParamInfo.cpp */; };
@@ -90,6 +91,7 @@
 		58685f70d967cf184b2311021aa51c1b /* ofxAudioUnitOutput.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitOutput.cpp; path = ../src/ofxAudioUnitOutput.cpp; sourceTree = SOURCE_ROOT; };
 		660FCEDC15470B5100F01C6F /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
 		660FCEDE15470B5C00F01C6F /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
+		6639AF33197360FE005BD77F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		663F7BD2176BBB9C00F9972E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		6672B08115AA455F007E871E /* ofxAudioUnitSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAudioUnitSampler.cpp; path = ../src/ofxAudioUnitSampler.cpp; sourceTree = "<group>"; };
 		6676B52E178DDAFF001F55C4 /* AUParamInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AUParamInfo.cpp; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6639AF34197360FE005BD77F /* CoreVideo.framework in Frameworks */,
 				663F7BD3176BBB9C00F9972E /* Accelerate.framework in Frameworks */,
 				660FCEDF15470B5C00F01C6F /* AudioUnit.framework in Frameworks */,
 				660FCEDD15470B5100F01C6F /* CoreAudioKit.framework in Frameworks */,
@@ -262,6 +265,7 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6639AF33197360FE005BD77F /* CoreVideo.framework */,
 				663F7BD2176BBB9C00F9972E /* Accelerate.framework */,
 				660FCEDE15470B5C00F01C6F /* AudioUnit.framework */,
 				660FCEDC15470B5100F01C6F /* CoreAudioKit.framework */,
@@ -610,7 +614,6 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "example-bussesDebug";
-				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -698,7 +701,6 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "example-busses";
-				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6617F17215460B4800EDC48D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6617F17115460B4800EDC48D /* CoreMIDI.framework */; };
+		6639AF3119736009005BD77F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6639AF3019736009005BD77F /* CoreVideo.framework */; };
 		663F7BD0176BBB6800F9972E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 663F7BCF176BBB6800F9972E /* Accelerate.framework */; };
 		6676B54B178DDB64001F55C4 /* AUParamInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B544178DDB64001F55C4 /* AUParamInfo.cpp */; };
 		6676B54C178DDB64001F55C4 /* CAAUParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6676B546178DDB64001F55C4 /* CAAUParameter.cpp */; };
@@ -82,6 +83,7 @@
 
 /* Begin PBXFileReference section */
 		6617F17115460B4800EDC48D /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		6639AF3019736009005BD77F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		663F7BCF176BBB6800F9972E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		6676B544178DDB64001F55C4 /* AUParamInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AUParamInfo.cpp; sourceTree = "<group>"; };
 		6676B545178DDB64001F55C4 /* AUParamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUParamInfo.h; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6639AF3119736009005BD77F /* CoreVideo.framework in Frameworks */,
 				663F7BD0176BBB6800F9972E /* Accelerate.framework in Frameworks */,
 				6617F17215460B4800EDC48D /* CoreMIDI.framework in Frameworks */,
 				66F2ECB21544605100B3DDB5 /* AudioUnit.framework in Frameworks */,
@@ -264,6 +267,7 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6639AF3019736009005BD77F /* CoreVideo.framework */,
 				663F7BCF176BBB6800F9972E /* Accelerate.framework */,
 				6617F17115460B4800EDC48D /* CoreMIDI.framework */,
 				66F2ECB01544605100B3DDB5 /* AudioUnit.framework */,
@@ -614,7 +618,6 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
-				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -702,7 +705,6 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.8;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
