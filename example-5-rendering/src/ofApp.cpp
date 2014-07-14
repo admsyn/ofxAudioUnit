@@ -1,7 +1,7 @@
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofApp::setup(){
 	
 //	This example will show you how to generate your own sound
 //	programmatically. To do this, you'll be using render callbacks.
@@ -32,7 +32,7 @@ void testApp::setup(){
 //	or glitches in the audio.
 	
 //	Another catch is that the render callback must be a static function,
-//	not a member of your testApp. What this means is that you'll have to
+//	not a member of your ofApp. What this means is that you'll have to
 //	pass a reference to your app (eg. "this") if you want to access its variables.
 //	Your callback gets called by an Audio Unit (you don't call it yourself).
 	
@@ -167,12 +167,12 @@ OSStatus plainRenderCallback(void * inRefCon,
 */
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ofApp::update(){
 	tap.getLeftWaveform(waveform, ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofApp::draw(){
 	ofBackground(30);
 	ofSetColor(255, 100, 100);
 	ofSetLineWidth(3);
@@ -184,24 +184,24 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ofApp::keyPressed(int key){
 	if(key == 'd') distortion.showUI();
 	if(key == 'r') reverb.showUI();
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){}
+void ofApp::keyReleased(int key){}
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){}
+void ofApp::mouseMoved(int x, int y ){}
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){}
+void ofApp::mouseDragged(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){}
+void ofApp::mousePressed(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){}
+void ofApp::mouseReleased(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){}
+void ofApp::windowResized(int w, int h){}
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){}
+void ofApp::gotMessage(ofMessage msg){}
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){}
+void ofApp::dragEvent(ofDragInfo dragInfo){}

@@ -1,7 +1,7 @@
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofApp::setup(){
 	
 //	This example explains a bit about what an Audio Unit is, and
 //	how to use one in the context of the ofxAudioUnit addon.
@@ -80,7 +80,7 @@ void testApp::setup(){
 //	of the specific types does
 //	
 //	We've already declared an ofxAudioUnitSpeechSynth in the 
-//	testApp.h of this example. Therefore we don't need to
+//	ofApp.h of this example. Therefore we don't need to
 //	specify which Audio Unit we're looking for since ofxAudioUnit
 //	knows to look for the AUSpeechSynthesis unit.
 //	
@@ -157,7 +157,7 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ofApp::update(){
 
 //	The ofxAudioUnitTap has a function for getting an ofPolyline
 //	representing the waveform of the samples currently passing 
@@ -167,7 +167,7 @@ void testApp::update(){
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofApp::draw(){
 	ofBackground(170);
 	ofSetColor(20);
 	waveform.draw();
@@ -180,7 +180,7 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y ){
 
 //	The ofxAudioUnitMixer has functions for setting the pan, 
 //	as well as its input and output volume
@@ -190,7 +190,7 @@ void testApp::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ofApp::keyPressed(int key){
 	
 //	Audio Units have UIs which allow you to change their
 //	parameters on the fly. Some Audio Units have very
@@ -203,16 +203,16 @@ void testApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){}
+void ofApp::keyReleased(int key){}
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){}
+void ofApp::mouseDragged(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){}
+void ofApp::mousePressed(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){}
+void ofApp::mouseReleased(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){}
+void ofApp::windowResized(int w, int h){}
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){}
+void ofApp::gotMessage(ofMessage msg){}
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){}
+void ofApp::dragEvent(ofDragInfo dragInfo){}

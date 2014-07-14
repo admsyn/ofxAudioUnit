@@ -1,7 +1,7 @@
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofApp::setup(){
 	
 	activeUnit = NULL;
 	
@@ -93,12 +93,12 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ofApp::update(){
 	tap.getStereoWaveform(oscLineLeft, oscLineRight, ofGetWidth(), ofGetHeight()/4);
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofApp::draw(){
 	ofBackground(0,50,10);
 	drawOscilloscopeGrid();
 	drawOscilloscopeLines();
@@ -109,14 +109,13 @@ void testApp::draw(){
 		ofDrawBitmapString("Press space to show the Audio Unit's UI", ofPoint(25,25));
 	}
 	else {
-		ofDrawBitmapString("You need to un-comment one of the blocks in\
-						   setup() to generate some audio", ofPoint(25,25));
+		ofDrawBitmapString("You need to un-comment one of the blocks in setup() to generate some audio", ofPoint(25,25));
 	}
 	
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ofApp::keyPressed(int key){
 	if(key == ' ' && activeUnit)
 	{
 		activeUnit->showUI();
@@ -128,7 +127,7 @@ void testApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void testApp::drawOscilloscopeGrid()
+void ofApp::drawOscilloscopeGrid()
 {
 	ofSetColor(0, 40, 0);
 	ofSetLineWidth(1);
@@ -144,7 +143,7 @@ void testApp::drawOscilloscopeGrid()
 }
 
 //--------------------------------------------------------------
-void testApp::drawOscilloscopeLabels()
+void ofApp::drawOscilloscopeLabels()
 {
 	ofSetColor(0, 200, 40);
 	ofDrawBitmapString("Left Channel", 25, ofGetHeight() / 8 - 40);
@@ -172,7 +171,7 @@ void testApp::drawOscilloscopeLabels()
 }
 
 //--------------------------------------------------------------
-void testApp::drawOscilloscopeLines()
+void ofApp::drawOscilloscopeLines()
 {
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	ofSetColor(60, 150, 80, 175);
@@ -203,18 +202,18 @@ void testApp::drawOscilloscopeLines()
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){}
+void ofApp::keyReleased(int key){}
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){}
+void ofApp::mouseMoved(int x, int y ){}
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){}
+void ofApp::mouseDragged(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){}
+void ofApp::mousePressed(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){}
+void ofApp::mouseReleased(int x, int y, int button){}
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){}
+void ofApp::windowResized(int w, int h){}
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){}
+void ofApp::gotMessage(ofMessage msg){}
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){}
+void ofApp::dragEvent(ofDragInfo dragInfo){}

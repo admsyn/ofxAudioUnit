@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxAudioUnit.h"
 
-class testApp : public ofBaseApp{
+class ofApp : public ofBaseApp{
 	
 public:
 	void setup();
@@ -20,12 +20,16 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 	
-	ofxAudioUnit reverb;
-	ofxAudioUnitMixer mixer;
-	ofxAudioUnitSpeechSynth speechSynth;
-	ofxAudioUnitTap tap;
 	ofxAudioUnitOutput output;
+	ofxAudioUnit reverb;
+	ofxAudioUnit distortion;
+	ofxAudioUnitTap tap;
 	ofPolyline waveform;
-	
-	string hello;
 };
+
+static OSStatus renderPulseSineChord(void * inRefCon,
+									 AudioUnitRenderActionFlags * ioActionFlags,
+									 const AudioTimeStamp * inTimeStamp,
+									 UInt32 inBusNumber,
+									 UInt32 inNumberFrames,
+									 AudioBufferList * ioData);
