@@ -163,14 +163,19 @@ bool ofxAudioUnitInput::setDevice(AudioDeviceID deviceID)
 // ----------------------------------------------------------
 {
 	_impl->inputDeviceID = deviceID;
-	UInt32 deviceIDSize = sizeof(deviceID);
-	OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
-										kAudioOutputUnitProperty_CurrentDevice,
-										kAudioUnitScope_Global,
-										0,
-										&deviceID,
-										deviceIDSize),
-				   "setting input unit's device ID");
+	
+	// Only actively set the device if it's already been configured. If it's not
+	// yet configured, it'll be handled when configureInputDevice() is called.
+	if(_impl->isReady) {
+		UInt32 deviceIDSize = sizeof(deviceID);
+		OFXAU_RET_BOOL(AudioUnitSetProperty(*_unit,
+											kAudioOutputUnitProperty_CurrentDevice,
+											kAudioUnitScope_Global,
+											0,
+											&deviceID,
+											deviceIDSize),
+					   "setting input unit's device ID");
+	}
 }
 
 // ----------------------------------------------------------
