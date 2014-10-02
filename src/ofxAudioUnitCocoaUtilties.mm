@@ -225,7 +225,7 @@ void ofxAudioUnit::showUI(const string &title, int x, int y, bool forceGeneric)
 {
 	if(!_unit.get()) return;
 	
-	NSString * windowTitle = [NSString stringWithUTF8String:title.c_str()];
+	NSString * windowTitle = [[NSString stringWithUTF8String:title.c_str()] copy];
 	
 	if(!windowTitle) {
 		windowTitle = @"Audio Unit UI";
