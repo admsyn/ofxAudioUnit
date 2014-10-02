@@ -68,7 +68,9 @@ void ofxAudioUnit::initUnit()
 // ----------------------------------------------------------
 {
 	_unit = allocUnit(_desc);
-	OFXAU_RETURN(AudioUnitInitialize(*_unit), "initializing unit");
+	if(_unit) {
+		OFXAU_RETURN(AudioUnitInitialize(*_unit), "initializing unit");
+	}
 }
 
 // ----------------------------------------------------------
