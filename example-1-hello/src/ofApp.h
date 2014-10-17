@@ -22,10 +22,9 @@ public:
 	
 	ofxAudioUnit reverb;
 	ofxAudioUnitMixer mixer;
-	ofxAudioUnitSpeechSynth speechSynth;
+	ofxAudioUnitFilePlayer filePlayer;
 	ofxAudioUnitTap tap;
 	ofxAudioUnitOutput output;
-	ofPolyline waveform;
 	
-	string hello;
+	ofPolyline waveform;
 };

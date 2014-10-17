@@ -50,15 +50,9 @@
 - (void) initWithCocoaViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
-	UInt32  dataSize;
-	Boolean isWriteable;
-	AudioUnitCocoaViewInfo * cocoaViewInfo = NULL;
-	UInt32  numberOfClasses;
-	CFURLRef cocoaViewBundlePath = NULL;
-	CFStringRef factoryClassName = NULL;
-	NSView * AUView = nil;
-	
 	// getting the size of the AU View info
+	UInt32 dataSize;
+	Boolean isWriteable;
 	OSStatus result = AudioUnitGetPropertyInfo(unit,
 											   kAudioUnitProperty_CocoaUI,
 											   kAudioUnitScope_Global,
@@ -66,51 +60,38 @@
 											   &dataSize,
 											   &isWriteable);
 	
-	numberOfClasses = (dataSize - sizeof(CFURLRef)) / sizeof(CFStringRef);
+	UInt32 numberOfClasses = (dataSize - sizeof(CFURLRef)) / sizeof(CFStringRef);
+
+	NSView * AUView = nil;
 	
-	// getting the location / name of the necessary view factory bits
-	if((result == noErr) && (numberOfClasses > 0))
-	{
-		cocoaViewInfo = (AudioUnitCocoaViewInfo *)malloc(dataSize);
-		if(AudioUnitGetProperty(unit,
-								kAudioUnitProperty_CocoaUI,
-								kAudioUnitScope_Global,
-								0,
-								cocoaViewInfo,
-								&dataSize) == noErr)
-		{
-			cocoaViewBundlePath = cocoaViewInfo->mCocoaAUViewBundleLocation;
-			factoryClassName    = cocoaViewInfo->mCocoaAUViewClass[0];
-		}
-		else if(cocoaViewInfo != NULL)
-		{
-			free(cocoaViewInfo);
-			cocoaViewInfo = NULL;
-		}
-	}
-	
-	// if we have everything we need, create the custom Cocoa view
-	if(cocoaViewBundlePath && factoryClassName)
-	{
-		NSBundle * viewBundle = [NSBundle bundleWithURL:(NSURL *)cocoaViewBundlePath];
-		if(viewBundle)
-		{
-			Class factoryClass = [viewBundle classNamed:(NSString *)factoryClassName];
-			id<AUCocoaUIBase> factoryInstance = [[[factoryClass alloc] init] autorelease];
-			AUView = [factoryInstance uiViewForAudioUnit:unit 
-												withSize:NSMakeSize(0, 0)];
-			// cleanup
-			CFRelease(cocoaViewBundlePath);
-			if(cocoaViewInfo)
-			{
-				for(int i = 0; i < numberOfClasses; i++)
-					CFRelease(cocoaViewInfo->mCocoaAUViewClass[i]);
-				free(cocoaViewInfo);
+	if((result == noErr) && (numberOfClasses > 0)) {
+		AudioUnitCocoaViewInfo * cocoaViewInfo = (AudioUnitCocoaViewInfo *)malloc(dataSize);
+		OSStatus success = AudioUnitGetProperty(unit,
+												kAudioUnitProperty_CocoaUI,
+												kAudioUnitScope_Global,
+												0,
+												cocoaViewInfo,
+												&dataSize);
+		if(success == noErr && cocoaViewInfo) {
+			CFURLRef cocoaViewBundlePath = cocoaViewInfo->mCocoaAUViewBundleLocation;
+			CFStringRef factoryClassName = cocoaViewInfo->mCocoaAUViewClass[0];
+			NSBundle * viewBundle = [NSBundle bundleWithURL:(NSURL *)cocoaViewBundlePath];
+			
+			if(viewBundle) {
+				Class factoryClass = [viewBundle classNamed:(NSString *)factoryClassName];
+				id<AUCocoaUIBase> factoryInstance = [[[factoryClass alloc] init] autorelease];
+				AUView = [factoryInstance uiViewForAudioUnit:unit withSize:NSZeroSize];
 			}
 		}
+		
+		free(cocoaViewInfo);
 	}
-	
-	[self initWithAudioUnitCocoaView:AUView];
+
+	if(AUView) {
+		[self initWithAudioUnitCocoaView:AUView];
+	} else {
+		NSLog(@"Failed to create view");
+	}
 }
 
 // ----------------------------------------------------------
@@ -126,18 +107,18 @@
 - (void) initWithAudioUnitCocoaView:(NSView *)audioUnitView
 // ----------------------------------------------------------
 {
-	_AUView = audioUnitView;
+	_AUView = [audioUnitView retain];
 	NSRect contentRect = NSMakeRect(0, 0, audioUnitView.frame.size.width, audioUnitView.frame.size.height);
 	self = [super initWithContentRect:contentRect
 							styleMask:(NSTitledWindowMask |
 									   NSClosableWindowMask |
 									   NSMiniaturizableWindowMask)
 							  backing:NSBackingStoreBuffered
-								defer:NO];
+								defer:YES];
 	if(self)
 	{
 		self.level = NSNormalWindowLevel;
-		self.contentView = audioUnitView;
+		self.contentView = _AUView;
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(audioUnitChangedViewSize:)
@@ -231,16 +212,22 @@ void ofxAudioUnit::showUI(const string &title, int x, int y, bool forceGeneric)
 		windowTitle = @"Audio Unit UI";
 	}
 	
+	AudioUnitRef au = _unit;
+	
 	dispatch_async(dispatch_get_main_queue(), ^{
 		@autoreleasepool {
-			ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*_unit.get()
+			
+			cout << au << endl;
+			
+			ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*au
 																				 forceGeneric:forceGeneric];
 			
-			CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
-			
-			[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
-			[auWindow setTitle:windowTitle];
-			[auWindow makeKeyAndOrderFront:nil];
+			if(auWindow) {
+				CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
+				[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
+				[auWindow setTitle:windowTitle];
+				[auWindow makeKeyAndOrderFront:nil];
+			}
 		}
 	});
 }

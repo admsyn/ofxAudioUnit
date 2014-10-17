@@ -28,7 +28,6 @@ public:
 	ofxAudioUnitSampler sampler;
 	ofxAudioUnitFilePlayer filePlayer;
 	ofxAudioUnitNetReceive netReceive;
-	ofxAudioUnitSpeechSynth speechSynth;
 	ofxAudioUnitMidiReceiver midiReceiver;
 	ofxAudioUnitInput input;
 	

@@ -7,6 +7,9 @@
 // for text-to-speech on your mac (the same thing that
 // powers the VoiceOver utility).
 
+// This unit is not available when compiling in 32 bit mode
+// on Yosemite
+
 class ofxAudioUnitSpeechSynth : public ofxAudioUnit
 {
 	SpeechChannel _channel;

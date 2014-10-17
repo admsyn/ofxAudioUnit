@@ -13,22 +13,10 @@ void ofApp::setup(){
 	
 //	This will open a file with an ofxAudioUnitFilePlayer and play it.
 //-------------------------------------------------
-//	filePlayer.setFile(ofFilePath::getAbsolutePath("entertainer.mp3"));
+//	filePlayer.setFile(ofToDataPath("../../../example-1-hello/bin/data/entertainer.mp3"));
 //	filePlayer.play();
 //	filePlayer.connectTo(tap).connectTo(output);
 //	activeUnit = &filePlayer;
-//-------------------------------------------------
-
-//	This will use an ofxAudioUnitSpeechSynth to generate
-//	audio via text-to-speech.
-//	Press 's' to make the speech synth talk.
-//	See the console output to see what other voices are
-//	available on your computer.
-//-------------------------------------------------
-//	speechSynth.printAvailableVoices();
-//	speechSynth.setVoice("Fred");
-//	speechSynth.connectTo(tap).connectTo(output);
-//	activeUnit = &speechSynth; 
 //-------------------------------------------------
 	
 //	This will use an ofxAudioUnitInput to get audio from
@@ -107,8 +95,7 @@ void ofApp::draw(){
 	ofSetColor(255);
 	if(activeUnit){
 		ofDrawBitmapString("Press space to show the Audio Unit's UI", ofPoint(25,25));
-	}
-	else {
+	} else {
 		ofDrawBitmapString("You need to un-comment one of the blocks in setup() to generate some audio", ofPoint(25,25));
 	}
 	
@@ -116,19 +103,13 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if(key == ' ' && activeUnit)
-	{
+	if(key == ' ' && activeUnit) {
 		activeUnit->showUI();
-	}
-	else if(key == 's')
-	{
-		speechSynth.say("Fitter. Happier. More Productive");
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::drawOscilloscopeGrid()
-{
+void ofApp::drawOscilloscopeGrid() {
 	ofSetColor(0, 40, 0);
 	ofSetLineWidth(1);
 	float step = float(ofGetHeight()) / 64;
@@ -143,8 +124,7 @@ void ofApp::drawOscilloscopeGrid()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawOscilloscopeLabels()
-{
+void ofApp::drawOscilloscopeLabels() {
 	ofSetColor(0, 200, 40);
 	ofDrawBitmapString("Left Channel", 25, ofGetHeight() / 8 - 40);
 	ofDrawBitmapString("Right Channel", 25, ofGetHeight() - (ofGetHeight() / 8 - 40));
@@ -171,8 +151,7 @@ void ofApp::drawOscilloscopeLabels()
 }
 
 //--------------------------------------------------------------
-void ofApp::drawOscilloscopeLines()
-{
+void ofApp::drawOscilloscopeLines() {
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	ofSetColor(60, 150, 80, 175);
 	for(int i = 1; i < 7; i++)
