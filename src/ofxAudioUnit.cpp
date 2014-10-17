@@ -54,7 +54,7 @@ AudioUnitRef ofxAudioUnit::allocUnit(AudioComponentDescription desc)
 	AudioComponent component = AudioComponentFindNext(NULL, &_desc);
 	if(!component)
 	{
-		cout << "Couldn't locate component for description" << endl;
+		cout << "Couldn't locate component for description: " << StringForDescription(desc) << endl;
 		return AudioUnitRef();
 	}
 	
@@ -209,6 +209,8 @@ OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
 UInt32 ofxAudioUnit::getNumOutputChannels() const
 // ----------------------------------------------------------
 {
+	if(!_unit) return 0;
+	
 	AudioStreamBasicDescription ASBD = {0};
 	UInt32 ASBD_size = sizeof(ASBD);
 	

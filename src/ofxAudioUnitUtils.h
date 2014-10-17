@@ -2,6 +2,7 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <iostream>
+#include <sstream>
 
 static AudioBufferList * AudioBufferListAlloc(UInt32 channels, UInt32 samplesPerChannel)
 {
@@ -25,6 +26,16 @@ static void AudioBufferListRelease(AudioBufferList * bufferList)
 	}
 	
 	free(bufferList);
+}
+
+static std::string StringForDescription(const AudioComponentDescription &desc)
+{
+	std::stringstream ss;
+	unsigned char * c = (unsigned char *)&desc.componentType;
+	ss << c[3] << c[2] << c[1] << c[0] << ", ";
+	ss << c[7] << c[6] << c[5] << c[4] << ", ";
+	ss << c[11] << c[10] << c[9] << c[8];
+	return ss.str();
 }
 
 // these macros make the "do core audio thing, check for error" process less repetitive
