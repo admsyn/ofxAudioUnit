@@ -257,7 +257,7 @@ OSStatus RenderAndCopy(void * inRefCon,
 	
 	OSStatus status;
 	
-	if(ctx->sourceType == NodeSourceUnit && ctx->sourceUnit->getUnit()) {
+	if(ctx->sourceType == NodeSourceUnit && ctx->sourceUnit->getUnitRef()) {
 		status = ctx->sourceUnit->render(ioActionFlags, inTimeStamp, ctx->sourceBus, inNumberFrames, ioData);
 	} else if(ctx->sourceType == NodeSourceCallback) {
 		status = (ctx->sourceCallback.inputProc)(ctx->sourceCallback.inputProcRefCon,
