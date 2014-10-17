@@ -25,7 +25,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:NSViewFrameDidChangeNotification
 												  object:_AUView];
-	
 	[super dealloc];
 }
 
@@ -36,7 +35,9 @@
 	if(useGeneric) {
 		[self initWithGenericViewForUnit:unit];
 	} else if([ofxAudioUnitUIWindow audioUnitHasCocoaView:unit]) {
-		[self initWithCocoaViewForUnit:unit];
+		if(![self initWithCocoaViewForUnit:unit]) {
+			return nil;
+		}
 	} else if([ofxAudioUnitUIWindow audioUnitHasCarbonView:unit]) {
 		[self printUnsupportedCarbonMessage:unit];
 	} else {
@@ -47,7 +48,7 @@
 }
 
 // ----------------------------------------------------------
-- (void) initWithCocoaViewForUnit:(AudioUnit)unit
+- (BOOL) initWithCocoaViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
 	// getting the size of the AU View info
@@ -61,7 +62,7 @@
 											   &isWriteable);
 	
 	UInt32 numberOfClasses = (dataSize - sizeof(CFURLRef)) / sizeof(CFStringRef);
-
+	
 	NSView * AUView = nil;
 	
 	if((result == noErr) && (numberOfClasses > 0)) {
@@ -86,11 +87,13 @@
 		
 		free(cocoaViewInfo);
 	}
-
+	
 	if(AUView) {
 		[self initWithAudioUnitCocoaView:AUView];
+		return YES;
 	} else {
-		NSLog(@"Failed to create view");
+		NSLog(@"Failed to create AU view");
+		return NO;
 	}
 }
 
@@ -168,7 +171,7 @@
 										  kAudioUnitProperty_GetUIComponentList,
 										  kAudioUnitScope_Global,
 										  0,
-										  &dataSize, 
+										  &dataSize,
 										  &isWriteable);
 	
 	return (s == noErr) && (dataSize >= sizeof(ComponentDescription));
@@ -178,8 +181,8 @@
 - (void) audioUnitChangedViewSize:(NSNotification *)notification
 // ----------------------------------------------------------
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:NSViewFrameDidChangeNotification 
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:NSViewFrameDidChangeNotification
 												  object:_AUView];
 	
 	NSRect newRect = self.frame;
@@ -188,8 +191,8 @@
 	newRect.size = newSize;
 	[self setFrame:newRect display:YES];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(audioUnitChangedViewSize:) 
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(audioUnitChangedViewSize:)
 												 name:NSViewFrameDidChangeNotification
 											   object:_AUView];
 }
@@ -215,19 +218,15 @@ void ofxAudioUnit::showUI(const string &title, int x, int y, bool forceGeneric)
 	AudioUnitRef au = _unit;
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
-		@autoreleasepool {
-			
-			cout << au << endl;
-			
-			ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*au
-																				 forceGeneric:forceGeneric];
-			
-			if(auWindow) {
-				CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
-				[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
-				[auWindow setTitle:windowTitle];
-				[auWindow makeKeyAndOrderFront:nil];
-			}
+		if(!au) return;
+		
+		ofxAudioUnitUIWindow * auWindow = [[ofxAudioUnitUIWindow alloc] initWithAudioUnit:*au forceGeneric:forceGeneric];
+		
+		if(auWindow) {
+			CGFloat flippedY = [[NSScreen mainScreen] visibleFrame].size.height - y - auWindow.frame.size.height;
+			[auWindow setFrameOrigin:NSMakePoint(x, flippedY)];
+			[auWindow setTitle:windowTitle];
+			[auWindow makeKeyAndOrderFront:nil];
 		}
 	});
 }
