@@ -46,6 +46,8 @@ ofxAudioUnit has rudimentary iOS support, but doesn't have 1:1 coverage. The DSP
 
 I would gladly accept a PR that adds more support for iOS.
 
+An alternative for iOS would be to investigate the [AVAudioEngine API](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioEngine_Class/index.html) or [The Amazing Audio Engine](http://theamazingaudioengine.com/)
+
 License
 ----------
 
