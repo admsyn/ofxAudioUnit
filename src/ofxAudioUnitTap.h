@@ -52,6 +52,13 @@ public:
 	void getStereoWaveform(ofPolyline &outLeft, ofPolyline &outRight, float width, float height, unsigned sampleRate = 1);
 	void getLeftWaveform(ofPolyline &outLine, float width, float height, unsigned sampleRate = 1);
 	void getRightWaveform(ofPolyline &outLine, float width, float height, unsigned sampleRate = 1);
+	void getWaveform(ofPolyline &outLine, float width, float height, unsigned channel = 0, unsigned sampleRate = 1);
+	
+	// These are convenience functions that return an ofPolyline directly, but are generally less
+	// efficient than the ones with an "out" parameter above
+	ofPolyline getLeftWaveform(float width, float height, unsigned sampleRate = 1);
+	ofPolyline getRightWaveform(float width, float height, unsigned sampleRate = 1);
+	ofPolyline getWaveform(float width, float height, unsigned channel = 0, unsigned sampleRate = 1);
 	
 	// These output the RMS (i.e. "loudness") of the most recent buffer
 	float getRMS(unsigned int channel);

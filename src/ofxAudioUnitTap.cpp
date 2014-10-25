@@ -99,28 +99,40 @@ void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, 
 	}
 }
 
-// ----------------------------------------------------------
-void ofxAudioUnitTap::getLeftWaveform(ofPolyline &outLine, float w, float h, unsigned sampleRate)
-// ----------------------------------------------------------
+void ofxAudioUnitTap::getWaveform(ofPolyline &l, float w, float h, unsigned chan, unsigned rate)
 {
-	getSamples(_tempBuffer, 0);
-	WaveformForBuffer(_tempBuffer, w, h, outLine, sampleRate);
+	getSamples(_tempBuffer, chan);
+	WaveformForBuffer(_tempBuffer, w, h, l, rate);
 }
 
-// ----------------------------------------------------------
-void ofxAudioUnitTap::getRightWaveform(ofPolyline &outLine, float w, float h, unsigned sampleRate)
-// ----------------------------------------------------------
+void ofxAudioUnitTap::getLeftWaveform(ofPolyline &l, float w, float h, unsigned rate)
 {
-	getSamples(_tempBuffer, 1);
-	WaveformForBuffer(_tempBuffer, w, h, outLine, sampleRate);
+	getWaveform(l, w, h, 0, rate);
 }
 
-// ----------------------------------------------------------
+void ofxAudioUnitTap::getRightWaveform(ofPolyline &l, float w, float h, unsigned rate)
+{
+	getWaveform(l, w, h, 1, rate);
+}
+
 void ofxAudioUnitTap::getStereoWaveform(ofPolyline &l, ofPolyline &r, float w, float h, unsigned rate)
-// ----------------------------------------------------------
 {
 	getLeftWaveform(l, w, h, rate);
 	getRightWaveform(r, w, h, rate);
+}
+
+ofPolyline ofxAudioUnitTap::getWaveform(float w, float h, unsigned chan, unsigned rate) {
+	ofPolyline tempWave;
+	getWaveform(tempWave, w, h, chan, rate);
+	return tempWave;
+}
+
+ofPolyline ofxAudioUnitTap::getLeftWaveform(float w, float h, unsigned rate) {
+	return getWaveform(w, h, 0, rate);
+}
+
+ofPolyline ofxAudioUnitTap::getRightWaveform(float w, float h, unsigned rate) {
+	return getWaveform(w, h, 1, rate);
 }
 
 #endif // !TARGET_OS_IPHONE
