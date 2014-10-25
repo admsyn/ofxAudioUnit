@@ -78,20 +78,25 @@ float ofxAudioUnitTap::getRMS(unsigned int channel)
 
 #pragma mark - Waveforms
 
-// ----------------------------------------------------------
-void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, float height, ofPolyline &outLine, unsigned sampleRate)
-// ----------------------------------------------------------
+void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float w, float h, ofPolyline &outLine, unsigned rate)
 {	
-	outLine.clear();
+	const size_t size = buffer.size() / rate;
 	
-	const float xStep = width / (buffer.size() / sampleRate);
-	float x = 0;
-	
-	for (int i = 0; i < buffer.size(); i += sampleRate, x += xStep)
-	{
-		float y = ofMap(buffer[i], -1, 1, height, 0, true);
-		outLine.addVertex(ofPoint(x, y));
+	if(size == 0) {
+		outLine.clear();
+		return;
 	}
+	
+	if(outLine.size() != size) {
+		outLine.resize(size);
+	}
+	
+	float * v = (float *)&outLine[0];
+	float one = 1;
+	float zero = 0;
+	float half = h / 2.;
+	vDSP_vsmsa(&buffer[0], rate, &half, &half, v + 1, 3, size); // multiply and add "y"s
+	vDSP_vgen(&zero, &w, v, 3, size); // generate "x"s
 }
 
 void ofxAudioUnitTap::getWaveform(ofPolyline &l, float w, float h, unsigned chan, unsigned rate)
@@ -117,9 +122,8 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &l, ofPolyline &r, float w, f
 }
 
 ofPolyline ofxAudioUnitTap::getWaveform(float w, float h, unsigned chan, unsigned rate) {
-	ofPolyline tempWave;
-	getWaveform(tempWave, w, h, chan, rate);
-	return tempWave;
+	getWaveform(_tempWave, w, h, chan, rate);
+	return _tempWave;
 }
 
 ofPolyline ofxAudioUnitTap::getLeftWaveform(float w, float h, unsigned rate) {

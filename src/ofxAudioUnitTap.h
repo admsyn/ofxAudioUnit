@@ -67,4 +67,5 @@ public:
 	
 private:
 	MonoSamples _tempBuffer;
+	ofPolyline _tempWave;
 };
