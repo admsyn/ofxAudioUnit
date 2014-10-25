@@ -41,10 +41,9 @@ public:
 	void setBufferLength(unsigned int samplesToBuffer);
 	
 	void getSamples(StereoSamples &outData) const;
-	void getSamples(MonoSamples &outData) const;
-	void getSamples(MonoSamples &outData, unsigned int channel) const;
-	void getLeftSamples(MonoSamples &outData) const { getSamples(outData, 0); }
-	void getRightSamples(MonoSamples &outData) const { getSamples(outData, 1); }
+	void getSamples(MonoSamples &outData, unsigned channel = 0) const;
+	void getLeftSamples(MonoSamples &outData) const;
+	void getRightSamples(MonoSamples &outData) const;
 	
 	// These output an ofPolyline representing the waveform of the most recent samples in the buffer.
 	// You can use the "sampleRate" param to skip samples for the sake of speed (i.e. a sampleRate
@@ -61,7 +60,7 @@ public:
 	ofPolyline getWaveform(float width, float height, unsigned channel = 0, unsigned sampleRate = 1);
 	
 	// These output the RMS (i.e. "loudness") of the most recent buffer
-	float getRMS(unsigned int channel);
+	float getRMS(unsigned channel);
 	float getLeftChannelRMS()  {return getRMS(0);}
 	float getRightChannelRMS() {return getRMS(1);}
 	
