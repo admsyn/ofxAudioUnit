@@ -89,12 +89,7 @@ void WaveformForBuffer(const ofxAudioUnitTap::MonoSamples &buffer, float width, 
 	
 	for (int i = 0; i < buffer.size(); i += sampleRate, x += xStep)
 	{
-#if TARGET_OS_IPHONE
-		SInt16 s = SInt16(buffer[i] >> 9);
-		float y = ofMap(s, -32768, 32767, height, 0, true);
-#else
 		float y = ofMap(buffer[i], -1, 1, height, 0, true);
-#endif
 		outLine.addVertex(ofPoint(x, y));
 	}
 }
