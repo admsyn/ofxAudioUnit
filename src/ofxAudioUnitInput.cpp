@@ -366,8 +366,11 @@ OSStatus PullCallback(void *inRefCon,
 		}
 		
 		size_t bytesToConsume = min(ioData->mBuffers[i].mDataByteSize, (UInt32)circBufferSize);
-		memcpy(ioData->mBuffers[i].mData, circBufferTail, bytesToConsume);
-		TPCircularBufferConsume(&ctx->circularBuffers[i], bytesToConsume);
+		
+		if(bytesToConsume > 0) {
+			memcpy(ioData->mBuffers[i].mData, circBufferTail, bytesToConsume);
+			TPCircularBufferConsume(&ctx->circularBuffers[i], bytesToConsume);
+		}
 	}
 	
 	return noErr;
