@@ -68,7 +68,6 @@ void WaveformForBuffer(Float32 * begin, size_t length, float w, float h, ofPolyl
 	}
 	
 	float * v = (float *)&outLine[0];
-	float one = 1;
 	float zero = 0;
 	float half = h / 2.;
 	vDSP_vsmsa(begin, rate, &half, &half, v + 1, 3, size); // multiply and add "y"s
