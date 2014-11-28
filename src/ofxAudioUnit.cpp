@@ -88,6 +88,26 @@ ofxAudioUnit::~ofxAudioUnit()
 	
 }
 
+// ----------------------------------------------------------
+bool ofxAudioUnit::setup(AudioComponentDescription description)
+// ----------------------------------------------------------
+{
+	_desc = description;
+	initUnit();
+}
+
+// ----------------------------------------------------------
+bool ofxAudioUnit::setup(OSType type, OSType subType, OSType manufacturer)
+// ----------------------------------------------------------
+{
+	_desc = (AudioComponentDescription){
+		.componentType = type,
+		.componentSubType = subType,
+		.componentManufacturer = manufacturer
+	};
+	initUnit();
+}
+
 #pragma mark - Parameters
 
 #if !TARGET_OS_IPHONE

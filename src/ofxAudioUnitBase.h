@@ -33,6 +33,9 @@ public:
 	
 	virtual ~ofxAudioUnit();
 	
+	bool setup(AudioComponentDescription description);
+	bool setup(OSType type, OSType subType, OSType manufacturer = kAudioUnitManufacturer_Apple);
+	
 	virtual ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
 	virtual ofxAudioUnitDSPNode& connectTo(ofxAudioUnitDSPNode &node);
 	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit));
