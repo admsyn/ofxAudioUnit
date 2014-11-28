@@ -34,14 +34,9 @@ void ofApp::setup()
 	
 //	Now, let's set up a different effect for each one
 	
-	distortion = ofxAudioUnit(kAudioUnitType_Effect,
-							  kAudioUnitSubType_Distortion);
-	
-	delay = ofxAudioUnit(kAudioUnitType_Effect,
-						 kAudioUnitSubType_Delay);
-	
-	filter = ofxAudioUnit(kAudioUnitType_Effect,
-						  kAudioUnitSubType_LowPassFilter);
+	distortion.setup(kAudioUnitType_Effect, kAudioUnitSubType_Distortion);
+	delay.setup(kAudioUnitType_Effect, kAudioUnitSubType_Delay);
+	filter.setup(kAudioUnitType_Effect, kAudioUnitSubType_LowPassFilter);
 	
 //	We'll send each of our sources through its own effect, and also
 //	through its own tap so that we can see the individual waveforms
@@ -63,8 +58,7 @@ void ofApp::setup()
 //	Now, we'll send the mixer's single output bus through a shared
 //	compressor effect, then to the output
 	
-	compressor = ofxAudioUnit(kAudioUnitType_Effect,
-							  kAudioUnitSubType_DynamicsProcessor);
+	compressor.setup(kAudioUnitType_Effect, kAudioUnitSubType_DynamicsProcessor);
 	
 	mixer.connectTo(compressor).connectTo(output);
 	

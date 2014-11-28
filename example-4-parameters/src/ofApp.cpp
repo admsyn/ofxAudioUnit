@@ -24,14 +24,12 @@ void ofApp::setup(){
 //	going through it, while simultaneously changing the pitch
 //	(like slowing down and speeding up a record)
 	
-	varispeed = ofxAudioUnit(kAudioUnitType_FormatConverter,
-							 kAudioUnitSubType_Varispeed);
+	varispeed.setup(kAudioUnitType_FormatConverter, kAudioUnitSubType_Varispeed);
 	
 //	AULowPass - a lowpass filter which cuts off high frequencies
 //	at a user-controllable cutoff point
 	
-	lowpass = ofxAudioUnit(kAudioUnitType_Effect,
-						   kAudioUnitSubType_LowPassFilter);
+	lowpass.setup(kAudioUnitType_Effect, kAudioUnitSubType_LowPassFilter);
 	
 //	We'll also use an ofxAudioUnitFilePlayer to generate audio,
 //	an ofxAudioUnitTap to extract the waveform, and an output
@@ -72,8 +70,7 @@ void ofApp::setup(){
 	
 //	Here, we're setting the lowpass's resonance to 10
 	
-	AudioUnitSetParameter(lowpass.getUnit(), kLowPassParam_Resonance,
-						  kAudioUnitScope_Global, 0, 10, 0);
+	AudioUnitSetParameter(lowpass, kLowPassParam_Resonance, kAudioUnitScope_Global, 0, 10, 0);
 	
 //	If you're using a 3rd party unit (i.e. one that's not made by Apple)
 //	you'll need to retrieve and set parameters by finding their parameter
@@ -137,7 +134,7 @@ void ofApp::mouseMoved(int x, int y ){
 	
 	float newSpeed = ofMap(x, 0, ofGetWidth(), 0.01, 2, true);
 	
-	AudioUnitSetParameter(varispeed.getUnit(),
+	AudioUnitSetParameter(varispeed,
 						  kVarispeedParam_PlaybackRate,
 						  kAudioUnitScope_Global,
 						  0,
@@ -146,7 +143,7 @@ void ofApp::mouseMoved(int x, int y ){
 	
 	float newCutoff = ofMap(y, 0, ofGetHeight(), 10, 6900);
 	
-	AudioUnitSetParameter(lowpass.getUnit(),
+	AudioUnitSetParameter(lowpass,
 						  kLowPassParam_CutoffFrequency,
 						  kAudioUnitScope_Global,
 						  0,

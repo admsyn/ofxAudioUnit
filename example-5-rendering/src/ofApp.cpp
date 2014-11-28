@@ -49,11 +49,8 @@ void ofApp::setup(){
 	
 //	First, let's set up an Audio Unit chain
 	
-	distortion = ofxAudioUnit(kAudioUnitType_Effect,
-							  kAudioUnitSubType_Distortion);
-	
-	reverb = ofxAudioUnit(kAudioUnitType_Effect,
-						  kAudioUnitSubType_MatrixReverb);
+	distortion.setup(kAudioUnitType_Effect, kAudioUnitSubType_Distortion);
+	reverb.setup(kAudioUnitType_Effect, kAudioUnitSubType_MatrixReverb);
 	
 	distortion.connectTo(reverb).connectTo(tap).connectTo(output);
 	

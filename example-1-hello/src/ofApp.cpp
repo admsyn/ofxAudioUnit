@@ -39,16 +39,16 @@ void ofApp::setup(){
 //	Here, we're creating an ofxAudioUnit which controls an
 //	AUMatrixReverb Audio Unit
 	
-	reverb = ofxAudioUnit('aufx', 'mrev', 'appl');
+	reverb.setup('aufx', 'mrev', 'appl');
 	
 //	All of the Apple-supplied OSTypes also have convienient 
 //	constants defined for them, which can make your code a
 //	bit more readable. The reverb unit could also have been
-//	constructed like this:
+//	set up like this:
 //	
-//	reverb = ofxAudioUnit(kAudioUnitType_Effect,
-//	                      kAudioUnitSubType_MatrixReverb,
-//	                      kAudioUnitManufacturer_Apple);
+//	reverb.setup(kAudioUnitType_Effect,
+//	             kAudioUnitSubType_MatrixReverb,
+//	             kAudioUnitManufacturer_Apple);
 //	
 //	To see all of the Audio Units you have installed on your
 //	computer, open a Terminal and run the command "auval -a"
