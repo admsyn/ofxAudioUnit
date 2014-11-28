@@ -64,12 +64,14 @@ AudioUnitRef ofxAudioUnit::allocUnit(AudioComponentDescription desc)
 }
 
 // ----------------------------------------------------------
-void ofxAudioUnit::initUnit()
+bool ofxAudioUnit::initUnit()
 // ----------------------------------------------------------
 {
 	_unit = allocUnit(_desc);
 	if(_unit) {
-		OFXAU_RETURN(AudioUnitInitialize(*_unit), "initializing unit");
+		OFXAU_RET_BOOL(AudioUnitInitialize(*_unit), "initializing unit");
+	} else {
+		return false;
 	}
 }
 
@@ -93,7 +95,7 @@ bool ofxAudioUnit::setup(AudioComponentDescription description)
 // ----------------------------------------------------------
 {
 	_desc = description;
-	initUnit();
+	return initUnit();
 }
 
 // ----------------------------------------------------------
@@ -105,7 +107,7 @@ bool ofxAudioUnit::setup(OSType type, OSType subType, OSType manufacturer)
 		.componentSubType = subType,
 		.componentManufacturer = manufacturer
 	};
-	initUnit();
+	return initUnit();
 }
 
 #pragma mark - Parameters
@@ -149,9 +151,10 @@ void ofxAudioUnit::printParameterList(bool includeExpert, bool includeReadOnly)
 	for(size_t i = 0; i < paramList.size(); ++i) {
 		AudioUnitParameterInfo& p = paramList[i];
 		
-		char buf[PATH_MAX];
-		CFStringGetCString(p.cfNameString, buf, PATH_MAX, kCFStringEncodingUTF8);
-		string paramName(buf);
+		const size_t bufferSize = 1024;
+		char buffer[bufferSize];
+		CFStringGetCString(p.cfNameString, buffer, bufferSize, kCFStringEncodingUTF8);
+		string paramName(buffer);
 		
 		cout << "[" << i << "] " << paramName << " [";
 		cout << p.minValue << " : " << p.maxValue << " : " << p.defaultValue << "]" << endl;
