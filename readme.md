@@ -40,6 +40,10 @@ After this, just add
 ```
 in your ofApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include ofxAudioUnitMidi.h` as well.
 
+Other Addons
+------------
+[Andrew McWilliams](http://jahya.net/) has written a GUI / util / manager addon called [ofxAudioUnitManager](https://github.com/microcosm/ofxAudioUnitManager)
+
 iOS
 ---
 ofxAudioUnit has rudimentary iOS support, but doesn't have 1:1 coverage. The DSP stuff (FFT, tap, recorder..) won't work at the moment, because they haven't been ported to adapt to the different sample format on iOS. You'll also have to manage your own audio session. Also, be aware that the Apple-supplied audio units aren't the same between iOS and OSX.
