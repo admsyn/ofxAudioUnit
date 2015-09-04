@@ -281,7 +281,7 @@ OSStatus RenderAndCopy(void * inRefCon,
 										 ioData);
 	}
 	
-	if(ctx->bufferMutex.tryLock()) {
+	if(ctx->bufferMutex.try_lock()) {
 		if(status == noErr) {
 			const size_t buffersToCopy = std::min<size_t>(ctx->circularBuffers.size(), ioData->mNumberBuffers);
 			
