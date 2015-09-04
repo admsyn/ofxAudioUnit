@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0600"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "example-parameters.app"
-               BlueprintName = "example-parameters"
-               ReferencedContainer = "container:example-parameters.xcodeproj">
+               BuildableName = "example-4-parameters.app"
+               BlueprintName = "example-4-parameters"
+               ReferencedContainer = "container:example-4-parameters.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-parameters.app"
-            BlueprintName = "example-parameters"
-            ReferencedContainer = "container:example-parameters.xcodeproj">
+            BuildableName = "example-4-parameters.app"
+            BlueprintName = "example-4-parameters"
+            ReferencedContainer = "container:example-4-parameters.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -48,13 +48,14 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-parameters.app"
-            BlueprintName = "example-parameters"
-            ReferencedContainer = "container:example-parameters.xcodeproj">
+            BuildableName = "example-4-parameters.app"
+            BlueprintName = "example-4-parameters"
+            ReferencedContainer = "container:example-4-parameters.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -66,13 +67,14 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-parameters.app"
-            BlueprintName = "example-parameters"
-            ReferencedContainer = "container:example-parameters.xcodeproj">
+            BuildableName = "example-4-parameters.app"
+            BlueprintName = "example-4-parameters"
+            ReferencedContainer = "container:example-4-parameters.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

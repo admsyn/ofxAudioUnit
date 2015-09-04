@@ -112,11 +112,11 @@ void ofApp::draw(){
 	ofDrawBitmapString("Press 'f' to show the file player", ofPoint(40,20));
 	
 	ofSetColor(255, 125, 50);
-	ofCircle(20, ofGetMouseY(), 15);
+	ofDrawCircle(20, ofGetMouseY(), 15);
 	ofDrawBitmapString("|\nFilter\nFrequency\n|", ofPoint(40, ofGetHeight()/2));
 	
 	ofSetColor(20, 255, 150);
-	ofCircle(ofGetMouseX(), ofGetHeight() - 20, 15);
+	ofDrawCircle(ofGetMouseX(), ofGetHeight() - 20, 15);
 	ofDrawBitmapString("<- Playback Speed ->", ofPoint(ofGetWidth()/2 - 100, ofGetHeight() - 40));
 }
 

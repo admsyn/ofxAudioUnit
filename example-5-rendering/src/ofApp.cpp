@@ -102,8 +102,8 @@ OSStatus renderPulseSineChord(void * inRefCon,
 	
 //	Here, we're grabbing pointers to the two chunks of memory that the Audio Unit
 //	wants the samples written to (left channel and right channel).
-	AudioUnitSampleType * leftSamples  = (AudioUnitSampleType *)ioData->mBuffers[0].mData;
-	AudioUnitSampleType * rightSamples = (AudioUnitSampleType *)ioData->mBuffers[1].mData;
+	Float32 * leftSamples  = (Float32 *)ioData->mBuffers[0].mData;
+	Float32 * rightSamples = (Float32 *)ioData->mBuffers[1].mData;
 	
 //	Now, we iterate over the buffer and write our sine wave samples into the 
 //	left channel's buffer
@@ -123,7 +123,7 @@ OSStatus renderPulseSineChord(void * inRefCon,
 	
 //	Since we're not doing any stereo effects, we'll just copy the left channel's 
 //	buffer into the right channel.
-	memcpy(rightSamples, leftSamples, inNumberFrames * sizeof(AudioUnitSampleType));
+	memcpy(rightSamples, leftSamples, inNumberFrames * sizeof(Float32));
 	
 //	We're done. We return noErr so the Audio Unit knows we finished properly
 	return noErr;

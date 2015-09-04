@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0600"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,16 +15,16 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "example-rendering.app"
-               BlueprintName = "example-rendering"
-               ReferencedContainer = "container:example-rendering.xcodeproj">
+               BuildableName = "example-2-oscilloscope.app"
+               BlueprintName = "example-2-oscilloscope"
+               ReferencedContainer = "container:example-2-oscilloscope.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Release">
       <Testables>
@@ -33,28 +33,29 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-rendering.app"
-            BlueprintName = "example-rendering"
-            ReferencedContainer = "container:example-rendering.xcodeproj">
+            BuildableName = "example-2-oscilloscope.app"
+            BlueprintName = "example-2-oscilloscope"
+            ReferencedContainer = "container:example-2-oscilloscope.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-rendering.app"
-            BlueprintName = "example-rendering"
-            ReferencedContainer = "container:example-rendering.xcodeproj">
+            BuildableName = "example-2-oscilloscope.app"
+            BlueprintName = "example-2-oscilloscope"
+            ReferencedContainer = "container:example-2-oscilloscope.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -66,13 +67,14 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "example-rendering.app"
-            BlueprintName = "example-rendering"
-            ReferencedContainer = "container:example-rendering.xcodeproj">
+            BuildableName = "example-2-oscilloscope.app"
+            BlueprintName = "example-2-oscilloscope"
+            ReferencedContainer = "container:example-2-oscilloscope.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -115,11 +115,11 @@ void ofApp::drawOscilloscopeGrid() {
 	float step = float(ofGetHeight()) / 64;
 	for(int x = 0; x < ofGetWidth(); x += step)
 	{
-		ofLine(x, 0, x, ofGetHeight());
+		ofDrawLine(x, 0, x, ofGetHeight());
 	}
 	for(int y = 0; y < ofGetHeight(); y += step)
 	{
-		ofLine(0, y, ofGetWidth(), y);
+		ofDrawLine(0, y, ofGetWidth(), y);
 	}
 }
 
