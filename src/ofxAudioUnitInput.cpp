@@ -33,7 +33,7 @@ typedef std::shared_ptr<AudioBufferList> AudioBufferListRef;
 
 struct InputContext
 {
-	vector<TPCircularBuffer> circularBuffers;
+	std::vector<TPCircularBuffer> circularBuffers;
 	AudioUnitRef inputUnit;
 	AudioBufferListRef bufferList;
 };
@@ -179,7 +179,7 @@ bool ofxAudioUnitInput::setDevice(AudioDeviceID deviceID)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitInput::setDevice(const string &deviceName)
+bool ofxAudioUnitInput::setDevice(const std::string &deviceName)
 // ----------------------------------------------------------
 {
 	std::vector<AudioDeviceID> inputDevices = AudioInputDeviceList();
@@ -205,10 +205,10 @@ bool ofxAudioUnitInput::setDevice(const string &deviceName)
 void ofxAudioUnitInput::listInputDevices()
 // ----------------------------------------------------------
 {
-	vector<AudioDeviceID> deviceList = AudioInputDeviceList();
+	std::vector<AudioDeviceID> deviceList = AudioInputDeviceList();
 	
 	for(int i = 0; i < deviceList.size(); i++) {
-		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]" << endl;
+		std::cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]" << std::endl;
 	}
 }
 
@@ -365,7 +365,7 @@ OSStatus PullCallback(void *inRefCon,
 			memset(ioData->mBuffers[i].mData, 0, ioData->mBuffers[i].mDataByteSize);
 		}
 		
-		size_t bytesToConsume = min(ioData->mBuffers[i].mDataByteSize, (UInt32)circBufferSize);
+		size_t bytesToConsume = std::min(ioData->mBuffers[i].mDataByteSize, (UInt32)circBufferSize);
 		
 		if(bytesToConsume > 0) {
 			memcpy(ioData->mBuffers[i].mData, circBufferTail, bytesToConsume);

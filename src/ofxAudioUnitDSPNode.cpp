@@ -35,7 +35,7 @@ struct DSPNodeContext
 	AURenderCallbackStruct sourceCallback;
 	AURenderCallbackStruct processCallback;
 	std::vector<TPCircularBuffer> circularBuffers;
-	ofMutex bufferMutex;
+	std::mutex bufferMutex;
 	
 	DSPNodeContext()
 	: sourceBus(0)
@@ -131,13 +131,6 @@ ofxAudioUnitDSPNode& ofxAudioUnitDSPNode::connectTo(ofxAudioUnitDSPNode &destina
 	AURenderCallbackStruct callback = {RenderAndCopy, &_impl->ctx};
 	destination.setSource(callback);
 	return destination;
-}
-
-// ----------------------------------------------------------
-ofxAudioUnit& ofxAudioUnitDSPNode::operator>>(ofxAudioUnit &destination)
-// ----------------------------------------------------------
-{
-	return connectTo(destination);
 }
 
 // ----------------------------------------------------------

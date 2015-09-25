@@ -130,7 +130,7 @@ static void PerformFFT(float * input, float * window, COMPLEX_SPLIT &fftData, FF
 	fftData.imagp[0] = 0.0f;
 }
 
-bool ofxAudioUnitFftNode::getAmplitude(vector<float> &outAmplitude)
+bool ofxAudioUnitFftNode::getAmplitude(std::vector<float> &outAmplitude)
 {
 	getSamplesFromChannel(_sampleBuffer, 0);
 	

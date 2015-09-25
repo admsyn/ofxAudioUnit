@@ -24,13 +24,13 @@ public:
 	
 #if !TARGET_OS_IPHONE
 	bool setDevice(AudioDeviceID deviceID);
-	bool setDevice(const string &deviceName);
+	bool setDevice(const std::string &deviceName);
 	
 	static void listInputDevices();
 #endif
 	
 private:
 	struct InputImpl;
-	shared_ptr<InputImpl> _impl;
+	std::shared_ptr<InputImpl> _impl;
 	bool configureInputDevice();
 };

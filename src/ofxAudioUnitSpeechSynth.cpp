@@ -56,7 +56,7 @@ void ofxAudioUnitSpeechSynth::printAvailableVoices()
 	std::vector<std::string> voiceNames = getAvailableVoices();
 	for(int i = 0; i < voiceNames.size(); i++)
 	{
-		cout << i+1 << ":\t" << voiceNames.at(i) << endl;
+		std::cout << i+1 << ":\t" << voiceNames.at(i) << std::endl;
 	}
 }
 
@@ -75,11 +75,11 @@ std::vector<std::string> ofxAudioUnitSpeechSynth::getAvailableVoices()
 		VoiceDescription vDesc;
 		GetIndVoice(i, &vSpec);
 		GetVoiceDescription(&vSpec, &vDesc, sizeof(VoiceDescription));
-		string name = string((const char *)vDesc.name);
+		std::string name((const char *)vDesc.name);
 		
 		// the first "character" in vDesc.name is actually just the length
 		// of the string. We're tossing it out here by making a substring.
-		voiceNames.push_back(string(name, 1, name[0]));
+		voiceNames.push_back(std::string(name, 1, name[0]));
 	}
 	return voiceNames;
 }

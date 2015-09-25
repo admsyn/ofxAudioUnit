@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofxAudioUnitBase.h"
+#include <ApplicationServices/ApplicationServices.h>
 
 // ofxAudioUnitSpeechSynth wraps the AUSpeechSynthesis unit.
 // This unit lets you access the Speech Synthesis API

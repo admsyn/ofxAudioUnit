@@ -56,7 +56,7 @@ bool ofxAudioUnitRecorder::startRecording(const std::string &filePath) {
 	CFRelease(fileURL);
 	
 	if(s != noErr) {
-		cout << "Couldn't create audio file: " << (OSStatus)s << endl;
+		std::cout << "Couldn't create audio file: " << (OSStatus)s << std::endl;
 		return false;
 	}
 	
@@ -67,7 +67,7 @@ bool ofxAudioUnitRecorder::startRecording(const std::string &filePath) {
 	
 	
 	if(s != noErr) {
-		cout << "Couldn't set client format: " << (OSStatus)s << endl;
+		std::cout << "Couldn't set client format: " << (OSStatus)s << std::endl;
 		return false;
 	}
 	
@@ -96,7 +96,7 @@ OSStatus Record(void * inRefCon,
 	OSStatus s = ExtAudioFileWriteAsync(file, inNumberFrames, ioData);
 	
 	if(s != noErr) {
-		cout << "error while recording audio: " << (OSStatus)s << endl;
+		std::cout << "error while recording audio: " << (OSStatus)s << std::endl;
 	}
 	
 	return noErr;

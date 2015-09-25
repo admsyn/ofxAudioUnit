@@ -48,7 +48,7 @@ bool ofxAudioUnitFilePlayer::setFile(const std::string &filePath) {
 	_primed = false;
 	
 	if(s != noErr) {
-		cout << "Error " << s << " while opening file at " << filePath << endl;
+		std::cout << "Error " << s << " while opening file at " << filePath << std::endl;
 		return false;
 	} else {
 		// setting the file ID now since it seems to have some overhead.
@@ -113,7 +113,7 @@ void ofxAudioUnitFilePlayer::prime() {
 	_seekSampleTime = 0;
 	
 	if(!(_region.mTimeStamp.mFlags & kAudioTimeStampHostTimeValid)) {
-		cout << "ofxAudioUnitFilePlayer has no file to play" << endl;
+		std::cout << "ofxAudioUnitFilePlayer has no file to play" << std::endl;
 		return;
 	}
 	

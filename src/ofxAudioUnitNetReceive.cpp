@@ -24,7 +24,7 @@ ofxAudioUnitNetReceive::ofxAudioUnitNetReceive()
 void ofxAudioUnitNetReceive::connectToHost(const std::string &address, unsigned long port)
 // ----------------------------------------------------------
 {
-	stringstream ss;
+	std::stringstream ss;
 	ss << address << ":" << port;
 	CFStringRef hostName = CFStringCreateWithCString(kCFAllocatorDefault,
 													 ss.str().c_str(),

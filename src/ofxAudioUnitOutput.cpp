@@ -55,7 +55,7 @@ bool ofxAudioUnitOutput::setDevice(AudioDeviceID deviceID)
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitOutput::setDevice(const string &deviceName)
+bool ofxAudioUnitOutput::setDevice(const std::string &deviceName)
 // ----------------------------------------------------------
 {
 	std::vector<AudioDeviceID> outputDevices = AudioOutputDeviceList();
@@ -81,10 +81,10 @@ bool ofxAudioUnitOutput::setDevice(const string &deviceName)
 void ofxAudioUnitOutput::listOutputDevices()
 // ----------------------------------------------------------
 {
-	vector<AudioDeviceID> deviceList = AudioOutputDeviceList();
+	std::vector<AudioDeviceID> deviceList = AudioOutputDeviceList();
 	
 	for(int i = 0; i < deviceList.size(); i++) {
-		cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]\n";
+		std::cout << "ID[" << deviceList[i] << "]  \t" << "Name[" << AudioDeviceName(deviceList[i]) << "]\n";
 	}
 }
 

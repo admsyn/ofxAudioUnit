@@ -14,15 +14,15 @@ ofxAudioUnitMatrixMixer::ofxAudioUnitMatrixMixer(UInt32 inputBusCount, UInt32 ou
 
 ofxAudioUnitMatrixMixer::ofxAudioUnitMatrixMixer(const ofxAudioUnitMatrixMixer &orig)
 {	
-	vector<UInt32> origBusCount = orig.getBusCount();
-	vector<AudioStreamBasicDescription> origASBDs = orig.getASBDs();
+	std::vector<UInt32> origBusCount = orig.getBusCount();
+	std::vector<AudioStreamBasicDescription> origASBDs = orig.getASBDs();
 	initWithLayout(origBusCount[0], origBusCount[1], &origASBDs[0], &origASBDs[1]);
 }
 
 ofxAudioUnitMatrixMixer& ofxAudioUnitMatrixMixer::operator=(const ofxAudioUnitMatrixMixer &orig)
 {
-	vector<UInt32> origBusCount = orig.getBusCount();
-	vector<AudioStreamBasicDescription> origASBDs = orig.getASBDs();
+	std::vector<UInt32> origBusCount = orig.getBusCount();
+	std::vector<AudioStreamBasicDescription> origASBDs = orig.getASBDs();
 	initWithLayout(origBusCount[0], origBusCount[1], &origASBDs[0], &origASBDs[1]);
 	return *this;
 }

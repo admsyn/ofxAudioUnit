@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ofxAudioUnitDSPNode.h"
-#include "ofPolyline.h"
+//#include "ofPolyline.h"
+class ofPolyline;
 
 // ofxAudioUnitTap acts like an Audio Unit (as in, you
 // can connect it to other Audio Units). In reality, it
@@ -34,7 +35,7 @@ public:
 	{
 		ofxAudioUnitTap::MonoSamples left;
 		ofxAudioUnitTap::MonoSamples right;
-		size_t size(){return min(left.size(), right.size());}
+		size_t size(){return std::min(left.size(), right.size());}
 		bool empty(){return left.empty() || right.empty();}
 	};
 	
@@ -66,5 +67,5 @@ public:
 	
 private:
 	MonoSamples _tempBuffer;
-	ofPolyline _tempWave;
+	std::unique_ptr<ofPolyline> _tempWave;
 };

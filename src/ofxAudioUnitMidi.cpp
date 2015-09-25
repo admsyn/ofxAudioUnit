@@ -4,10 +4,10 @@
 #pragma mark MIDI utilities
 
 // ----------------------------------------------------------
-vector<string> ofxAudioUnitMidi::getSourceNames()
+std::vector<std::string> ofxAudioUnitMidi::getSourceNames()
 // ----------------------------------------------------------
 {
-	vector<string> sourceNames;
+	std::vector<std::string> sourceNames;
 	ItemCount sourceCount = MIDIGetNumberOfSources();
 	for(int i = 0; i < sourceCount; i++)
 	{
@@ -25,17 +25,17 @@ vector<string> ofxAudioUnitMidi::getSourceNames()
 void ofxAudioUnitMidi::printSourceNames()
 // ----------------------------------------------------------
 {
-	vector<string> midiSources = ofxAudioUnitMidi::getSourceNames();
+	std::vector<std::string> midiSources = ofxAudioUnitMidi::getSourceNames();
 	for(int i = 0; i < midiSources.size(); i++)
 	{
-		cout << i << " : " << midiSources[i] << endl;
+		std::cout << i << " : " << midiSources[i] << std::endl;
 	}
 }
 
 #pragma mark - MIDI Receiver
 
 // ----------------------------------------------------------
-ofxAudioUnitMidiReceiver::ofxAudioUnitMidiReceiver(string clientName)
+ofxAudioUnitMidiReceiver::ofxAudioUnitMidiReceiver(std::string clientName)
 : _client(NULL), _endpoint(NULL), _port(NULL), _unit(NULL)
 // ----------------------------------------------------------
 {
@@ -96,10 +96,10 @@ bool ofxAudioUnitMidiReceiver::connectToMidiSource(unsigned long midiSourceIndex
 }
 
 // ----------------------------------------------------------
-bool ofxAudioUnitMidiReceiver::connectToMidiSource(string midiSourceName)
+bool ofxAudioUnitMidiReceiver::connectToMidiSource(std::string midiSourceName)
 // ----------------------------------------------------------
 {
-	vector<string> sources = ofxAudioUnitMidi::getSourceNames();
+	std::vector<std::string> sources = ofxAudioUnitMidi::getSourceNames();
 	bool foundSource = false;
 	int sourceIndex;
 	for(int i = 0; i < sources.size() && !foundSource; i++)

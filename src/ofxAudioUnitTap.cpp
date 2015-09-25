@@ -2,9 +2,12 @@
 #if !TARGET_OS_IPHONE
 
 #include "ofxAudioUnit.h"
+#include "ofPolyline.h"
 #include <Accelerate/Accelerate.h>
 
-ofxAudioUnitTap::ofxAudioUnitTap(unsigned int samplesToTrack) {
+ofxAudioUnitTap::ofxAudioUnitTap(unsigned int samplesToTrack)
+: _tempWave(new ofPolyline)
+{
 	setBufferSize(samplesToTrack);
 }
 
@@ -12,7 +15,9 @@ ofxAudioUnitTap::~ofxAudioUnitTap() {
 	
 }
 
-ofxAudioUnitTap::ofxAudioUnitTap(const ofxAudioUnitTap& orig) {
+ofxAudioUnitTap::ofxAudioUnitTap(const ofxAudioUnitTap& orig)
+: _tempWave(new ofPolyline(*orig._tempWave))
+{
 	setBufferSize(orig.getBufferSize());
 }
 
@@ -93,8 +98,8 @@ void ofxAudioUnitTap::getStereoWaveform(ofPolyline &l, ofPolyline &r, float w, f
 }
 
 ofPolyline ofxAudioUnitTap::getWaveform(float w, float h, unsigned chan, unsigned rate) {
-	getWaveform(_tempWave, w, h, chan, rate);
-	return _tempWave;
+	getWaveform(*_tempWave, w, h, chan, rate);
+	return *_tempWave;
 }
 
 ofPolyline ofxAudioUnitTap::getLeftWaveform(float w, float h, unsigned rate) {

@@ -19,7 +19,7 @@ public:
 	
 #if !TARGET_OS_IPHONE
 	bool setDevice(AudioDeviceID deviceID);
-	bool setDevice(const string &deviceName);
+	bool setDevice(const std::string &deviceName);
 
 	static void listOutputDevices();
 #endif

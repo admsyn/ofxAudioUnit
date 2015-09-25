@@ -203,20 +203,6 @@ ofxAudioUnitDSPNode& ofxAudioUnit::connectTo(ofxAudioUnitDSPNode &node)
 }
 
 // ----------------------------------------------------------
-ofxAudioUnit& ofxAudioUnit::operator>>(ofxAudioUnit& otherUnit)
-// ----------------------------------------------------------
-{
-	return connectTo(otherUnit);
-}
-
-// ----------------------------------------------------------
-ofxAudioUnitDSPNode& ofxAudioUnit::operator>>(ofxAudioUnitDSPNode &node)
-// ----------------------------------------------------------
-{
-	return connectTo(node);
-}
-
-// ----------------------------------------------------------
 OSStatus ofxAudioUnit::render(AudioUnitRenderActionFlags *ioActionFlags,
 							  const AudioTimeStamp *inTimeStamp,
 							  UInt32 inOutputBusNumber,
