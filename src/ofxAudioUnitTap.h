@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofxAudioUnitDSPNode.h"
-//#include "ofPolyline.h"
 class ofPolyline;
 
 // ofxAudioUnitTap acts like an Audio Unit (as in, you
