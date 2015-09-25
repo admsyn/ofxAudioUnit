@@ -3,7 +3,6 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <string>
 #include <vector>
-#include "ofTypes.h"
 #include "AUParamInfo.h"
 
 typedef std::shared_ptr<AudioUnit> AudioUnitRef;
@@ -38,8 +37,6 @@ public:
 	
 	virtual ofxAudioUnit& connectTo(ofxAudioUnit &otherUnit, int destinationBus = 0, int sourceBus = 0);
 	virtual ofxAudioUnitDSPNode& connectTo(ofxAudioUnitDSPNode &node);
-	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnit& operator>>(ofxAudioUnit& otherUnit));
-	OF_DEPRECATED_MSG("Use connectTo() instead.", virtual ofxAudioUnitDSPNode& operator>>(ofxAudioUnitDSPNode& node));
 	
 	// By default, this just calls AudioUnitRender() on the underlying AudioUnit. However, some
 	// subclasses require more complex rendering behaviour
