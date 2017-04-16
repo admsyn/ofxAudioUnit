@@ -36,7 +36,7 @@ If you have [OFPlugin](https://github.com/admsyn/OFPlugin), it will sort out the
 
 After this, just add
 ```C++
-#include "ofxAudioUnit.h"
+# include "ofxAudioUnit.h"
 ```
 in your ofApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include ofxAudioUnitMidi.h` as well.
 
