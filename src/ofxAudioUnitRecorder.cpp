@@ -40,23 +40,59 @@ bool ofxAudioUnitRecorder::startRecording(const std::string &filePath) {
 															   (const UInt8*)filePath.c_str(),
 															   filePath.length(),
 															   false);
-	
-	AudioStreamBasicDescription outASBD = {
+    
+    //default m4a setting
+    AudioStreamBasicDescription outASBD = {
 		.mChannelsPerFrame = inASBD.mChannelsPerFrame,
 		.mSampleRate = inASBD.mSampleRate,
 		.mFormatID = kAudioFormatMPEG4AAC
 	};
+    
 	
-	OSStatus s = ExtAudioFileCreateWithURL(fileURL,
-										   kAudioFileM4AType,
-										   &outASBD,
-										   NULL,
-										   kAudioFileFlags_EraseFile,
-										   &_recordFile);
+    //detect file format from fileName
+    std::string ext = "";
+     if(filePath.find_last_of(".") != std::string::npos){
+        ext = filePath.substr(filePath.find_last_of(".")+1);
+    }
+    
+    OSStatus s;
+    
+    if(ext == "wav"){
+        outASBD = {
+                .mChannelsPerFrame = inASBD.mChannelsPerFrame,
+                .mSampleRate = inASBD.mSampleRate,
+                .mFormatID = kAudioFormatLinearPCM,
+                .mFramesPerPacket = 1, //For uncompressed audio, the value is 1. For variable bit-rate formats, the value is a larger fixed number, such as 1024 for AAC
+
+                .mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked,
+                .mBitsPerChannel = 16,
+                .mBytesPerFrame = inASBD.mChannelsPerFrame * 2,
+                .mBytesPerPacket = inASBD.mChannelsPerFrame * 2
+        };
+        
+        //bizarrely enough it seems kAudioFileWAVEType doesn't work
+        s = ExtAudioFileCreateWithURL(fileURL,
+                kAudioFileCAFType,
+                &outASBD,
+                NULL,
+                kAudioFileFlags_EraseFile,
+                &_recordFile);
+    }else{
+        //default m4a
+        s = ExtAudioFileCreateWithURL(fileURL,
+                kAudioFileM4AType,
+                &outASBD,
+                NULL,
+                kAudioFileFlags_EraseFile,
+                &_recordFile);
+    
+    }
+    
+
 	CFRelease(fileURL);
 	
 	if(s != noErr) {
-		std::cout << "Couldn't create audio file: " << (OSStatus)s << std::endl;
+		std::cout << "Couldn't create audio file: "<<filePath<<" err code: " << (OSStatus)s << std::endl;
 		return false;
 	}
 	
