@@ -56,23 +56,26 @@ bool ofxAudioUnitRecorder::startRecording(const std::string &filePath) {
     }
     
     OSStatus s;
-    
+    //http://kaniini.dereferenced.org/2014/08/31/CoreAudio-sucks.html
+    //you can expand wav formats as you like
     if(ext == "wav"){
         outASBD = {
                 .mChannelsPerFrame = inASBD.mChannelsPerFrame,
                 .mSampleRate = inASBD.mSampleRate,
                 .mFormatID = kAudioFormatLinearPCM,
                 .mFramesPerPacket = 1, //For uncompressed audio, the value is 1. For variable bit-rate formats, the value is a larger fixed number, such as 1024 for AAC
-
-                .mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked,
+                //S16_BE
+                //.mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked,
+                //S16_LE...better for Ableton
+                .mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked,
                 .mBitsPerChannel = 16,
                 .mBytesPerFrame = inASBD.mChannelsPerFrame * 2,
                 .mBytesPerPacket = inASBD.mChannelsPerFrame * 2
         };
         
-        //bizarrely enough it seems kAudioFileWAVEType doesn't work
+        
         s = ExtAudioFileCreateWithURL(fileURL,
-                kAudioFileCAFType,
+                kAudioFileWAVEType,
                 &outASBD,
                 NULL,
                 kAudioFileFlags_EraseFile,
