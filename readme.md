@@ -1,7 +1,7 @@
 Intro
 -----
 
-ofxAudioUnit is an addon for [openFrameworks](http://www.openframeworks.cc/) that lets you work with [Audio Units](http://en.wikipedia.org/wiki/Audio_Units) in an intuitive way.
+ofxAudioUnit is an addon for [openFrameworks](http://www.openframeworks.cc/) that lets you work with [Audio Units](http://en.wikipedia.org/wiki/Audio_Units).
 
 [Here's a demo of the examples](http://vimeo.com/41115496)
 
@@ -10,7 +10,7 @@ What Are Audio Units?
 
 Audio Units are small programs that you can hook up to each other to produce sound. For example, you can hook up a synthesizer unit to a distortion effect unit, then connect the distortion unit to an output unit to send the audio to your speakers. This is analogous to a guitar being connected to an effect stompbox which is connected to an amplifier.
 
-Audio Units are only available on osx and iOS. If you're on a mac, you already have a bunch of Audio Units on your computer. Run this command in a Terminal to see them all: 
+Audio Units are only available on macOS and iOS. If you're on a mac, you already have a bunch of Audio Units on your computer. Run this command in a Terminal to see them all: 
 
 ```
 auval -a
@@ -23,10 +23,8 @@ Just add ofxAudioUnit to your openFrameworks/addons/ folder.
 
 I highly recommend that you check out the examples, as they demonstrate the important concepts related to Audio Units, as well as clear up some of the terminology. The examples are numbered in order to provide a logical progression.
 
-Adding ofxAudioUnit to your oF app
+Adding ofxAudioUnit to your OF app
 ---------------------------------
-
-If you have [OFPlugin](https://github.com/admsyn/OFPlugin), it will sort out the frameworks dependencies for you. If you'd like to set ofxAudioUnit up manually:
 
 * Add the ofxAudioUnit src folder to your Xcode project
 * Add the AudioUnit and CoreAudioKit frameworks to your project
@@ -43,14 +41,6 @@ in your ofApp.h file. If you're using the ofxAudioUnitMidiReceiver, `#include of
 Other Addons
 ------------
 [Andrew McWilliams](http://jahya.net/) has written a GUI / util / manager addon called [ofxAudioUnitManager](https://github.com/microcosm/ofxAudioUnitManager)
-
-iOS
----
-ofxAudioUnit has rudimentary iOS support, but doesn't have 1:1 coverage. The DSP stuff (FFT, tap, recorder..) won't work at the moment, because they haven't been ported to adapt to the different sample format on iOS. You'll also have to manage your own audio session. Also, be aware that the Apple-supplied audio units aren't the same between iOS and OSX.
-
-I would gladly accept a PR that adds more support for iOS.
-
-An alternative for iOS would be to investigate the [AVAudioEngine API](https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioEngine_Class/index.html) or [The Amazing Audio Engine](http://theamazingaudioengine.com/)
 
 License
 ----------
