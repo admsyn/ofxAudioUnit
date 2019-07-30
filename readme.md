@@ -42,6 +42,8 @@ Other Addons
 ------------
 [Andrew McWilliams](http://jahya.net/) has written a GUI / util / manager addon called [ofxAudioUnitManager](https://github.com/microcosm/ofxAudioUnitManager)
 
+Also see [antimodular's fork](https://github.com/antimodular/ofxAudioUnit) which has many more examples.
+
 License
 ----------
 
