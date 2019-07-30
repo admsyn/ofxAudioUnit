@@ -1,6 +1,7 @@
 #include "ofxAudioUnit.h"
 #include "ofxAudioUnitUtils.h"
 #include "ofUtils.h"
+#include "ofTypes.h"
 #include <iostream>
 
 using namespace std;
