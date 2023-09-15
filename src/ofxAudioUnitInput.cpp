@@ -176,6 +176,7 @@ bool ofxAudioUnitInput::setDevice(AudioDeviceID deviceID)
 											deviceIDSize),
 					   "setting input unit's device ID");
 	}
+    return false;
 }
 
 // ----------------------------------------------------------
