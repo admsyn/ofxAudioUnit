@@ -7,9 +7,21 @@
 
 #pragma mark Objective-C
 
+#if __has_feature(objc_arc)
+#   define OF_OBJC_DEALLOC(obj)
+#   define OF_OBJC_RELEASE(obj) obj
+#   define OF_OBJC_RETAIN(obj) obj
+#   define OF_OBJC_AUTORELEASE(obj) obj
+#else
+#   define OF_OBJC_DEALLOC(obj) [obj dealloc]
+#   define OF_OBJC_RELEASE(obj) [obj release]
+#   define OF_OBJC_RETAIN(obj) [obj retain]
+#   define OF_OBJC_AUTORELEASE(obj) [obj autorelease]
+#endif
+
 @interface ofxAudioUnitUIWindow : NSWindow
 {
-	NSView * _AUView;
+	__strong NSView * _AUView;
 }
 
 - (id) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric;
@@ -25,15 +37,16 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:NSViewFrameDidChangeNotification
 												  object:_AUView];
-//	[super dealloc];
+	OF_OBJC_RELEASE(_AUView);
+	OF_OBJC_DEALLOC(super);
 }
 
 // ----------------------------------------------------------
-- (id) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric
+- (instancetype) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric
 // ----------------------------------------------------------
 {
 	if(useGeneric) {
-		[self initWithGenericViewForUnit:unit];
+		return [self initWithGenericViewForUnit:unit];
 	} else if([ofxAudioUnitUIWindow audioUnitHasCocoaView:unit]) {
 		if(![self initWithCocoaViewForUnit:unit]) {
 			return nil;
@@ -41,14 +54,14 @@
 	} else if([ofxAudioUnitUIWindow audioUnitHasCarbonView:unit]) {
 		[self printUnsupportedCarbonMessage:unit];
 	} else {
-		[self initWithGenericViewForUnit:unit];
+		return [self initWithGenericViewForUnit:unit];
 	}
 	
 	return self;
 }
 
 // ----------------------------------------------------------
-- (BOOL) initWithCocoaViewForUnit:(AudioUnit)unit
+- (instancetype) initWithCocoaViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
 	// getting the size of the AU View info
@@ -89,31 +102,28 @@
 	}
 	
 	if(AUView) {
-		[self initWithAudioUnitCocoaView:AUView];
-		return YES;
+		return [self initWithAudioUnitCocoaView:AUView];
 	} else {
 		NSLog(@"Failed to create AU view");
-		return NO;
+		return nil;
 	}
 }
 
 // ----------------------------------------------------------
-- (void) initWithGenericViewForUnit:(AudioUnit)unit
+- (instancetype) initWithGenericViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
-	AUGenericView * AUView = [[AUGenericView alloc] initWithAudioUnit:unit];
-	[AUView setShowsExpertParameters:YES];
-	[self initWithAudioUnitCocoaView:AUView];
+	AUGenericView * AUView = OF_OBJC_AUTORELEASE([[AUGenericView alloc] initWithAudioUnit:unit]);	[AUView setShowsExpertParameters:YES];
+	return [self initWithAudioUnitCocoaView:AUView];
 }
 
 // ----------------------------------------------------------
-- (void) initWithAudioUnitCocoaView:(NSView *)audioUnitView
+- (instancetype) initWithAudioUnitCocoaView:(NSView *)audioUnitView
 // ----------------------------------------------------------
 {
-	_AUView = audioUnitView;
+	_AUView = OF_OBJC_RETAIN(audioUnitView);
 	NSRect contentRect = NSMakeRect(0, 0, audioUnitView.frame.size.width, audioUnitView.frame.size.height);
-	//self = 
-	[super initWithContentRect:contentRect
+	self = [super initWithContentRect:contentRect
 							styleMask:(NSWindowStyleMaskTitled |
 									   NSWindowStyleMaskClosable |
 									   NSWindowStyleMaskMiniaturizable)
@@ -129,6 +139,7 @@
 													 name:NSViewFrameDidChangeNotification
 												   object:_AUView];
 	}
+	return self;
 }
 
 // ----------------------------------------------------------
