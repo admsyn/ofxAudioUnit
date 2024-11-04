@@ -25,15 +25,15 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self
 													name:NSViewFrameDidChangeNotification
 												  object:_AUView];
-	[super dealloc];
+//	[super dealloc];
 }
 
 // ----------------------------------------------------------
-- (instancetype) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric
+- (id) initWithAudioUnit:(AudioUnit)unit forceGeneric:(BOOL)useGeneric
 // ----------------------------------------------------------
 {
 	if(useGeneric) {
-		return [self initWithGenericViewForUnit:unit];
+		[self initWithGenericViewForUnit:unit];
 	} else if([ofxAudioUnitUIWindow audioUnitHasCocoaView:unit]) {
 		if(![self initWithCocoaViewForUnit:unit]) {
 			return nil;
@@ -41,14 +41,14 @@
 	} else if([ofxAudioUnitUIWindow audioUnitHasCarbonView:unit]) {
 		[self printUnsupportedCarbonMessage:unit];
 	} else {
-		return [self initWithGenericViewForUnit:unit];
+		[self initWithGenericViewForUnit:unit];
 	}
 	
 	return self;
 }
 
 // ----------------------------------------------------------
-- (instancetype) initWithCocoaViewForUnit:(AudioUnit)unit
+- (BOOL) initWithCocoaViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
 	// getting the size of the AU View info
@@ -76,11 +76,11 @@
 		if(success == noErr && cocoaViewInfo) {
 			CFURLRef cocoaViewBundlePath = cocoaViewInfo->mCocoaAUViewBundleLocation;
 			CFStringRef factoryClassName = cocoaViewInfo->mCocoaAUViewClass[0];
-			NSBundle * viewBundle = [NSBundle bundleWithURL:(NSURL *)cocoaViewBundlePath];
+			NSBundle * viewBundle = [NSBundle bundleWithURL:(__bridge NSURL *)cocoaViewBundlePath];
 			
 			if(viewBundle) {
-				Class factoryClass = [viewBundle classNamed:(NSString *)factoryClassName];
-				id<AUCocoaUIBase> factoryInstance = [[[factoryClass alloc] init] autorelease];
+				Class factoryClass = [viewBundle classNamed:(__bridge NSString *)factoryClassName];
+				id<AUCocoaUIBase> factoryInstance = [[factoryClass alloc] init];
 				AUView = [factoryInstance uiViewForAudioUnit:unit withSize:NSZeroSize];
 			}
 		}
@@ -89,38 +89,34 @@
 	}
 	
 	if(AUView) {
-		return [self initWithAudioUnitCocoaView:AUView];
+		[self initWithAudioUnitCocoaView:AUView];
+		return YES;
 	} else {
 		NSLog(@"Failed to create AU view");
-		return nil;
+		return NO;
 	}
 }
 
 // ----------------------------------------------------------
-- (instancetype) initWithGenericViewForUnit:(AudioUnit)unit
+- (void) initWithGenericViewForUnit:(AudioUnit)unit
 // ----------------------------------------------------------
 {
-	AUGenericView * AUView = [[[AUGenericView alloc] initWithAudioUnit:unit] autorelease];
+	AUGenericView * AUView = [[AUGenericView alloc] initWithAudioUnit:unit];
 	[AUView setShowsExpertParameters:YES];
-	return [self initWithAudioUnitCocoaView:AUView];
+	[self initWithAudioUnitCocoaView:AUView];
 }
 
 // ----------------------------------------------------------
-- (instancetype) initWithAudioUnitCocoaView:(NSView *)audioUnitView
+- (void) initWithAudioUnitCocoaView:(NSView *)audioUnitView
 // ----------------------------------------------------------
 {
-	_AUView = [audioUnitView retain];
+	_AUView = audioUnitView;
 	NSRect contentRect = NSMakeRect(0, 0, audioUnitView.frame.size.width, audioUnitView.frame.size.height);
-	self = [super initWithContentRect:contentRect
-<<<<<<< Updated upstream
-							styleMask:(NSTitledWindowMask |
-									   NSClosableWindowMask |
-									   NSMiniaturizableWindowMask)
-=======
+	//self = 
+	[super initWithContentRect:contentRect
 							styleMask:(NSWindowStyleMaskTitled |
 									   NSWindowStyleMaskClosable |
 									   NSWindowStyleMaskMiniaturizable)
->>>>>>> Stashed changes
 							  backing:NSBackingStoreBuffered
 								defer:YES];
 	if(self)
@@ -133,7 +129,6 @@
 													 name:NSViewFrameDidChangeNotification
 												   object:_AUView];
 	}
-	return self;
 }
 
 // ----------------------------------------------------------
