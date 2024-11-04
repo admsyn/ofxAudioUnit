@@ -1,552 +1,859 @@
-// !$*UTF8*$!
 {
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		0906C2D4D2BBEC054B2D5BA5 /* ofxAudioUnitMatrixMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8B7749DFCB2413261E353B4 /* ofxAudioUnitMatrixMixer.cpp */; };
-		0928F46C1FFAFB7170C2A661 /* ofxAudioUnitSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72439F44FFDA8E291988657B /* ofxAudioUnitSampler.cpp */; };
-		0B1A7EDFBC477E5A2E37CCDF /* ofxAudioUnitTap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BF3233A625C876FDABFAB0C /* ofxAudioUnitTap.cpp */; };
-		0C4F519BCE65BA5D7D6B6B68 /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D354A3121711EC82B6136FB0 /* CADebugMacros.cpp */; };
-		0E826EC50F9F913C3159C2F7 /* ofxAudioUnitFftNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 10F1B6B6DFEE960F7FA4C661 /* ofxAudioUnitFftNode.cpp */; };
-		250A710D8814BF6D345B0877 /* ofxAudioUnitNetSend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B31A94C1F7A20222686E663 /* ofxAudioUnitNetSend.cpp */; };
-		2B33B0211E062CB61C7FAEF9 /* ofxAudioUnitDSPNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA63A01981FA6FCF6879A5C3 /* ofxAudioUnitDSPNode.cpp */; };
-		2D5FF7F2ACFB45212BC7739D /* ofxAudioUnitCocoaUtilties.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF9373CF95715BD3B8B9E8F9 /* ofxAudioUnitCocoaUtilties.mm */; };
-		66796F0D1B99489600BA9A68 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66796F0C1B99489600BA9A68 /* CoreMIDI.framework */; };
-		66796F0F1B99489A00BA9A68 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66796F0E1B99489A00BA9A68 /* AudioUnit.framework */; };
-		66796F111B9948A100BA9A68 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66796F101B9948A100BA9A68 /* CoreAudioKit.framework */; };
-		6F4C9BC6393F980E0D016D52 /* AUParamInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDA227D32C008FE98AD76882 /* AUParamInfo.cpp */; };
-		71239FABD9DD8DADE3E2EFF9 /* ofxAudioUnitMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2939367276DF781697E0D879 /* ofxAudioUnitMixer.cpp */; };
-		87B337624802E70C0BDB11F3 /* ofxAudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DC2346096C29D44D4517679 /* ofxAudioUnit.cpp */; };
-		A1D93B3B282E51FD3DED5313 /* ofxAudioUnitInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 921304ABBEE9BBAD13436898 /* ofxAudioUnitInput.cpp */; };
-		AA26BBDA5E32E5BB20C82ADD /* ofxAudioUnitRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FB5F74C69D4E17560BB615E /* ofxAudioUnitRecorder.cpp */; };
-		AB6830767302568AB46DC937 /* ofxAudioUnitSpeechSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39A11AF55C4BFFBB589C8D0D /* ofxAudioUnitSpeechSynth.cpp */; };
-		B7855559EDBA512073143693 /* CAAUParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8F2F49AF09EB5453E1E6536 /* CAAUParameter.cpp */; };
-		C0A1F9451231B08DCCFFC838 /* ofxAudioUnitNetReceive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8329EBFADF768E535429BCA /* ofxAudioUnitNetReceive.cpp */; };
-		D5D5C8479C1C2A462955A2EC /* ofxAudioUnitMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B5DC24CF34C7895A503416 /* ofxAudioUnitMidi.cpp */; };
-		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
-		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
-		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
-		EE243572ECA9AD4D118EEF8E /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C1900A801EF82F8E3B799B7 /* TPCircularBuffer.c */; };
-		F09EC3F89CF64E415784BB32 /* ofxAudioUnitHardwareUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA70779062F057766BC5DE /* ofxAudioUnitHardwareUtils.cpp */; };
-		F37393707BBD7E49A1055FFB /* ofxAudioUnitFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31564F8523FF518F4EC8F292 /* ofxAudioUnitFilePlayer.cpp */; };
-		F46D757E6D52DFFE3A9C169B /* ofxAudioUnitOutput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58685F70D967CF184B231102 /* ofxAudioUnitOutput.cpp */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		E4328147138ABC890047C5CB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E4B27C1510CBEB8E00536013;
-			remoteInfo = openFrameworks;
-		};
-		E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
-			remoteInfo = openFrameworks;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXFileReference section */
-		089DEAE1CF6D401E86110F72 /* ofxAudioUnitOutput.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitOutput.h; path = ../src/ofxAudioUnitOutput.h; sourceTree = SOURCE_ROOT; };
-		10F1B6B6DFEE960F7FA4C661 /* ofxAudioUnitFftNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitFftNode.cpp; path = ../src/ofxAudioUnitFftNode.cpp; sourceTree = SOURCE_ROOT; };
-		13B169351929EEA804C94E5D /* CAAUParameter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = CAAUParameter.h; path = ../src/CAPublicUtility/CAAUParameter.h; sourceTree = SOURCE_ROOT; };
-		18B335E1BC2A834648C8D7DF /* ofxAudioUnitNetSend.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitNetSend.h; path = ../src/ofxAudioUnitNetSend.h; sourceTree = SOURCE_ROOT; };
-		18F9C99EFC1FC4B7EAF4E79F /* ofxAudioUnitMixer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitMixer.h; path = ../src/ofxAudioUnitMixer.h; sourceTree = SOURCE_ROOT; };
-		1B31A94C1F7A20222686E663 /* ofxAudioUnitNetSend.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitNetSend.cpp; path = ../src/ofxAudioUnitNetSend.cpp; sourceTree = SOURCE_ROOT; };
-		2295801F930C94A28D50E7E2 /* CAXException.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = CAXException.h; path = ../src/CAPublicUtility/CAXException.h; sourceTree = SOURCE_ROOT; };
-		240097A265C7FC338C551511 /* AUParamInfo.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = AUParamInfo.h; path = ../src/CAPublicUtility/AUParamInfo.h; sourceTree = SOURCE_ROOT; };
-		24AF919600E8F2404A7E5035 /* ofxAudioUnitMatrixMixer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitMatrixMixer.h; path = ../src/ofxAudioUnitMatrixMixer.h; sourceTree = SOURCE_ROOT; };
-		29320BAA1F94E62780C2C648 /* ofxAudioUnitInput.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitInput.h; path = ../src/ofxAudioUnitInput.h; sourceTree = SOURCE_ROOT; };
-		2939367276DF781697E0D879 /* ofxAudioUnitMixer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitMixer.cpp; path = ../src/ofxAudioUnitMixer.cpp; sourceTree = SOURCE_ROOT; };
-		2DC2346096C29D44D4517679 /* ofxAudioUnit.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnit.cpp; path = ../src/ofxAudioUnit.cpp; sourceTree = SOURCE_ROOT; };
-		31564F8523FF518F4EC8F292 /* ofxAudioUnitFilePlayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitFilePlayer.cpp; path = ../src/ofxAudioUnitFilePlayer.cpp; sourceTree = SOURCE_ROOT; };
-		39A11AF55C4BFFBB589C8D0D /* ofxAudioUnitSpeechSynth.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitSpeechSynth.cpp; path = ../src/ofxAudioUnitSpeechSynth.cpp; sourceTree = SOURCE_ROOT; };
-		3BF3233A625C876FDABFAB0C /* ofxAudioUnitTap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitTap.cpp; path = ../src/ofxAudioUnitTap.cpp; sourceTree = SOURCE_ROOT; };
-		49B5DC24CF34C7895A503416 /* ofxAudioUnitMidi.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitMidi.cpp; path = ../src/ofxAudioUnitMidi.cpp; sourceTree = SOURCE_ROOT; };
-		4B3F2BB1352C56702EDD2D4E /* TPCircularBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = TPCircularBuffer.h; path = ../src/TPCircularBuffer/TPCircularBuffer.h; sourceTree = SOURCE_ROOT; };
-		58685F70D967CF184B231102 /* ofxAudioUnitOutput.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitOutput.cpp; path = ../src/ofxAudioUnitOutput.cpp; sourceTree = SOURCE_ROOT; };
-		598ECD3AE55D46CB116F5C6F /* CADebugMacros.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = CADebugMacros.h; path = ../src/CAPublicUtility/CADebugMacros.h; sourceTree = SOURCE_ROOT; };
-		66796F0C1B99489600BA9A68 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
-		66796F0E1B99489A00BA9A68 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
-		66796F101B9948A100BA9A68 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
-		72439F44FFDA8E291988657B /* ofxAudioUnitSampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitSampler.cpp; path = ../src/ofxAudioUnitSampler.cpp; sourceTree = SOURCE_ROOT; };
-		7C1900A801EF82F8E3B799B7 /* TPCircularBuffer.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = TPCircularBuffer.c; path = ../src/TPCircularBuffer/TPCircularBuffer.c; sourceTree = SOURCE_ROOT; };
-		7FB5F74C69D4E17560BB615E /* ofxAudioUnitRecorder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitRecorder.cpp; path = ../src/ofxAudioUnitRecorder.cpp; sourceTree = SOURCE_ROOT; };
-		883971DDCC3F7881C2C65B50 /* ofxAudioUnitSpeechSynth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitSpeechSynth.h; path = ../src/ofxAudioUnitSpeechSynth.h; sourceTree = SOURCE_ROOT; };
-		8B873EEEF22B81D25EA0D45D /* ofxAudioUnitDSPNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitDSPNode.h; path = ../src/ofxAudioUnitDSPNode.h; sourceTree = SOURCE_ROOT; };
-		921304ABBEE9BBAD13436898 /* ofxAudioUnitInput.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitInput.cpp; path = ../src/ofxAudioUnitInput.cpp; sourceTree = SOURCE_ROOT; };
-		9ABA70779062F057766BC5DE /* ofxAudioUnitHardwareUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitHardwareUtils.cpp; path = ../src/ofxAudioUnitHardwareUtils.cpp; sourceTree = SOURCE_ROOT; };
-		A9FB6499E5A09FB015A883EA /* ofxAudioUnitHardwareUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitHardwareUtils.h; path = ../src/ofxAudioUnitHardwareUtils.h; sourceTree = SOURCE_ROOT; };
-		AA63A01981FA6FCF6879A5C3 /* ofxAudioUnitDSPNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitDSPNode.cpp; path = ../src/ofxAudioUnitDSPNode.cpp; sourceTree = SOURCE_ROOT; };
-		B4488A9492C5F3EB48122907 /* ofxAudioUnitBase.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitBase.h; path = ../src/ofxAudioUnitBase.h; sourceTree = SOURCE_ROOT; };
-		C03E4BD2B0DF7B29FCB3BDDF /* ofxAudioUnitSampler.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitSampler.h; path = ../src/ofxAudioUnitSampler.h; sourceTree = SOURCE_ROOT; };
-		C8329EBFADF768E535429BCA /* ofxAudioUnitNetReceive.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitNetReceive.cpp; path = ../src/ofxAudioUnitNetReceive.cpp; sourceTree = SOURCE_ROOT; };
-		C8B7749DFCB2413261E353B4 /* ofxAudioUnitMatrixMixer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAudioUnitMatrixMixer.cpp; path = ../src/ofxAudioUnitMatrixMixer.cpp; sourceTree = SOURCE_ROOT; };
-		CCC45454AE1EDAA951FC5B84 /* ofxAudioUnitUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitUtils.h; path = ../src/ofxAudioUnitUtils.h; sourceTree = SOURCE_ROOT; };
-		CDA167E15FB84F30B6CE5F74 /* ofxAudioUnitMidi.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitMidi.h; path = ../src/ofxAudioUnitMidi.h; sourceTree = SOURCE_ROOT; };
-		D354A3121711EC82B6136FB0 /* CADebugMacros.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = CADebugMacros.cpp; path = ../src/CAPublicUtility/CADebugMacros.cpp; sourceTree = SOURCE_ROOT; };
-		D51A3B424E06281899DE1B69 /* ofxAudioUnitTap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitTap.h; path = ../src/ofxAudioUnitTap.h; sourceTree = SOURCE_ROOT; };
-		E255709A8D96E5B2A47124C8 /* ofxAudioUnitFilePlayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitFilePlayer.h; path = ../src/ofxAudioUnitFilePlayer.h; sourceTree = SOURCE_ROOT; };
-		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* example-2-oscilloscopeDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-2-oscilloscopeDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
-		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
-		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
-		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
-		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
-		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		E8F2F49AF09EB5453E1E6536 /* CAAUParameter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = CAAUParameter.cpp; path = ../src/CAPublicUtility/CAAUParameter.cpp; sourceTree = SOURCE_ROOT; };
-		F6B47EE3720786D4B6C128CD /* ofxAudioUnitFftNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitFftNode.h; path = ../src/ofxAudioUnitFftNode.h; sourceTree = SOURCE_ROOT; };
-		F87718627E3AC8BBCD17012D /* ofxAudioUnitNetReceive.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitNetReceive.h; path = ../src/ofxAudioUnitNetReceive.h; sourceTree = SOURCE_ROOT; };
-		F8ADFB6685B4886F48E323A6 /* ofxAudioUnit.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnit.h; path = ../src/ofxAudioUnit.h; sourceTree = SOURCE_ROOT; };
-		FDA227D32C008FE98AD76882 /* AUParamInfo.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = AUParamInfo.cpp; path = ../src/CAPublicUtility/AUParamInfo.cpp; sourceTree = SOURCE_ROOT; };
-		FF907932A21C5D48B60D4FEB /* ofxAudioUnitRecorder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAudioUnitRecorder.h; path = ../src/ofxAudioUnitRecorder.h; sourceTree = SOURCE_ROOT; };
-		FF9373CF95715BD3B8B9E8F9 /* ofxAudioUnitCocoaUtilties.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; name = ofxAudioUnitCocoaUtilties.mm; path = ../src/ofxAudioUnitCocoaUtilties.mm; sourceTree = SOURCE_ROOT; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		E4B69B590A3A1756003C02F2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				66796F111B9948A100BA9A68 /* CoreAudioKit.framework in Frameworks */,
-				66796F0F1B99489A00BA9A68 /* AudioUnit.framework in Frameworks */,
-				66796F0D1B99489600BA9A68 /* CoreMIDI.framework in Frameworks */,
-				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		1F4B8F73512F75DCABF5DA50 /* CAPublicUtility */ = {
-			isa = PBXGroup;
-			children = (
-				FDA227D32C008FE98AD76882 /* AUParamInfo.cpp */,
-				240097A265C7FC338C551511 /* AUParamInfo.h */,
-				E8F2F49AF09EB5453E1E6536 /* CAAUParameter.cpp */,
-				13B169351929EEA804C94E5D /* CAAUParameter.h */,
-				D354A3121711EC82B6136FB0 /* CADebugMacros.cpp */,
-				598ECD3AE55D46CB116F5C6F /* CADebugMacros.h */,
-				2295801F930C94A28D50E7E2 /* CAXException.h */,
-			);
-			name = CAPublicUtility;
-			sourceTree = "<group>";
-		};
-		57D572937403D9D7FE4C2000 /* TPCircularBuffer */ = {
-			isa = PBXGroup;
-			children = (
-				7C1900A801EF82F8E3B799B7 /* TPCircularBuffer.c */,
-				4B3F2BB1352C56702EDD2D4E /* TPCircularBuffer.h */,
-			);
-			name = TPCircularBuffer;
-			sourceTree = "<group>";
-		};
-		6948EE371B920CB800B5AC1A /* local_addons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = local_addons;
-			sourceTree = "<group>";
-		};
-		8119335EE8E352A52D64B712 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				1F4B8F73512F75DCABF5DA50 /* CAPublicUtility */,
-				2DC2346096C29D44D4517679 /* ofxAudioUnit.cpp */,
-				F8ADFB6685B4886F48E323A6 /* ofxAudioUnit.h */,
-				B4488A9492C5F3EB48122907 /* ofxAudioUnitBase.h */,
-				FF9373CF95715BD3B8B9E8F9 /* ofxAudioUnitCocoaUtilties.mm */,
-				AA63A01981FA6FCF6879A5C3 /* ofxAudioUnitDSPNode.cpp */,
-				8B873EEEF22B81D25EA0D45D /* ofxAudioUnitDSPNode.h */,
-				10F1B6B6DFEE960F7FA4C661 /* ofxAudioUnitFftNode.cpp */,
-				F6B47EE3720786D4B6C128CD /* ofxAudioUnitFftNode.h */,
-				31564F8523FF518F4EC8F292 /* ofxAudioUnitFilePlayer.cpp */,
-				E255709A8D96E5B2A47124C8 /* ofxAudioUnitFilePlayer.h */,
-				9ABA70779062F057766BC5DE /* ofxAudioUnitHardwareUtils.cpp */,
-				A9FB6499E5A09FB015A883EA /* ofxAudioUnitHardwareUtils.h */,
-				921304ABBEE9BBAD13436898 /* ofxAudioUnitInput.cpp */,
-				29320BAA1F94E62780C2C648 /* ofxAudioUnitInput.h */,
-				C8B7749DFCB2413261E353B4 /* ofxAudioUnitMatrixMixer.cpp */,
-				24AF919600E8F2404A7E5035 /* ofxAudioUnitMatrixMixer.h */,
-				49B5DC24CF34C7895A503416 /* ofxAudioUnitMidi.cpp */,
-				CDA167E15FB84F30B6CE5F74 /* ofxAudioUnitMidi.h */,
-				2939367276DF781697E0D879 /* ofxAudioUnitMixer.cpp */,
-				18F9C99EFC1FC4B7EAF4E79F /* ofxAudioUnitMixer.h */,
-				C8329EBFADF768E535429BCA /* ofxAudioUnitNetReceive.cpp */,
-				F87718627E3AC8BBCD17012D /* ofxAudioUnitNetReceive.h */,
-				1B31A94C1F7A20222686E663 /* ofxAudioUnitNetSend.cpp */,
-				18B335E1BC2A834648C8D7DF /* ofxAudioUnitNetSend.h */,
-				58685F70D967CF184B231102 /* ofxAudioUnitOutput.cpp */,
-				089DEAE1CF6D401E86110F72 /* ofxAudioUnitOutput.h */,
-				7FB5F74C69D4E17560BB615E /* ofxAudioUnitRecorder.cpp */,
-				FF907932A21C5D48B60D4FEB /* ofxAudioUnitRecorder.h */,
-				72439F44FFDA8E291988657B /* ofxAudioUnitSampler.cpp */,
-				C03E4BD2B0DF7B29FCB3BDDF /* ofxAudioUnitSampler.h */,
-				39A11AF55C4BFFBB589C8D0D /* ofxAudioUnitSpeechSynth.cpp */,
-				883971DDCC3F7881C2C65B50 /* ofxAudioUnitSpeechSynth.h */,
-				3BF3233A625C876FDABFAB0C /* ofxAudioUnitTap.cpp */,
-				D51A3B424E06281899DE1B69 /* ofxAudioUnitTap.h */,
-				CCC45454AE1EDAA951FC5B84 /* ofxAudioUnitUtils.h */,
-				57D572937403D9D7FE4C2000 /* TPCircularBuffer */,
-			);
-			name = src;
-			sourceTree = "<group>";
-		};
-		9360D34D90EA59A50AF2804F /* ofxAudioUnit */ = {
-			isa = PBXGroup;
-			children = (
-				66796F101B9948A100BA9A68 /* CoreAudioKit.framework */,
-				66796F0E1B99489A00BA9A68 /* AudioUnit.framework */,
-				66796F0C1B99489600BA9A68 /* CoreMIDI.framework */,
-				8119335EE8E352A52D64B712 /* src */,
-			);
-			name = ofxAudioUnit;
-			sourceTree = "<group>";
-		};
-		BB4B014C10F69532006C3DED /* addons */ = {
-			isa = PBXGroup;
-			children = (
-				9360D34D90EA59A50AF2804F /* ofxAudioUnit */,
-			);
-			name = addons;
-			sourceTree = "<group>";
-		};
-		E4328144138ABC890047C5CB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E4328148138ABC890047C5CB /* openFrameworksDebug.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E4B69B4A0A3A1720003C02F2 = {
-			isa = PBXGroup;
-			children = (
-				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
-				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
-				E4B69E1C0A3A1BDC003C02F2 /* src */,
-				E4EEC9E9138DF44700A80321 /* openFrameworks */,
-				BB4B014C10F69532006C3DED /* addons */,
-				6948EE371B920CB800B5AC1A /* local_addons */,
-				E4B69B5B0A3A1756003C02F2 /* example-2-oscilloscopeDebug.app */,
-			);
-			sourceTree = "<group>";
-		};
-		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
-				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-			);
-			path = src;
-			sourceTree = SOURCE_ROOT;
-		};
-		E4EEC9E9138DF44700A80321 /* openFrameworks */ = {
-			isa = PBXGroup;
-			children = (
-				E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */,
-				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
-			);
-			name = openFrameworks;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* example-2-oscilloscope */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-2-oscilloscope" */;
-			buildPhases = (
-				E4B69B580A3A1756003C02F2 /* Sources */,
-				E4B69B590A3A1756003C02F2 /* Frameworks */,
-				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
-				E4C2427710CC5ABF004149E2 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
-			);
-			name = "example-2-oscilloscope";
-			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* example-2-oscilloscopeDebug.app */;
-			productType = "com.apple.product-type.application";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastUpgradeCheck = 0600;
-			};
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-2-oscilloscope" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
-			);
-			mainGroup = E4B69B4A0A3A1720003C02F2;
-			productRefGroup = E4B69B4A0A3A1720003C02F2;
-			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = E4328144138ABC890047C5CB /* Products */;
-					ProjectRef = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-				},
-			);
-			projectRoot = "";
-			targets = (
-				E4B69B5A0A3A1756003C02F2 /* example-2-oscilloscope */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		E4328148138ABC890047C5CB /* openFrameworksDebug.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = openFrameworksDebug.a;
-			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E4B6FFFD0C3F9AB9008CF71C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "rsync -aved ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\nmkdir -p \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\nrsync -aved \"$ICON_FILE\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		E4B69B580A3A1756003C02F2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
-				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				6F4C9BC6393F980E0D016D52 /* AUParamInfo.cpp in Sources */,
-				B7855559EDBA512073143693 /* CAAUParameter.cpp in Sources */,
-				0C4F519BCE65BA5D7D6B6B68 /* CADebugMacros.cpp in Sources */,
-				87B337624802E70C0BDB11F3 /* ofxAudioUnit.cpp in Sources */,
-				2D5FF7F2ACFB45212BC7739D /* ofxAudioUnitCocoaUtilties.mm in Sources */,
-				2B33B0211E062CB61C7FAEF9 /* ofxAudioUnitDSPNode.cpp in Sources */,
-				0E826EC50F9F913C3159C2F7 /* ofxAudioUnitFftNode.cpp in Sources */,
-				F37393707BBD7E49A1055FFB /* ofxAudioUnitFilePlayer.cpp in Sources */,
-				F09EC3F89CF64E415784BB32 /* ofxAudioUnitHardwareUtils.cpp in Sources */,
-				A1D93B3B282E51FD3DED5313 /* ofxAudioUnitInput.cpp in Sources */,
-				0906C2D4D2BBEC054B2D5BA5 /* ofxAudioUnitMatrixMixer.cpp in Sources */,
-				D5D5C8479C1C2A462955A2EC /* ofxAudioUnitMidi.cpp in Sources */,
-				71239FABD9DD8DADE3E2EFF9 /* ofxAudioUnitMixer.cpp in Sources */,
-				C0A1F9451231B08DCCFFC838 /* ofxAudioUnitNetReceive.cpp in Sources */,
-				250A710D8814BF6D345B0877 /* ofxAudioUnitNetSend.cpp in Sources */,
-				F46D757E6D52DFFE3A9C169B /* ofxAudioUnitOutput.cpp in Sources */,
-				AA26BBDA5E32E5BB20C82ADD /* ofxAudioUnitRecorder.cpp in Sources */,
-				0928F46C1FFAFB7170C2A661 /* ofxAudioUnitSampler.cpp in Sources */,
-				AB6830767302568AB46DC937 /* ofxAudioUnitSpeechSynth.cpp in Sources */,
-				0B1A7EDFBC477E5A2E37CCDF /* ofxAudioUnitTap.cpp in Sources */,
-				EE243572ECA9AD4D118EEF8E /* TPCircularBuffer.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E4EEB9AC138B136A00A80321 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = openFrameworks;
-			targetProxy = E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		E4B69B4E0A3A1720003C02F2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
-				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
-				GCC_WARN_UNUSED_VALUE = NO;
-				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
+	"_OFProjectGeneratorVersion": "0.82.0",
+	"archiveVersion": "1",
+	"classes": {},
+	"objectVersion": "70",
+	"objects": {
+		"0025F985-0230-4A16-9DDD-A768BFB6205E": {
+			"fileRef": "36DDBDDC-92FF-4F51-A121-E1347E947749",
+			"isa": "PBXBuildFile"
+		},
+		"02B856A2-B66E-435E-BFE3-C9F83464BE17": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitHardwareUtils.h",
+			"sourceTree": "<group>"
+		},
+		"037A58C72CD6B54100CF8AC1": {
+			"explicitFileTypes": {},
+			"explicitFolders": [],
+			"isa": "PBXFileSystemSynchronizedRootGroup",
+			"path": "src",
+			"sourceTree": "SOURCE_ROOT"
+		},
+		"067353B1-AB86-4ED2-A66B-E532C98C467A": {
+			"fileRef": "CF9CBCF7-F5CF-4BC9-811F-A5B68282D861",
+			"isa": "PBXBuildFile"
+		},
+		"0BA88164-EEA7-415E-9A03-C853CCF3C038": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "AUParamInfo.h",
+			"sourceTree": "<group>"
+		},
+		"1123F787-D88F-4360-8950-8CAD4A8C5E7F": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitNetSend.h",
+			"sourceTree": "<group>"
+		},
+		"134B7A82-D1F5-4591-AE79-32A26D374231": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitNetSend.cpp",
+			"sourceTree": "<group>"
+		},
+		"1375490F-FB3B-4DEA-9874-56014AD4B954": {
+			"fileRef": "16B14E25-FFB6-4A62-B51E-EB834BFDCEDB",
+			"isa": "PBXBuildFile"
+		},
+		"16B14E25-FFB6-4A62-B51E-EB834BFDCEDB": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.objcpp",
+			"name": "ofxAudioUnitCocoaUtilties.mm",
+			"sourceTree": "<group>"
+		},
+		"191CD6FA2847E21E0085CBB6": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "text.plist.entitlements",
+			"path": "of.entitlements",
+			"sourceTree": "<group>"
+		},
+		"191EF70929D778A400F35F26": {
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "folder",
+			"name": "openFrameworks",
+			"path": "../../../libs/openFrameworks",
+			"sourceTree": "SOURCE_ROOT"
+		},
+		"19B789C429E5AB4A0082E9B8": {
+			"alwaysOutOfDate": "1",
+			"buildActionMask": "2147483647",
+			"files": [],
+			"inputFileListPaths": [],
+			"inputPaths": [],
+			"isa": "PBXShellScriptBuildPhase",
+			"outputFileListPaths": [],
+			"outputPaths": [],
+			"runOnlyForDeploymentPostprocessing": "0",
+			"shellPath": "/bin/sh",
+			"shellScript": "\"$OF_PATH/scripts/osx/xcode_project.sh\"\n",
+			"showEnvVarsInLog": "0"
+		},
+		"1D60588F0D05DD3D006BFB54": {
+			"files": [
+				"0E76EB82-F1C8-4CAC-9D32-9B38B1FB5801",
+				"74E0C368-B555-44DA-9ABD-BE6BB76AC793",
+				"4FA80B80-B826-41C5-BA40-A9EAB062E473"
+			]
+		},
+		"1F629011-6B46-4525-B4D5-EC2C16036BFD": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitFilePlayer.h",
+			"sourceTree": "<group>"
+		},
+		"2559103E-E9E0-4284-8552-90357CF0B46E": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitSpeechSynth.h",
+			"sourceTree": "<group>"
+		},
+		"2FDD2CDA-0F4C-478F-90F6-1811B5D52F9D": {
+			"children": [
+				"5BE416FF-8904-4654-998A-AA6F144D8816"
+			],
+			"isa": "PBXGroup",
+			"name": "ofxAudioUnit",
+			"path": "ofxAudioUnit",
+			"sourceTree": "<group>"
+		},
+		"302408BE-EEDF-4EDE-9966-437014B239FF": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnit.h",
+			"sourceTree": "<group>"
+		},
+		"31412F54-FD3E-45F7-8CF6-88CDD4B43ACA": {
+			"fileRef": "4B0CAD95-DF57-4C71-AFA4-5E2DD5FCA256",
+			"isa": "PBXBuildFile"
+		},
+		"31A7570A-DAE5-4C8B-9B19-9DE9A07460DD": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitUtils.h",
+			"sourceTree": "<group>"
+		},
+		"32C206A1-6377-422F-B773-932E96412F64": {
+			"children": [
+				"57CEFE47-2BD8-4CAA-9ACB-0101D44D3890",
+				"72099FA2-B1AF-4A64-BA65-06E98A21A597"
+			],
+			"isa": "PBXGroup",
+			"name": "TPCircularBuffer",
+			"path": "TPCircularBuffer",
+			"sourceTree": "<group>"
+		},
+		"33950E0E-C89F-481E-9703-9B7CCF9374CE": {
+			"fileRef": "C86F7F68-AF00-45F7-831E-2A2B678EFFA1",
+			"isa": "PBXBuildFile"
+		},
+		"36DDBDDC-92FF-4F51-A121-E1347E947749": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitDSPNode.cpp",
+			"sourceTree": "<group>"
+		},
+		"375DEC05-240D-4850-94FE-4FF3D1EC0737": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitOutput.h",
+			"sourceTree": "<group>"
+		},
+		"3A0E624F-D614-43C1-891C-A2DC4390578C": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "wrapper.framework",
+			"name": "AudioUnit.framework",
+			"path": "System/Library/Frameworks/AudioUnit.framework",
+			"sourceTree": "SDKROOT"
+		},
+		"3D07B983-6ABF-4B8E-9792-1DF0F8E60D3F": {
+			"fileRef": "F6E283BE-056A-4AE2-B0A3-5B44D7D4A95A",
+			"isa": "PBXBuildFile"
+		},
+		"4287F127-254E-4237-81FD-BE81AE4CD99B": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitRecorder.h",
+			"sourceTree": "<group>"
+		},
+		"4A6792C0-5634-4F5B-8741-2D30AECCA5F6": {
+			"fileRef": "DF3F6A8B-2171-496F-A284-53EF61C16615",
+			"isa": "PBXBuildFile"
+		},
+		"4B0CAD95-DF57-4C71-AFA4-5E2DD5FCA256": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitHardwareUtils.cpp",
+			"sourceTree": "<group>"
+		},
+		"4EADDC7D-0F7F-4278-90D3-59475E102664": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitInput.cpp",
+			"sourceTree": "<group>"
+		},
+		"527AF6E4-0ED0-41DC-B697-B27969B1E103": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitMatrixMixer.cpp",
+			"sourceTree": "<group>"
+		},
+		"539CD8A9-7D20-4176-802F-72807A467BBF": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "folder",
+			"name": "data",
+			"path": "bin/data",
+			"sourceTree": "SOURCE_ROOT"
+		},
+		"541CDFC8-9777-4728-AAD4-3E51A8F2ADAB": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnit.cpp",
+			"sourceTree": "<group>"
+		},
+		"560E187B-9165-4136-8432-E83007AFF08A": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitNetReceive.cpp",
+			"sourceTree": "<group>"
+		},
+		"57CEFE47-2BD8-4CAA-9ACB-0101D44D3890": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.c",
+			"name": "TPCircularBuffer.c",
+			"sourceTree": "<group>"
+		},
+		"58498825-5F2A-45AC-A1C0-A0FB929ACA77": {
+			"fileRef": "4EADDC7D-0F7F-4278-90D3-59475E102664",
+			"isa": "PBXBuildFile"
+		},
+		"5B337DE6-2081-46D3-ABE9-6C88BC0858CD": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitTap.cpp",
+			"sourceTree": "<group>"
+		},
+		"5BE416FF-8904-4654-998A-AA6F144D8816": {
+			"children": [
+				"666B1FF8-DB5E-4EDD-BE74-77AE0D945CF6",
+				"32C206A1-6377-422F-B773-932E96412F64",
+				"541CDFC8-9777-4728-AAD4-3E51A8F2ADAB",
+				"302408BE-EEDF-4EDE-9966-437014B239FF",
+				"7E98BEAF-928A-4D65-BCA2-137895939494",
+				"16B14E25-FFB6-4A62-B51E-EB834BFDCEDB",
+				"36DDBDDC-92FF-4F51-A121-E1347E947749",
+				"DF9DB83F-7C6E-455D-AEEC-6EFA70D7E11F",
+				"A2A82C50-787F-4105-A9E1-CA82302B7B4E",
+				"EFDECE4E-09D2-470B-9977-5CB9E4742407",
+				"E82F8893-7EFE-4C6A-B8FF-99B95237E0FB",
+				"1F629011-6B46-4525-B4D5-EC2C16036BFD",
+				"4B0CAD95-DF57-4C71-AFA4-5E2DD5FCA256",
+				"02B856A2-B66E-435E-BFE3-C9F83464BE17",
+				"4EADDC7D-0F7F-4278-90D3-59475E102664",
+				"8F3995EF-583D-4130-A5A9-BE5CD83401F7",
+				"527AF6E4-0ED0-41DC-B697-B27969B1E103",
+				"62BAA75E-1AE9-4A69-989C-66899963832A",
+				"9DD90A67-E6D4-4F3B-AB95-26686B24DF2F",
+				"A4F968ED-E9F1-4ADE-9080-5358CFCC4E4C",
+				"F6E283BE-056A-4AE2-B0A3-5B44D7D4A95A",
+				"E56ABFA6-867A-4DA4-BC91-64A03489BF81",
+				"560E187B-9165-4136-8432-E83007AFF08A",
+				"98B027AC-B986-4D8F-8FF7-E016BFAEFC5A",
+				"134B7A82-D1F5-4591-AE79-32A26D374231",
+				"1123F787-D88F-4360-8950-8CAD4A8C5E7F",
+				"C86F7F68-AF00-45F7-831E-2A2B678EFFA1",
+				"375DEC05-240D-4850-94FE-4FF3D1EC0737",
+				"8E9705AA-CCC6-424E-9BBD-B814DC324F19",
+				"4287F127-254E-4237-81FD-BE81AE4CD99B",
+				"FB28671A-2F8F-4CE5-9CD1-E98EB0098BEA",
+				"FABAE1A6-A909-4FDA-8493-3959A450A073",
+				"727DBC93-B3D1-470E-91A5-239AE43D7464",
+				"2559103E-E9E0-4284-8552-90357CF0B46E",
+				"5B337DE6-2081-46D3-ABE9-6C88BC0858CD",
+				"C6BD45AE-260F-4467-9994-AE157BAD5C51",
+				"31A7570A-DAE5-4C8B-9B19-9DE9A07460DD"
+			],
+			"isa": "PBXGroup",
+			"name": "src",
+			"path": "src",
+			"sourceTree": "<group>"
+		},
+		"62BAA75E-1AE9-4A69-989C-66899963832A": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitMatrixMixer.h",
+			"sourceTree": "<group>"
+		},
+		"666B1FF8-DB5E-4EDD-BE74-77AE0D945CF6": {
+			"children": [
+				"8ACB3CF3-A1AA-4DC2-BE13-AE0B92DD166D",
+				"0BA88164-EEA7-415E-9A03-C853CCF3C038",
+				"CF9CBCF7-F5CF-4BC9-811F-A5B68282D861",
+				"99D922C2-C1A9-4EEE-A3BC-8844867FAB1D",
+				"B3A19996-3891-4A70-9DA3-5E21C39DAF8F",
+				"CFA1D6E7-F382-42A5-B0B8-7314BCCB7175",
+				"70CD8824-3114-4D03-971C-F3AE4915E3A7"
+			],
+			"isa": "PBXGroup",
+			"name": "CAPublicUtility",
+			"path": "CAPublicUtility",
+			"sourceTree": "<group>"
+		},
+		"70CD8824-3114-4D03-971C-F3AE4915E3A7": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "CAXException.h",
+			"sourceTree": "<group>"
+		},
+		"72099FA2-B1AF-4A64-BA65-06E98A21A597": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "TPCircularBuffer.h",
+			"sourceTree": "<group>"
+		},
+		"727DBC93-B3D1-470E-91A5-239AE43D7464": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitSpeechSynth.cpp",
+			"sourceTree": "<group>"
+		},
+		"760CA881-FEBB-4202-8C64-AB9C5BF1590F": {
+			"fileRef": "3A0E624F-D614-43C1-891C-A2DC4390578C",
+			"isa": "PBXBuildFile"
+		},
+		"7C8BF3F2-ED62-477E-8E23-1115E46CADF3": {
+			"fileRef": "E82F8893-7EFE-4C6A-B8FF-99B95237E0FB",
+			"isa": "PBXBuildFile"
+		},
+		"7E98BEAF-928A-4D65-BCA2-137895939494": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitBase.h",
+			"sourceTree": "<group>"
+		},
+		"89861563-C266-417D-9A4B-69D429433D2A": {
+			"fileRef": "57CEFE47-2BD8-4CAA-9ACB-0101D44D3890",
+			"isa": "PBXBuildFile"
+		},
+		"8A67BD8C-1C6C-4856-9CDB-1D2578FFCEEE": {
+			"fileRef": "CFC1590B-B90F-4F99-B757-EEC795394040",
+			"isa": "PBXBuildFile"
+		},
+		"8ACB3CF3-A1AA-4DC2-BE13-AE0B92DD166D": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "AUParamInfo.cpp",
+			"sourceTree": "<group>"
+		},
+		"8E9705AA-CCC6-424E-9BBD-B814DC324F19": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitRecorder.cpp",
+			"sourceTree": "<group>"
+		},
+		"8EBD58F2-A20F-455E-B4E8-836791A96393": {
+			"fileRef": "8ACB3CF3-A1AA-4DC2-BE13-AE0B92DD166D",
+			"isa": "PBXBuildFile"
+		},
+		"8F3995EF-583D-4130-A5A9-BE5CD83401F7": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitInput.h",
+			"sourceTree": "<group>"
+		},
+		"901808C02053638E004A7774": {
+			"children": [
+				"DF3F6A8B-2171-496F-A284-53EF61C16615",
+				"CFC1590B-B90F-4F99-B757-EEC795394040",
+				"3A0E624F-D614-43C1-891C-A2DC4390578C"
+			]
+		},
+		"94AAE764-179E-4FD2-89F3-F20166451741": {
+			"fileRef": "A2A82C50-787F-4105-A9E1-CA82302B7B4E",
+			"isa": "PBXBuildFile"
+		},
+		"98B027AC-B986-4D8F-8FF7-E016BFAEFC5A": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitNetReceive.h",
+			"sourceTree": "<group>"
+		},
+		"99D922C2-C1A9-4EEE-A3BC-8844867FAB1D": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "CAAUParameter.h",
+			"sourceTree": "<group>"
+		},
+		"9DCD6E54-6A6E-4849-8503-DB5BE59B6615": {
+			"fileRef": "541CDFC8-9777-4728-AAD4-3E51A8F2ADAB",
+			"isa": "PBXBuildFile"
+		},
+		"9DD90A67-E6D4-4F3B-AB95-26686B24DF2F": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitMidi.cpp",
+			"sourceTree": "<group>"
+		},
+		"A2A82C50-787F-4105-A9E1-CA82302B7B4E": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitFftNode.cpp",
+			"sourceTree": "<group>"
+		},
+		"A3E37E29-274B-4216-93EB-EA064D9BCF8C": {
+			"fileRef": "8E9705AA-CCC6-424E-9BBD-B814DC324F19",
+			"isa": "PBXBuildFile"
+		},
+		"A4F968ED-E9F1-4ADE-9080-5358CFCC4E4C": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitMidi.h",
+			"sourceTree": "<group>"
+		},
+		"A5907067-D711-489F-9091-4965E860F9EB": {
+			"fileRef": "560E187B-9165-4136-8432-E83007AFF08A",
+			"isa": "PBXBuildFile"
+		},
+		"B3A19996-3891-4A70-9DA3-5E21C39DAF8F": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "CADebugMacros.cpp",
+			"sourceTree": "<group>"
+		},
+		"B9BC18E3-B952-480E-AF40-0A5E03AC0E7F": {
+			"fileRef": "134B7A82-D1F5-4591-AE79-32A26D374231",
+			"isa": "PBXBuildFile"
+		},
+		"BB4B014C10F69532006C3DED": {
+			"children": [
+				"2FDD2CDA-0F4C-478F-90F6-1811B5D52F9D"
+			],
+			"isa": "PBXGroup",
+			"name": "addons",
+			"path": "../../../addons",
+			"sourceTree": "SOURCE_ROOT"
+		},
+		"BF26640B2C634C16004360E2": {
+			"alwaysOutOfDate": "1",
+			"buildActionMask": "2147483647",
+			"files": [],
+			"inputFileListPaths": [],
+			"inputPaths": [],
+			"isa": "PBXShellScriptBuildPhase",
+			"outputFileListPaths": [],
+			"outputPaths": [],
+			"runOnlyForDeploymentPostprocessing": "0",
+			"shellPath": "/usr/bin/env bash",
+			"shellScript": "#!/usr/bin/env bash\nif [ ! -d \"${OF_PATH}/libs/freetype/lib/macos/freetype.xcframework\" ]; then\n\techo \"openFrameworks has missing xcFrameworks for osx. Downloading libaries now via scripts/osx/download_libs.sh\"\n    ${OF_PATH}/scripts/osx/download_libs.sh\nelse\n\techo \"xcFrameworks found\"\nfi\n",
+			"showEnvVarsInLog": "0"
+		},
+		"C60C3735-7EEE-434D-A5D8-681BE9DF0823": {
+			"fileRef": "527AF6E4-0ED0-41DC-B697-B27969B1E103",
+			"isa": "PBXBuildFile"
+		},
+		"C6BD45AE-260F-4467-9994-AE157BAD5C51": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitTap.h",
+			"sourceTree": "<group>"
+		},
+		"C86F7F68-AF00-45F7-831E-2A2B678EFFA1": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitOutput.cpp",
+			"sourceTree": "<group>"
+		},
+		"CF08C0B8-9932-46AC-B71A-E15D226CD2AA": {
+			"children": [
+				"DF3F6A8B-2171-496F-A284-53EF61C16615",
+				"CFC1590B-B90F-4F99-B757-EEC795394040",
+				"3A0E624F-D614-43C1-891C-A2DC4390578C"
+			],
+			"isa": "PBXGroup",
+			"name": "Frameworks",
+			"path": "",
+			"sourceTree": "SOURCE_ROOT"
+		},
+		"CF9CBCF7-F5CF-4BC9-811F-A5B68282D861": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "CAAUParameter.cpp",
+			"sourceTree": "<group>"
+		},
+		"CFA1D6E7-F382-42A5-B0B8-7314BCCB7175": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "CADebugMacros.h",
+			"sourceTree": "<group>"
+		},
+		"CFC1590B-B90F-4F99-B757-EEC795394040": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "wrapper.framework",
+			"name": "CoreAudioKit.framework",
+			"path": "System/Library/Frameworks/CoreAudioKit.framework",
+			"sourceTree": "SDKROOT"
+		},
+		"D5E35FE8-8A79-467D-859D-F0EE0A4D707D": {
+			"fileRef": "9DD90A67-E6D4-4F3B-AB95-26686B24DF2F",
+			"isa": "PBXBuildFile"
+		},
+		"DF3F6A8B-2171-496F-A284-53EF61C16615": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "wrapper.framework",
+			"name": "CoreMIDI.framework",
+			"path": "System/Library/Frameworks/CoreMIDI.framework",
+			"sourceTree": "SDKROOT"
+		},
+		"DF9DB83F-7C6E-455D-AEEC-6EFA70D7E11F": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitDSPNode.h",
+			"sourceTree": "<group>"
+		},
+		"E42962A92163ECCD00A6A9E2": {
+			"alwaysOutOfDate": "1",
+			"buildActionMask": "2147483647",
+			"files": [],
+			"inputPaths": [],
+			"isa": "PBXShellScriptBuildPhase",
+			"name": "Run Script — Compile OF",
+			"outputPaths": [],
+			"runOnlyForDeploymentPostprocessing": "0",
+			"shellPath": "/bin/sh",
+			"shellScript": "$OF_CORE_BUILD_COMMAND\n",
+			"showEnvVarsInLog": "0"
+		},
+		"E4A5B60F29BAAAE400C2D356": {
+			"buildActionMask": "2147483647",
+			"dstPath": "",
+			"dstSubfolderSpec": "6",
+			"files": [],
+			"isa": "PBXCopyFilesBuildPhase",
+			"runOnlyForDeploymentPostprocessing": "0"
+		},
+		"E4B69B4A0A3A1720003C02F2": {
+			"children": [
+				"037A58C72CD6B54100CF8AC1",
+				"191CD6FA2847E21E0085CBB6",
+				"E4B6FCAD0C3E899E008CF71C",
+				"E4EB6923138AFD0F00A09F29",
+				"191EF70929D778A400F35F26",
+				"BB4B014C10F69532006C3DED",
+				"E4B69B5B0A3A1756003C02F2",
+				"CF08C0B8-9932-46AC-B71A-E15D226CD2AA",
+				"539CD8A9-7D20-4176-802F-72807A467BBF"
+			],
+			"isa": "PBXGroup",
+			"sourceTree": "<group>"
+		},
+		"E4B69B4C0A3A1720003C02F2": {
+			"attributes": {
+				"BuildIndependentTargetsInParallel": "YES",
+				"LastUpgradeCheck": "1540"
+			},
+			"buildConfigurationList": "E4B69B4D0A3A1720003C02F2",
+			"compatibilityVersion": "Xcode 3.2",
+			"developmentRegion": "en",
+			"hasScannedForEncodings": "0",
+			"isa": "PBXProject",
+			"knownRegions": [
+				"en",
+				"Base"
+			],
+			"mainGroup": "E4B69B4A0A3A1720003C02F2",
+			"productRefGroup": "E4B69B4A0A3A1720003C02F2",
+			"projectDirPath": "",
+			"projectRoot": "",
+			"targets": [
+				"E4B69B5A0A3A1756003C02F2"
+			]
+		},
+		"E4B69B4D0A3A1720003C02F2": {
+			"buildConfigurations": [
+				"E4B69B4E0A3A1720003C02F2",
+				"E4B69B4F0A3A1720003C02F2"
+			],
+			"defaultConfigurationIsVisible": "0",
+			"defaultConfigurationName": "Release",
+			"isa": "XCConfigurationList"
+		},
+		"E4B69B4E0A3A1720003C02F2": {
+			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+			"buildSettings": {
+				"CODE_SIGN_ENTITLEMENTS": "of.entitlements",
+				"COPY_PHASE_STRIP": "NO",
+				"ENABLE_TESTABILITY": "YES",
+				"GCC_OPTIMIZATION_LEVEL": "0",
+				"GCC_WARN_UNUSED_VARIABLE": "NO",
+				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxAudioUnit/src,
-					../../../addons/ofxAudioUnit/src/CAPublicUtility,
-					../../../addons/ofxAudioUnit/src/TPCircularBuffer,
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-D__MACOSX_CORE__",
-					"-mtune=native",
-				);
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
-		E4B69B4F0A3A1720003C02F2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_UNROLL_LOOPS = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
-				GCC_WARN_UNUSED_VALUE = NO;
-				GCC_WARN_UNUSED_VARIABLE = NO;
-				HEADER_SEARCH_PATHS = (
+					"src"
+				],
+				"OTHER_CPLUSPLUSFLAGS": "-D__MACOSX_CORE__"
+			},
+			"isa": "XCBuildConfiguration",
+			"name": "Debug"
+		},
+		"E4B69B4F0A3A1720003C02F2": {
+			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+			"buildSettings": {
+				"CODE_SIGN_ENTITLEMENTS": "of.entitlements",
+				"COPY_PHASE_STRIP": "YES",
+				"GCC_OPTIMIZATION_LEVEL": "3",
+				"GCC_UNROLL_LOOPS": "YES",
+				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxAudioUnit/src,
-					../../../addons/ofxAudioUnit/src/CAPublicUtility,
-					../../../addons/ofxAudioUnit/src/TPCircularBuffer,
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-D__MACOSX_CORE__",
-					"-mtune=native",
-				);
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		E4B69B600A3A1757003C02F2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = NONE;
-				HEADER_SEARCH_PATHS = (
+					"src"
+				],
+				"ONLY_ACTIVE_ARCH": "YES",
+				"OTHER_CPLUSPLUSFLAGS": "-D__MACOSX_CORE__"
+			},
+			"isa": "XCBuildConfiguration",
+			"name": "Release"
+		},
+		"E4B69B580A3A1756003C02F2": {
+			"buildActionMask": "2147483647",
+			"files": [
+				"8EBD58F2-A20F-455E-B4E8-836791A96393",
+				"067353B1-AB86-4ED2-A66B-E532C98C467A",
+				"E61E6EDA-309E-476F-A487-C19DBFEDFF17",
+				"89861563-C266-417D-9A4B-69D429433D2A",
+				"9DCD6E54-6A6E-4849-8503-DB5BE59B6615",
+				"1375490F-FB3B-4DEA-9874-56014AD4B954",
+				"0025F985-0230-4A16-9DDD-A768BFB6205E",
+				"94AAE764-179E-4FD2-89F3-F20166451741",
+				"7C8BF3F2-ED62-477E-8E23-1115E46CADF3",
+				"31412F54-FD3E-45F7-8CF6-88CDD4B43ACA",
+				"58498825-5F2A-45AC-A1C0-A0FB929ACA77",
+				"C60C3735-7EEE-434D-A5D8-681BE9DF0823",
+				"D5E35FE8-8A79-467D-859D-F0EE0A4D707D",
+				"3D07B983-6ABF-4B8E-9792-1DF0F8E60D3F",
+				"A5907067-D711-489F-9091-4965E860F9EB",
+				"B9BC18E3-B952-480E-AF40-0A5E03AC0E7F",
+				"33950E0E-C89F-481E-9703-9B7CCF9374CE",
+				"A3E37E29-274B-4216-93EB-EA064D9BCF8C",
+				"F29B402A-C41C-452F-8A2C-466B34450C68",
+				"F9E333B5-FB1E-44AC-8E2B-3AAC0AC24A2B",
+				"FC5FF083-A96C-4E68-85B3-06442A7A26D2"
+			],
+			"isa": "PBXSourcesBuildPhase",
+			"runOnlyForDeploymentPostprocessing": "0"
+		},
+		"E4B69B590A3A1756003C02F2": {
+			"buildActionMask": "2147483647",
+			"files": [
+				"4A6792C0-5634-4F5B-8741-2D30AECCA5F6",
+				"8A67BD8C-1C6C-4856-9CDB-1D2578FFCEEE",
+				"760CA881-FEBB-4202-8C64-AB9C5BF1590F"
+			],
+			"isa": "PBXFrameworksBuildPhase",
+			"runOnlyForDeploymentPostprocessing": "0"
+		},
+		"E4B69B5A0A3A1756003C02F2": {
+			"buildConfigurationList": "E4B69B5F0A3A1757003C02F2",
+			"buildPhases": [
+				"BF26640B2C634C16004360E2",
+				"E42962A92163ECCD00A6A9E2",
+				"E4B69B580A3A1756003C02F2",
+				"E4B69B590A3A1756003C02F2",
+				"E4C2427710CC5ABF004149E2",
+				"E4A5B60F29BAAAE400C2D356",
+				"19B789C429E5AB4A0082E9B8"
+			],
+			"buildRules": [],
+			"dependencies": [],
+			"fileSystemSynchronizedGroups": [
+				"037A58C72CD6B54100CF8AC1"
+			],
+			"isa": "PBXNativeTarget",
+			"name": "example-2-oscilloscope",
+			"productName": "myOFApp",
+			"productReference": "E4B69B5B0A3A1756003C02F2",
+			"productType": "com.apple.product-type.application"
+		},
+		"E4B69B5B0A3A1756003C02F2": {
+			"explicitFileType": "wrapper.application",
+			"includeInIndex": "0",
+			"isa": "PBXFileReference",
+			"path": "example-2-oscilloscopeDebug.app",
+			"sourceTree": "BUILT_PRODUCTS_DIR"
+		},
+		"E4B69B5F0A3A1757003C02F2": {
+			"buildConfigurations": [
+				"E4B69B600A3A1757003C02F2",
+				"E4B69B610A3A1757003C02F2"
+			],
+			"defaultConfigurationIsVisible": "0",
+			"defaultConfigurationName": "Release",
+			"isa": "XCConfigurationList"
+		},
+		"E4B69B600A3A1757003C02F2": {
+			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+			"buildSettings": {
+				"ARCHS": "$(ARCHS_STANDARD)",
+				"COPY_PHASE_STRIP": "NO",
+				"DEFINES_MODULE": "YES",
+				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
+				"GCC_DYNAMIC_NO_PIC": "NO",
+				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxAudioUnit/src,
-					../../../addons/ofxAudioUnit/src/CAPublicUtility,
-					../../../addons/ofxAudioUnit/src/TPCircularBuffer,
-				);
-				ICON = "$(ICON_NAME_DEBUG)";
-				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
-				INFOPLIST_FILE = "openFrameworks-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_NAME = "example-2-oscilloscopeDebug";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		E4B69B610A3A1757003C02F2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = NONE;
-				HEADER_SEARCH_PATHS = (
+					"src",
+					"src",
+					"../src",
+					"../src/CAPublicUtility",
+					"../src/TPCircularBuffer"
+				],
+				"LIBRARY_SEARCH_PATHS": "$(inherited)",
+				"OTHER_LDFLAGS": [
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF_DEBUG)"
+				]
+			},
+			"isa": "XCBuildConfiguration",
+			"name": "Debug"
+		},
+		"E4B69B610A3A1757003C02F2": {
+			"baseConfigurationReference": "E4EB6923138AFD0F00A09F29",
+			"buildSettings": {
+				"ARCHS": "$(ARCHS_STANDARD)",
+				"COPY_PHASE_STRIP": "YES",
+				"DEFINES_MODULE": "YES",
+				"FRAMEWORK_SEARCH_PATHS": "$(inherited)",
+				"HEADER_SEARCH_PATHS": [
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxAudioUnit/src,
-					../../../addons/ofxAudioUnit/src/CAPublicUtility,
-					../../../addons/ofxAudioUnit/src/TPCircularBuffer,
-				);
-				ICON = "$(ICON_NAME_RELEASE)";
-				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
-				INFOPLIST_FILE = "openFrameworks-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_NAME = "example-2-oscilloscope";
-				WRAPPER_EXTENSION = app;
-				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
-			};
-			name = Release;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-2-oscilloscope" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4B69B4E0A3A1720003C02F2 /* Debug */,
-				E4B69B4F0A3A1720003C02F2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-2-oscilloscope" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4B69B600A3A1757003C02F2 /* Debug */,
-				E4B69B610A3A1757003C02F2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = E4B69B4C0A3A1720003C02F2 /* Project object */;
+					"src",
+					"src",
+					"../src",
+					"../src/CAPublicUtility",
+					"../src/TPCircularBuffer"
+				],
+				"LIBRARY_SEARCH_PATHS": "$(inherited)",
+				"ONLY_ACTIVE_ARCH": "YES",
+				"OTHER_LDFLAGS": [
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF)"
+				],
+				"baseConfigurationReference": "E4EB6923138AFD0F00A09F29"
+			},
+			"isa": "XCBuildConfiguration",
+			"name": "Release"
+		},
+		"E4B6FCAD0C3E899E008CF71C": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "text.plist.xml",
+			"path": "openFrameworks-Info.plist",
+			"sourceTree": "<group>"
+		},
+		"E4C2427710CC5ABF004149E2": {
+			"buildActionMask": "2147483647",
+			"dstPath": "",
+			"dstSubfolderSpec": "10",
+			"files": [],
+			"isa": "PBXCopyFilesBuildPhase",
+			"runOnlyForDeploymentPostprocessing": "0"
+		},
+		"E4EB6923138AFD0F00A09F29": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "text.xcconfig",
+			"path": "Project.xcconfig",
+			"sourceTree": "<group>"
+		},
+		"E56ABFA6-867A-4DA4-BC91-64A03489BF81": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitMixer.h",
+			"sourceTree": "<group>"
+		},
+		"E61E6EDA-309E-476F-A487-C19DBFEDFF17": {
+			"fileRef": "B3A19996-3891-4A70-9DA3-5E21C39DAF8F",
+			"isa": "PBXBuildFile"
+		},
+		"E82F8893-7EFE-4C6A-B8FF-99B95237E0FB": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitFilePlayer.cpp",
+			"sourceTree": "<group>"
+		},
+		"EFDECE4E-09D2-470B-9977-5CB9E4742407": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitFftNode.h",
+			"sourceTree": "<group>"
+		},
+		"F29B402A-C41C-452F-8A2C-466B34450C68": {
+			"fileRef": "FB28671A-2F8F-4CE5-9CD1-E98EB0098BEA",
+			"isa": "PBXBuildFile"
+		},
+		"F6E283BE-056A-4AE2-B0A3-5B44D7D4A95A": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitMixer.cpp",
+			"sourceTree": "<group>"
+		},
+		"F9E333B5-FB1E-44AC-8E2B-3AAC0AC24A2B": {
+			"fileRef": "727DBC93-B3D1-470E-91A5-239AE43D7464",
+			"isa": "PBXBuildFile"
+		},
+		"FABAE1A6-A909-4FDA-8493-3959A450A073": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.h",
+			"name": "ofxAudioUnitSampler.h",
+			"sourceTree": "<group>"
+		},
+		"FB28671A-2F8F-4CE5-9CD1-E98EB0098BEA": {
+			"fileEncoding": "4",
+			"isa": "PBXFileReference",
+			"lastKnownFileType": "sourcecode.cpp.cpp",
+			"name": "ofxAudioUnitSampler.cpp",
+			"sourceTree": "<group>"
+		},
+		"FC5FF083-A96C-4E68-85B3-06442A7A26D2": {
+			"fileRef": "5B337DE6-2081-46D3-ABE9-6C88BC0858CD",
+			"isa": "PBXBuildFile"
+		}
+	},
+	"rootObject": "E4B69B4C0A3A1720003C02F2"
 }
