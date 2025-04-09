@@ -94,9 +94,9 @@ void ofApp::draw(){
 	
 	ofSetColor(255);
 	if(activeUnit){
-		ofDrawBitmapString("Press space to show the Audio Unit's UI", ofPoint(25,25));
+		ofDrawBitmapString("Press space to show the Audio Unit's UI", 25, 25);
 	} else {
-		ofDrawBitmapString("You need to un-comment one of the blocks in setup() to generate some audio", ofPoint(25,25));
+		ofDrawBitmapString("You need to un-comment one of the blocks in setup() to generate some audio", 25, 25);
 	}
 	
 }
