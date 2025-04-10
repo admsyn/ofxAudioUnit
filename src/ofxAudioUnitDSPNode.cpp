@@ -2,6 +2,7 @@
 #include "ofxAudioUnitBase.h"
 #include "ofxAudioUnitUtils.h"
 #include "TPCircularBuffer.h"
+#include <mutex>
 
 // a passthru render callback which copies the rendered samples in the process
 static OSStatus RenderAndCopy(void * inRefCon,

@@ -143,9 +143,9 @@ void ofApp::draw(){
 	
 	ofSetColor(255, 230, 120);
 	ofDrawBitmapString("<- Panning ->", ofGetWidth()/2 - 50, ofGetHeight() - 55);
-	ofCircle(ofGetMouseX(), ofGetHeight() - 30, 15);
-	ofDrawBitmapString("Press space to show the reverb unit's UI,", ofPoint(20,20));
-	ofDrawBitmapString("Press 'f' to make the file player's UI", ofPoint(20, 40));
+	ofDrawCircle(ofGetMouseX(), ofGetHeight() - 30, 15);
+	ofDrawBitmapString("Press space to show the reverb unit's UI,", 20, 20);
+	ofDrawBitmapString("Press 'f' to make the file player's UI", 20, 40);
 }
 
 //--------------------------------------------------------------
